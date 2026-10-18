@@ -1,0 +1,143 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { AlertProvider } from './context/AlertContext';
+import { JurisdictionProvider } from './context/JurisdictionContext';
+import { AppShell } from './components/layout/AppShell';
+import { RequireAuth } from './components/guards/RequireAuth';
+
+import { Landing } from './pages/Landing';
+import { Overview } from './pages/Overview';
+import { Scan } from './pages/Scan';
+import { MapView } from './pages/MapView';
+import { Alerts } from './pages/Alerts';
+import { Risk } from './pages/Risk';
+import { Policy } from './pages/Policy';
+import { FAQ } from './pages/FAQ';
+import { Settings } from './pages/Settings';
+import { NotFound } from './pages/NotFound';
+
+function LandingRoute() {
+  const { user, loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0b0f0e] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-[#22c55e] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (user) {
+    return <Navigate to="/overview" replace />;
+  }
+  return <Landing />;
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <AlertProvider>
+          <JurisdictionProvider>
+            <Routes>
+              {/* Entry Page: Landing + Login on One Screen */}
+              <Route path="/" element={<LandingRoute />} />
+
+              {/* Redirect legacy auth paths to entry page */}
+              <Route path="/login" element={<Navigate to="/" replace />} />
+              <Route path="/register" element={<Navigate to="/" replace />} />
+
+              {/* Authenticated Routes inside AppShell */}
+              <Route
+                path="/overview"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Overview />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/command"
+                element={<Navigate to="/overview" replace />}
+              />
+              <Route
+                path="/map"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <MapView />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/alerts"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Alerts />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/scan"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Scan />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/risk"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Risk />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/policy"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Policy />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/faq"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <FAQ />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Settings />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+
+              {/* 404 Fallback */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </JurisdictionProvider>
+        </AlertProvider>
+      </AuthProvider>
+    </Router>
+  );
+}

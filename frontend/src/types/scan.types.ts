@@ -1,0 +1,72 @@
+export type SceneType = 'optical' | 'sar' | 'fused';
+export type EncroachmentClass =
+  | 'Deforestation'
+  | 'Unauthorized Construction'
+  | 'Mining'
+  | 'Land Encroachment';
+
+export interface DetectionBlob {
+  id: number;
+  class: EncroachmentClass;
+  confidence: number;
+  area_m2: number;
+  overlap_pct: number;
+  bbox: [number, number, number, number]; // [minX, minY, maxX, maxY]
+  isValidated: boolean;
+  rejectReason?: string;
+  beforeCrop: string; // base64 data URL
+  afterCrop: string;  // base64 data URL
+  patch?: number;
+}
+
+export type ClassResult = DetectionBlob;
+
+export interface ScanResult {
+  zone_id: number;
+  scene_type: SceneType;
+  cloud_coverage: number;
+  raw_count: number;
+  validated_count: number;
+  change_score: number;
+  blobs: DetectionBlob[];
+  raw_classes?: DetectionBlob[];
+  validated_classes?: DetectionBlob[];
+  before_img?: string;
+  after_img?: string;
+  lat?: number;
+  lng?: number;
+}
+
+export interface WorkerInput {
+  type: 'RUN';
+  payload: {
+    zone_id: number;
+    scene_type: SceneType;
+    cloud_coverage: number;
+    lat: number;
+    lng: number;
+    zoneCoordinates?: number[][];
+  };
+}
+
+export interface WorkerOutput {
+  type: 'RESULT' | 'PROGRESS' | 'ERROR';
+  payload: {
+    t0_scene?: Float32Array;
+    t1_scene?: Float32Array;
+    t0_optical?: Float32Array;
+    t0_sar?: Float32Array;
+    t1_optical?: Float32Array;
+    t1_sar?: Float32Array;
+    change_mask?: Float32Array;
+    raw_count?: number;
+    validated_count?: number;
+    false_positives_filtered?: number;
+    blobs?: DetectionBlob[];
+    raw_classes?: DetectionBlob[];
+    validated_classes?: DetectionBlob[];
+    change_score?: number;
+    progress?: number;
+    error?: string;
+  };
+}
