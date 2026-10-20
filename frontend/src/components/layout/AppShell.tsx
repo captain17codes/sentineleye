@@ -29,7 +29,7 @@ export function AppShell({ children }: AppShellProps) {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
+    navigate('/');
   };
 
   const navItems = [

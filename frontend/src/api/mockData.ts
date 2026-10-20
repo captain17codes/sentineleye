@@ -100,15 +100,7 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
   if (pathname === '/auth/me' && method === 'GET') {
     const raw = localStorage.getItem(STORAGE_KEYS.USER);
     if (!raw) {
-      // Auto-populate demo operator for seamless review
-      const demoUser: User = {
-        id: 1,
-        email: 'operator@sentineleye.com',
-        role: 'operator',
-        created_at: '2024-01-01T00:00:00Z',
-      };
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(demoUser));
-      return { user: demoUser } as unknown as T;
+      throw new Error('Unauthorized');
     }
     return { user: JSON.parse(raw) } as unknown as T;
   }
