@@ -58,8 +58,8 @@ function saveToStorage(store: AlertStore): void {
 
 /**
  * Generate exactly 38 alerts matching TARGET_DISTRIBUTION (6 Crit, 14 High, 11 Med, 7 Low)
- * by running the real Sentinel-1/2 scan pipeline on scenario scenes for each zone.
- * Scatter NDVI/SAR values, areas, and overlap percentages are authentic engine outputs.
+ * by running the scan pipeline on scenario scenes for each zone.
+ * Scatter NDVI/SAR values, areas, and overlap percentages are deterministic engine outputs.
  */
 function generateSeedAlerts(): Alert[] {
   const now = Date.now();

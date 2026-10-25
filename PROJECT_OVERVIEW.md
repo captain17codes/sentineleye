@@ -39,8 +39,8 @@ Protected ecological corridors and government cadastral lands across India face 
 SentinelEye introduces an automated, closed-loop surveillance-to-enforcement architecture:
 
 ```
-[Copernicus Constellation]
- Sentinel-1 SAR (Radar)  +  Sentinel-2 (10m Optical)
+[Orbital Remote Sensing Models]
+ Sentinel-1 SAR (Radar Model)  +  Sentinel-2 (10m Optical Model)
                  │
                  ▼
      [Bitemporal Change Engine]
@@ -69,7 +69,7 @@ SentinelEye introduces an automated, closed-loop surveillance-to-enforcement arc
 - **Solid Mission-Control Login Card:** Solid `#111816` background (no blur), inline validation, password show/hide toggle, and one-click **"Use demo account (operator)"** button.
 
 ### 2. High-Precision Evidence Validation Engine
-- **60fps Bitemporal Imagery Slider:** Interactive split-screen comparison slider displaying authentic Sentinel-2 true-color ortho-imagery of identical geographic coordinates across multi-year temporal intervals (T0: 2020 baseline vs T1: 2024 active encroachment).
+- **60fps Bitemporal Imagery Slider:** Interactive split-screen comparison slider displaying synthetic true-color ortho-imagery modeled on Sentinel-2 10m GSD across multi-year temporal intervals (T0: 2020 baseline vs T1: 2024 active encroachment).
 - **Cadastral Boundary Violation Overlays:** High-contrast vector polygons outlining illegal mining pits, unapproved building footprints, and clear-cut forest tracts with real-time overlap percentage calculations.
 - **Hardware-Accelerated Controls:** Keyboard arrow navigation (`←` / `→`), smooth drag handles, and percentage indicators.
 
@@ -202,7 +202,7 @@ $$H_{i} = \text{SHA256}(i + H_{i-1} + \text{Timestamp} + \text{Violation Details
 - **GIS Mapping:** Leaflet 1.9, React-Leaflet, Esri World Imagery Satellite Tiles
 - **3D Visualization:** Three.js, React-Globe.gl with 2K Blue Marble local texture mapping
 - **Charts & Telemetry:** Recharts (Scatter Plot, Donut Distribution, Multi-Temporal Area AreaChart)
-- **Data Architecture:** Fully client-side reactive simulation with Web Workers, WebCrypto ECDSA, and IndexedDB/LocalStorage. Telemetry integrates real Element 84 STAC Sentinel-1/2 replay data alongside calibrated synthetic scenes. An optional Express/SQLite backend is provided for local institutional development.
+- **Data Architecture:** Fully client-side reactive simulation with Web Workers, WebCrypto ECDSA, and IndexedDB/LocalStorage. Telemetry features calibrated synthetic scenes modeled on real sites alongside controlled calibration seeds. An optional Express/SQLite backend is provided for local institutional development.
 
 #### Backend (Optional / Local Development):
 - **Runtime:** Node.js (v20+) with TypeScript and Express (used for local multi-user testing and enterprise microservices; not required for the serverless Vercel demo)

@@ -139,8 +139,11 @@ export async function generateNoticePdf({
   const t0Str = t0Date.toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
   const t1Str = t1Date.toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
 
-  const t0SceneId = `S2B_MSIL2A_${t0Date.toISOString().slice(0, 10).replace(/-/g, '')}T053000_R062_T43REN`;
-  const t1SceneId = `S1C_IW_GRDH_1SDV_${t1Date.toISOString().slice(0, 10).replace(/-/g, '')}T123500_032541_03C124`;
+  const t0DateCompact = t0Date.toISOString().slice(0, 10).replace(/-/g, '');
+  const t1DateCompact = t1Date.toISOString().slice(0, 10).replace(/-/g, '');
+  const zoneTag = `Z${alert.zone_id || 101}`;
+  const t0SceneId = `SIM-${zoneTag}-T0-${t0DateCompact}`;
+  const t1SceneId = `SIM-${zoneTag}-T1-${t1DateCompact}`;
 
   const hashT0Scene = await sha256(`SCENE:${t0SceneId}:${alert.zone_id}:${alert.lat.toFixed(5)}:${alert.lng.toFixed(5)}`);
   const hashT1Scene = await sha256(`SCENE:${t1SceneId}:${alert.zone_id}:${alert.lat.toFixed(5)}:${alert.lng.toFixed(5)}`);
@@ -387,7 +390,12 @@ export async function generateNoticePdf({
   doc.text(`T1 Scene Hash SHA-256: ${hashT1Scene}`, 18, p2SealY + 29);
   doc.text(`Cadastral Hash SHA256: ${hashBoundary}`, 18, p2SealY + 33.5);
   doc.text(`Public Verify Anchor : ${verifyUrl}`, 18, p2SealY + 38);
-  doc.text(`Telemetry Source     : Calibrated scenes modeled on real sites (synthetic arrays)`, 18, p2SealY + 42.5);
+  doc.text(`Scene IDs (Simulated): ${t0SceneId} | ${t1SceneId}`, 18, p2SealY + 42.5);
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(6.2);
+  doc.setTextColor(90, 90, 90);
+  doc.text(`[Simulated demonstration scene (not a Copernicus product ID)]`, 18, p2SealY + 46);
+  doc.setFont('courier', 'normal');
 
   // QR Code on right
   try {
@@ -439,7 +447,7 @@ export async function generateNoticePdf({
   const partBText =
     `I, Independent Technical Expert in Remote Sensing & Digital Forensics, hereby certify pursuant to Section 63(4) of the Bharatiya Sakshya Adhiniyam, 2023 that:\n` +
     `1. I have independently examined the computer architecture, processing pipeline, and cryptographic hash chain of the SentinelEye system.\n` +
-    `2. I have verified that the SHA-256 hashes of the raw satellite scenes (IDs: ${t0SceneId} and ${t1SceneId}) and difference blobs match the ledger block #${blockIndex}.\n` +
+    `2. I have verified that the SHA-256 hashes of the simulated demonstration scenes (IDs: ${t0SceneId} and ${t1SceneId} — Simulated demonstration scene (not a Copernicus product ID)) and difference blobs match the ledger block #${blockIndex}.\n` +
     `3. The mathematical integrity of the electronic output is authentic, reproducible, and free from retroactive modification.`;
   doc.text(doc.splitTextToSize(partBText, pageWidth - 28), 14, partBY + 4.5);
 

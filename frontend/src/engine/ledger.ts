@@ -239,8 +239,8 @@ export async function createEvidenceManifest(
   zoneId: number,
   coordinates: [number, number] = [77.16, 28.58]
 ): Promise<EvidenceManifest> {
-  const t0RasterHash = await sha256(`S2B_L2A_${zoneId}_T0_${coordinates[0]}_${coordinates[1]}`);
-  const t1RasterHash = await sha256(`S1C_S2B_FUSED_${zoneId}_T1_${coordinates[0]}_${coordinates[1]}`);
+  const t0RasterHash = await sha256(`SIM_T0_${zoneId}_T0_${coordinates[0]}_${coordinates[1]}`);
+  const t1RasterHash = await sha256(`SIM_FUSED_${zoneId}_T1_${coordinates[0]}_${coordinates[1]}`);
   const ndviTensorHash = await sha256(`NDVI_LOSS_${zoneId}_DELTA_38PCT`);
   const sarBackscatterHash = await sha256(`SAR_SPECKLE_${zoneId}_DB_4.2`);
   const cadastralBoundaryHash = await sha256(`BOUNDARY_GEOJSON_ZONE_${zoneId}`);

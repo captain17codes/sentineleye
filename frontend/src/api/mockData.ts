@@ -255,7 +255,7 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
   // 13. Notifications: GET /notifications
   if (pathname.includes('/notifications')) {
     return [
-      { id: 1, type: 'alert', message: '[SIMULATED] Critical alert created for Aravalli Sector 4', created_at: new Date().toISOString() },
+      { id: 1, type: 'alert', message: '[SIMULATED] Critical alert created for Aravalli Forest Reserve (Z-105)', created_at: new Date().toISOString() },
       { id: 2, type: 'info', message: '[SIMULATED] Copernicus Sentinel-2 pass synchronized', created_at: new Date().toISOString() },
     ] as unknown as T;
   }

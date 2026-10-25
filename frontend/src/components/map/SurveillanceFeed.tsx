@@ -16,7 +16,7 @@ interface SurveillanceFeedProps {
 }
 
 const TELEMETRY_LOGS = [
-  { time: '14:22:05', msg: 'Copernicus Sentinel-2 MSI pass complete' },
+  { time: '14:22:05', msg: 'Sentinel-2 MSI model pass complete' },
   { time: '14:21:48', msg: 'Bitemporal SAR coherence matrix calibrated' },
   { time: '14:20:12', msg: 'Zone intersection validated against cadastral boundary' },
   { time: '14:18:30', msg: 'Atmospheric cloud suppression applied (88% clear)' },

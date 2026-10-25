@@ -1,6 +1,6 @@
 /**
  * PublicVerify.tsx — Public tamper-verification page accessible without login.
- * Recomputes SHA-256 chain up to the requested hash to verify Section 65B authenticity.
+ * Recomputes SHA-256 chain up to the requested hash to verify Section 63 BSA cryptographic validity.
  */
 
 import React, { useEffect, useState } from 'react';
@@ -226,7 +226,7 @@ export function PublicVerify() {
         {/* Footer info */}
         <div className="pt-5 border-t border-[#2a3832] flex items-center justify-between text-[11px] text-[#b4c2bb]">
           <span>SentinelEye Autonomous Planetary Intelligence</span>
-          <span>WGS84 EPSG:4326 | Copernicus Hub</span>
+          <span>WGS84 EPSG:4326 | SentinelEye Ledger</span>
         </div>
       </div>
     </div>

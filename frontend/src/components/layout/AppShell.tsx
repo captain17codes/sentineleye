@@ -123,7 +123,7 @@ export function AppShell({ children }: AppShellProps) {
             <span className="text-border">|</span>
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted">
               <Layers className="w-3.5 h-3.5 text-muted" />
-              <span>Feed: Copernicus Sentinel-1/2</span>
+              <span>Feed: Sentinel-1/2 Model</span>
             </div>
             <span className="hidden sm:inline text-border">|</span>
             {/* Small Simulation Tag only where synthetic */}

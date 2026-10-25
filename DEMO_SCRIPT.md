@@ -187,7 +187,7 @@ Use the built-in **Demo Director** panel at the bottom right of the screen (or a
 
 ### Q5: Why did you build an in-browser deterministic simulation engine rather than relying entirely on a cloud backend?
 **Answer:**
-> "In real-world deployment, SentinelEye integrates with Copernicus Open Access Hub and Cloud API endpoints. However, for an executive evaluation and courtroom demonstration:
-> 1. **Zero Downtime & Zero Latency:** Live cloud satellite APIs (ESA SciHub/Copernicus Data Space) frequently encounter rate limits, maintenance outages, and multi-gigabyte transfer delays that would stall a 3-minute executive presentation.
+> "In real-world deployment, SentinelEye integrates with cloud satellite APIs. However, for an executive evaluation and courtroom demonstration:
+> 1. **Zero Downtime & Zero Latency:** Live cloud satellite APIs frequently encounter rate limits, maintenance outages, and multi-gigabyte transfer delays that would stall a 3-minute executive presentation.
 > 2. **Deterministic Reproducibility:** By implementing our multi-band raster generator, Perlin cloud synthesizer, Turf cadastral clipping, and SHA-256 ledger directly in Web Workers with a seeded PRNG (`DEMO_SEED = 42`), the engine yields mathematically identical results on every presentation run while keeping the UI responsive at 60fps.
 > 3. **Edge Resiliency:** The entire platform runs seamlessly as a serverless Single Page Application on Vercel Edge with client-side PDF and QR generation, requiring zero backend server maintenance."

@@ -7,7 +7,7 @@
 ## 1. Remote Sensing Modeling & Telemetry Specifications
 
 ### A. Optical Vegetation Modeling (Modeled on Sentinel-2 MSI)
-- **Reference Tile IDs**: Ingested via Element 84 Earth Search STAC API (`https://earth-search.aws.element84.com/v1`, collection `sentinel-2-l2a`) for real geographic coordinates in Delhi NCR to obtain authentic tile footprints and temporal acquisition timestamps.
+- **Reference Tile IDs**: Ingested via Element 84 Earth Search STAC API (`https://earth-search.aws.element84.com/v1`, collection `sentinel-2-l2a`) for real geographic coordinates in Delhi NCR to obtain realistic reference tile footprints and temporal acquisition timestamps.
 - **Array Implementation**: Multi-band arrays (Red, Near-Infrared, Scene Classification Layer) are calibrated synthetic arrays ($256 \times 256$ Float32) modeled on physical BOA surface reflectance.
 - **Spectral Bands Modeled**:
   - **Band 4 (Red)**: Central wavelength $665\text{ nm}$, nominal $10\text{ m}$ spatial resolution.

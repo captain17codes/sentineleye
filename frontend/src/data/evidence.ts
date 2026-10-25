@@ -23,9 +23,9 @@ export interface EvidenceData {
 }
 
 export const EVIDENCE_SAMPLE: EvidenceData = {
-  areaName: "Aravalli Biodiversity Corridor (Sector 4)",
-  zoneId: 1,
-  bboxText: "28.5214° N, 77.0842° E",
+  areaName: "Aravalli Forest Reserve (Z-105)",
+  zoneId: 105,
+  bboxText: "28.4200° N, 77.0600° E",
   beforeDate: "Oct 2020",
   afterDate: "Oct 2024",
   sensor: "Synthetic true-color ortho-imagery (modeled on Sentinel-2 10m GSD)",

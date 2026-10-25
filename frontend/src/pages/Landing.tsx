@@ -88,7 +88,7 @@ export function Landing() {
   };
 
   const pipelineSteps = [
-    { name: 'Copernicus Sentinel-1/2', sub: 'Dual Optical + SAR' },
+    { name: 'Sentinel-1/2 Dual-Band Model', sub: 'Optical + SAR Simulation' },
     { name: 'Storage', sub: 'GeoTIFF / Zarr tensors' },
     { name: 'Orchestration', sub: 'Automated ingest pipeline' },
     { name: 'ML engine', sub: 'Bitemporal change model' },
@@ -193,7 +193,7 @@ export function Landing() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
               <span className="text-[#f1f5f3] font-medium">Orbital surveillance</span>
               <span className="text-[#2a3832]">|</span>
-              <span>Copernicus Sentinel-1/2</span>
+              <span>Dual Optical + SAR Model</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#f1f5f3] leading-[1.1]">

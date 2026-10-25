@@ -87,7 +87,7 @@ export function Settings() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col gap-1">
             <span className="text-[#b4c2bb] text-[10px]">Primary data feed</span>
-            <span className="text-[#f1f5f3] font-medium">Copernicus Sentinel-1 (C-Band SAR) & Sentinel-2 (MSI)</span>
+            <span className="text-[#f1f5f3] font-medium">Sentinel-1 (C-Band SAR) & Sentinel-2 (MSI) Constellation Models</span>
           </div>
 
           <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col gap-1">
