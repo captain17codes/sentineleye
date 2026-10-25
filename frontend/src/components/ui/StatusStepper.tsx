@@ -1,7 +1,14 @@
 import { AlertStatus } from '../../types/alert.types';
 import { cn } from '../../utils/cn';
 
-const STEPS: AlertStatus[] = ['New', 'Verified', 'Notice Issued'];
+const STEPS: AlertStatus[] = ['New', 'Verified', 'Notice Issued', 'Signed & Served'];
+
+const STEP_LABELS: Record<AlertStatus, string> = {
+  New: '1. New',
+  Verified: '2. Verified',
+  'Notice Issued': '3. Draft Notice',
+  'Signed & Served': '4. Signed & Served',
+};
 
 interface StatusStepperProps {
   currentStatus: AlertStatus;
@@ -56,13 +63,13 @@ export function StatusStepper({
             {/* Step Label */}
             <span
               className={cn(
-                'mt-1.5 text-[11px] font-mono tracking-wider text-center select-none truncate max-w-full px-1',
+                'mt-1.5 text-[10px] font-mono tracking-wider text-center select-none truncate max-w-full px-1',
                 isCurrent && 'text-[#22c55e] font-semibold',
                 isCompleted && 'text-[#f1f5f3]',
                 isUpcoming && 'text-[#b4c2bb]'
               )}
             >
-              {step}
+              {STEP_LABELS[step]}
             </span>
           </div>
         );

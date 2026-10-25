@@ -51,7 +51,8 @@ export function AlertFeed() {
             <option value="ALL">All Statuses</option>
             <option value="New">New</option>
             <option value="Verified">Verified</option>
-            <option value="Notice Issued">Notice Issued</option>
+            <option value="Notice Issued">Notice Drafted</option>
+            <option value="Signed & Served">Signed & Served</option>
           </select>
 
           {/* Refresh Button */}

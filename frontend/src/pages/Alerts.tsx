@@ -14,7 +14,7 @@ import {
   Download,
 } from 'lucide-react';
 
-const STATUS_FLOW: AlertStatus[] = ['New', 'Verified', 'Notice Issued'];
+const STATUS_FLOW: AlertStatus[] = ['New', 'Verified', 'Notice Issued', 'Signed & Served'];
 
 export function Alerts() {
   const { alerts, loading, refreshAlerts } = useAlerts();
@@ -147,7 +147,8 @@ export function Alerts() {
             <option value="all" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>All statuses</option>
             <option value="New" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>New</option>
             <option value="Verified" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Verified</option>
-            <option value="Notice Issued" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Notice Issued</option>
+            <option value="Notice Issued" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Notice Drafted</option>
+            <option value="Signed & Served" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Signed & Served</option>
           </select>
 
           {(search || selectedClass !== 'all' || selectedSeverity !== 'all' || selectedStatus !== 'all') && (

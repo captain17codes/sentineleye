@@ -1,6 +1,11 @@
 export type EncroachmentClass = 'Deforestation' | 'Unauthorized Construction' | 'Mining' | 'Land Encroachment';
 export type AlertSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-export type AlertStatus = 'New' | 'Verified' | 'Notice Issued';
+export type AlertStatus = 'New' | 'Verified' | 'Notice Issued' | 'Signed & Served';
+
+export function formatAlertStatus(status: AlertStatus): string {
+  if (status === 'Notice Issued') return 'Notice Drafted — Pending Officer Signature';
+  return status;
+}
 
 export interface AuditEntry {
   timestamp: string;

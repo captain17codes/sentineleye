@@ -6,7 +6,8 @@
 
 import { Alert, AlertStatus, AuditEntry } from '../types/alert.types';
 import { getAlerts, updateAlert } from './store/alertStore';
-import { addLedgerRecord, LedgerBlock } from './ledger';
+import { addLedgerRecord, LedgerBlock, BlockType } from './ledger';
+import { LEGAL } from '../constants/legal';
 
 export type ClockSpeed = 1 | 60 | 960;
 
@@ -58,7 +59,8 @@ export function formatSimulatedOffset(elapsedMinutes: number): string {
 const LEGAL_TRANSITIONS: Record<AlertStatus, AlertStatus[]> = {
   New: ['Verified'],
   Verified: ['Notice Issued'],
-  'Notice Issued': [], // Terminal state
+  'Notice Issued': ['Signed & Served'],
+  'Signed & Served': [],
 };
 
 /**
@@ -91,14 +93,24 @@ export async function transitionAlert(
       ? simulatedOffsetMinutes * 60 * 1000
       : targetStatus === 'Verified'
       ? 15 * 60 * 1000 // T+15m
-      : 240 * 60 * 1000; // T+4h
+      : targetStatus === 'Notice Issued'
+      ? 240 * 60 * 1000 // T+4h
+      : 1440 * 60 * 1000; // T+24h (Signed & Served)
   const transitionTime = new Date(alertBaseTime + offsetMs).toISOString();
 
-  const blockType = targetStatus === 'Verified' ? 'VERIFIED' : 'NOTICE_ISSUED';
-  const defaultNote =
-    targetStatus === 'Verified'
-      ? 'Multi-spectral satellite verification completed. Cadastral infringement confirmed.'
-      : 'Statutory Section 65B legal eviction notice generated and registered on tamper-evident ledger.';
+  let blockType: BlockType = 'VERIFIED';
+  let statutoryPhase = 'T+00:15';
+  let defaultNote = 'Multi-spectral satellite verification completed. Cadastral infringement confirmed.';
+
+  if (targetStatus === 'Notice Issued') {
+    blockType = 'NOTICE_ISSUED';
+    statutoryPhase = 'T+04:00';
+    defaultNote = `Draft statutory notice under ${LEGAL.EVIDENCE_ACT_CITATION} generated and registered on tamper-evident ledger for Competent Authority signature.`;
+  } else if (targetStatus === 'Signed & Served') {
+    blockType = 'SIGNED_AND_SERVED';
+    statutoryPhase = 'T+24:00';
+    defaultNote = 'Statutory notice formally signed by Competent Authority and served upon encroacher. Chain of custody finalized.';
+  }
 
   const auditNote = note || defaultNote;
 
@@ -111,7 +123,7 @@ export async function transitionAlert(
       zoneName: alert.zone_name,
       previousStatus: alert.status,
       newStatus: targetStatus,
-      statutoryPhase: targetStatus === 'Verified' ? 'T+00:15' : 'T+04:00',
+      statutoryPhase,
       coordinates: [alert.lng, alert.lat],
       cadastralOverlapPct: alert.overlap_pct,
       areaM2: alert.area_m2,
@@ -175,7 +187,7 @@ export async function runAcceleratedEscalation(
         simulatedTimeFormatted: 'T+04:00',
         percentComplete: 100,
         currentStatus: 'Notice Issued',
-        statusNote: 'Statutory notice already issued and anchored to blockchain ledger.',
+        statusNote: 'Statutory draft notice already prepared and anchored to blockchain ledger.',
       });
     }
     return alert;
@@ -251,7 +263,7 @@ export async function runAcceleratedEscalation(
         simulatedTimeFormatted: formatSimulatedOffset(elapsedMins),
         percentComplete: pct,
         currentStatus: 'Verified',
-        statusNote: `Drafting Section 65B statutory eviction notice (${elapsedMins.toFixed(0)}m elapsed)...`,
+        statusNote: `Drafting Section 63 BSA statutory notice (${elapsedMins.toFixed(0)}m elapsed)...`,
       });
     }
 
@@ -264,7 +276,7 @@ export async function runAcceleratedEscalation(
       simulatedTimeFormatted: 'T+04:00',
       percentComplete: 100,
       currentStatus: 'Notice Issued',
-      statusNote: `Notice Issued! Registered block #${res.block.index} (${res.block.hash.slice(0, 10)}...)`,
+      statusNote: `Notice Drafted! Registered block #${res.block.index} (${res.block.hash.slice(0, 10)}...) — Pending Officer Signature`,
     });
   }
 

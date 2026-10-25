@@ -218,7 +218,7 @@ export function Landing() {
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#111816] border border-[#2a3832]">
                 <Scale className="w-3.5 h-3.5 text-[#22c55e]" />
-                <span>Section 65B notices</span>
+                <span>Section 63 BSA notices</span>
               </div>
             </div>
           </div>

@@ -140,7 +140,8 @@ export function AlertItem({ alert, onStatusChange }: AlertItemProps) {
                   const nexts: Record<AlertStatus, AlertStatus> = {
                     New: 'Verified',
                     Verified: 'Notice Issued',
-                    'Notice Issued': 'Notice Issued',
+                    'Notice Issued': 'Signed & Served',
+                    'Signed & Served': 'Signed & Served',
                   };
                   handleStepClick(nexts[alert.status]);
                 }}

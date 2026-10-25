@@ -5,7 +5,7 @@
 
 import { STORAGE_KEYS } from './config';
 
-export type BlockType = 'SCENE_INGEST' | 'DETECTION' | 'VERIFIED' | 'NOTICE_ISSUED';
+export type BlockType = 'SCENE_INGEST' | 'DETECTION' | 'VERIFIED' | 'NOTICE_ISSUED' | 'SIGNED_AND_SERVED';
 
 export interface LedgerBlock {
   index: number;

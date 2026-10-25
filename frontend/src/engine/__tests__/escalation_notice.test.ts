@@ -4,7 +4,7 @@ import { transitionAlert } from '../clock';
 import { generateNoticePdf } from '../pdfNotice';
 import { getLedgerChain, verifyChain } from '../ledger';
 
-describe('Escalation Protocol & Section 65B Notice Generation', () => {
+describe('Escalation Protocol & Section 63 BSA Notice Generation', () => {
   it('advances alert through legal escalation transitions and records ledger blocks', async () => {
     const alerts = getAlerts();
     const candidate = alerts.find((a) => a.status === 'New') || alerts[0];
@@ -24,13 +24,22 @@ describe('Escalation Protocol & Section 65B Notice Generation', () => {
     expect(verify1.valid).toBe(true);
 
     // Step 2: Verified -> Notice Issued (T+04:00)
-    const step2 = await transitionAlert(candidate.id, 'Notice Issued', 'officer@delhiforest.gov.in', 'Section 65B notice issued');
+    const step2 = await transitionAlert(candidate.id, 'Notice Issued', 'officer@delhiforest.gov.in', 'Section 63 BSA notice drafted');
     expect(step2.alert.status).toBe('Notice Issued');
     expect(step2.block.type).toBe('NOTICE_ISSUED');
 
     const chain2 = await getLedgerChain();
     const verify2 = await verifyChain(chain2);
     expect(verify2.valid).toBe(true);
+
+    // Step 3: Notice Issued -> Signed & Served (T+24:00)
+    const step3 = await transitionAlert(candidate.id, 'Signed & Served', 'director@dda.gov.in', 'Signed by Competent Authority and served');
+    expect(step3.alert.status).toBe('Signed & Served');
+    expect(step3.block.type).toBe('SIGNED_AND_SERVED');
+
+    const chain3 = await getLedgerChain();
+    const verify3 = await verifyChain(chain3);
+    expect(verify3.valid).toBe(true);
   });
 
   it('guards against illegal statutory transitions', async () => {
@@ -38,15 +47,19 @@ describe('Escalation Protocol & Section 65B Notice Generation', () => {
     const candidate = alerts.find((a) => a.status === 'Notice Issued') || alerts[0];
     candidate.status = 'Notice Issued';
 
-    // Cannot transition from Notice Issued to Verified
+    // Cannot transition backwards from Notice Issued to Verified
     await expect(transitionAlert(candidate.id, 'Verified' as any)).rejects.toThrow(/Illegal transition/);
 
     candidate.status = 'New';
     // Cannot transition directly from New to Notice Issued without verification
     await expect(transitionAlert(candidate.id, 'Notice Issued' as any)).rejects.toThrow(/Illegal transition/);
+
+    candidate.status = 'Signed & Served';
+    // Cannot transition from terminal Signed & Served state
+    await expect(transitionAlert(candidate.id, 'New' as any)).rejects.toThrow(/Illegal transition/);
   });
 
-  it('generates a valid client-side Section 65B PDF document with QR code seal', async () => {
+  it('generates a valid client-side Section 63 BSA PDF document with Part A & B certificate and QR seal', async () => {
     const alert = getAlerts()[0];
     const { doc, filename } = await generateNoticePdf({
       alert,
@@ -54,7 +67,7 @@ describe('Escalation Protocol & Section 65B Notice Generation', () => {
     });
 
     expect(doc).toBeDefined();
-    expect(filename).toContain(`SentinelEye_Section65B_Notice_Alert_${alert.id}.pdf`);
+    expect(filename).toContain(`SentinelEye_Section63_BSA_Notice_Alert_${alert.id}.pdf`);
     // Output blob
     const pdfBlob = doc.output('blob');
     expect(pdfBlob.size).toBeGreaterThan(1000); // Valid non-empty PDF binary

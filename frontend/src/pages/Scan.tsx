@@ -102,7 +102,7 @@ export function Scan() {
           <div className="flex items-center gap-2.5 flex-wrap">
             <h1 className="text-xl font-semibold text-[#f1f5f3]">Orbital scan & anomaly detection</h1>
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-[#16201c] border border-[#2a3832] text-[#b4c2bb]">
-              Data source: Archived Sentinel scenes — simulated ingest
+              Data source: Calibration scenes (synthetic, ground truth known)
             </span>
           </div>
           <p className="text-xs text-[#b4c2bb] mt-0.5">
@@ -159,6 +159,12 @@ export function Scan() {
                   </option>
                 ))}
               </select>
+            </div>
+
+            {/* Constellation Specs Callout */}
+            <div className="p-2.5 rounded bg-[#16201c] border border-[#2a3832] text-[11px] text-[#b4c2bb] font-mono leading-relaxed">
+              <span className="text-[#22c55e] font-semibold block">Copernicus Constellation Telemetry</span>
+              Sentinel-2: 5-day nominal revisit; Sentinel-1: 6-day (C+D). Resolution: ~10 m pixel spacing.
             </div>
 
             {/* Sensor Band Toggle: 3 equal cards */}

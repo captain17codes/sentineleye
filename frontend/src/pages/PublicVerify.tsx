@@ -90,7 +90,7 @@ export function PublicVerify() {
           </Link>
           <div className="flex items-center gap-1.5 font-mono text-xs text-[#b4c2bb]">
             <Lock className="w-3.5 h-3.5 text-[#22c55e]" />
-            <span>Section 65B Public Verifier</span>
+            <span>Section 63 BSA / Sec. 65B Public Verifier</span>
           </div>
         </div>
 
@@ -128,7 +128,7 @@ export function PublicVerify() {
                   </span>
                 </div>
                 <p className="text-xs text-[#b4c2bb] mt-0.5">
-                  Block #{block.index} in the immutable chain is tamper-free and legally certified under Section 65B of the Indian Evidence Act.
+                  Block #{block.index} in the immutable chain is tamper-free and legally certified under Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872).
                 </p>
               </div>
             </div>

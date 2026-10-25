@@ -27,14 +27,19 @@ export function FAQ() {
       answer: 'The system categorizes validated detections into four human-readable classes: Deforestation (forest canopy loss and clear-cutting), Unauthorized Construction (rapid appearance of geometric masonry or industrial structures with high SAR double-bounce), Mining (unauthorized open-cast excavation pits and mineral gouging), and Land Encroachment (fencing, roads, and unauthorized perimeter expansion crossing protected cadastral boundaries).',
     },
     {
+      category: 'Satellite Fleet & Resolution',
+      question: 'What is the spatial resolution and revisit time of the Sentinel constellation?',
+      answer: 'Sentinel-2 MSI provides 10-meter spatial resolution (visible/NIR bands) with a 5-day nominal revisit at the equator. Sentinel-1 SAR operates in C-band with the active constellation Sentinel-1C and Sentinel-1D providing a 6-day nominal revisit (Sentinel-1A retired 29 June 2026, Sentinel-1B failed in 2021). IW GRD products are distributed at ~10 m pixel spacing.',
+    },
+    {
       category: 'Cryptographic ledger',
       question: 'How does the SHA-256 hash ledger guarantee evidential integrity?',
-      answer: 'Every formal case created from an alert generates a cryptographic block linked to the previous block hash: hash = SHA-256(prev_hash + data). Any retroactive tampering with coordinates, timestamps, or incident metadata invalidates the chain. The ledger verify endpoint recomputes every hash from stored JSON to guarantee chain integrity.',
+      answer: 'Every formal case created from an alert generates a cryptographic block linked to the previous block hash: hash = SHA-256(prev_hash + data). Any retroactive tampering with coordinates, timestamps, or incident metadata invalidates the chain. The generated PDF embeds Section 63(4) BSA certificates with SHA-256 package hashes admissible in court under Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872).',
     },
     {
       category: 'Escalation protocol',
       question: 'What is the full lifecycle from orbital detection to legal notice?',
-      answer: 'The lifecycle progresses through three verifiable states: New (automated satellite detection at T+00:00) → Verified (expert spectral & cadastral verification at T+00:15) → Notice Issued (statutory draft notice PDF generated with embedded base64 evidence and ledger verification at T+04:00).',
+      answer: 'The lifecycle progresses through four verifiable states: New (automated satellite detection at T+00:00) → Verified (expert spectral & cadastral verification at T+00:15) → Notice Drafted — Pending Officer Signature (statutory draft notice PDF generated with SHA-256 evidence package hashes at T+04:00) → Signed & Served (manual execution by Competent Authority recorded on ledger).',
     },
   ];
 

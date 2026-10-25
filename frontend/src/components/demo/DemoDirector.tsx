@@ -84,10 +84,10 @@ export const DEMO_STEPS: DemoStep[] = [
   },
   {
     id: 7,
-    title: '7. Section 65B Notice & Public QR',
+    title: '7. Section 63 BSA Notice & Public QR',
     route: '/alerts',
-    actionLabel: 'Generate 65B Notice',
-    presenterNote: 'Download client-side Section 65B PDF. Show legal certificate and click/scan the QR code to open the public verifier.',
+    actionLabel: 'Generate Section 63 Notice',
+    presenterNote: 'Download client-side Section 63 BSA PDF. Show legal certificate with Part A & Part B, evidence hashes, and click/scan the QR code to open the public verifier.',
     expectedOutcome: 'Public verifier displays green VALID CRYPTOGRAPHIC SEAL without login.',
   },
   {
@@ -96,7 +96,7 @@ export const DEMO_STEPS: DemoStep[] = [
     route: '/ledger',
     actionLabel: 'Open Ledger Explorer',
     presenterNote: 'Click "Simulate tampering" -> re-verify -> show red broken chain at Block #12. Then click "Restore chain" -> green verified.',
-    expectedOutcome: 'Proves forensic admissibility under Indian Evidence Act Section 65B.',
+    expectedOutcome: 'Proves forensic admissibility under Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872).',
   },
 ];
 

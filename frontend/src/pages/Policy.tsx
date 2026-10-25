@@ -1,6 +1,7 @@
 import React from 'react';
 import { POLICY_MAPPINGS } from '../utils/policy';
 import { Scale, AlertCircle, FileCheck, Shield, BookOpen } from 'lucide-react';
+import { LEGAL } from '../constants/legal';
 
 export function Policy() {
   return (
@@ -9,15 +10,20 @@ export function Policy() {
       <div className="pb-4 border-b border-border">
         <h1 className="text-xl font-semibold text-text">Legal framework & statutory policy</h1>
         <p className="text-xs text-muted mt-0.5">
-          Statutory mapping for environmental land protection and chain-of-custody compliance
+          Statutory mapping for environmental land protection and chain-of-custody compliance under Bharatiya Sakshya Adhiniyam, 2023
         </p>
       </div>
 
-      {/* Mandatory Disclaimer Banner */}
+      {/* Mandatory Statutory Disclaimer Banner */}
       <div className="p-4 rounded-lg bg-amber-400/10 border border-amber-400/20 flex items-start gap-3">
         <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-        <div className="text-xs text-amber-200/90 leading-relaxed">
-          <strong className="font-semibold text-amber-300">Statutory disclaimer:</strong> Indicative mapping, verify with legal counsel. SentinelEye is an automated earth observation decision support platform. Statutory provisions cited herein represent standard environmental frameworks and require formal legal verification prior to filing.
+        <div className="text-xs text-amber-200/90 leading-relaxed space-y-1">
+          <div>
+            <strong className="font-semibold text-amber-300">Statutory disclaimer:</strong> {LEGAL.STATUTORY_DISCLAIMER}
+          </div>
+          <div className="text-[11px] text-amber-300/80">
+            {LEGAL.DELHI_SPECIAL_PROVISIONS_NOTE}
+          </div>
         </div>
       </div>
 
@@ -59,35 +65,43 @@ export function Policy() {
         </div>
       </div>
 
-      {/* Evidentiary Protocol & 65B Compliance */}
+      {/* Evidentiary Protocol & Section 63 BSA Compliance */}
       <div className="p-5 rounded-lg bg-panel border border-border flex flex-col gap-3">
         <div className="flex items-center gap-2 pb-2 border-b border-border">
           <Shield className="w-4 h-4 text-accent" />
-          <h3 className="text-sm font-semibold text-text">Indian Evidence Act Section 65B compliance</h3>
+          <h3 className="text-sm font-semibold text-text">
+            {LEGAL.EVIDENCE_ACT_CITATION} compliance
+          </h3>
         </div>
 
         <p className="text-xs text-muted leading-relaxed">
-          Digital satellite records, multi-temporal difference tensors, spectral validation signatures, and operator verification notes are sequentially linked into a tamper-evident SHA-256 cryptographic hash ledger. Each generated legal notice PDF embeds the cryptographic block hash and parent root hash, satisfying statutory requirements for electronic record admissibility and preservation of digital chain-of-custody.
+          Digital satellite records, multi-temporal difference tensors, spectral validation signatures, and operator verification notes are sequentially linked into a tamper-evident SHA-256 cryptographic hash ledger. Each generated legal notice PDF embeds the cryptographic block hash, raw scene fingerprints, and Section 63(4) Part A (Custodian) and Part B (Technical Expert) certificates, satisfying statutory requirements for electronic record admissibility and preservation of digital chain-of-custody in Indian courts.
         </p>
 
-        {/* 3-Phase Escalation Stepper */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+        {/* 4-Phase Escalation Stepper */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 text-xs">
           <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
             <span className="font-semibold text-accent font-mono text-[11px]">T+00:00 • Alert</span>
             <span className="text-text font-medium">Bitemporal change</span>
-            <span className="text-[11px] text-muted">Sentinel-1/2 fused diff exceeds 35% anomaly threshold.</span>
+            <span className="text-[11px] text-muted">Sentinel-1/2 fused diff exceeds anomaly threshold.</span>
           </div>
 
           <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
-            <span className="font-semibold text-accent font-mono text-[11px]">T+00:15 • Expert verification</span>
+            <span className="font-semibold text-accent font-mono text-[11px]">T+00:15 • Verification</span>
             <span className="text-text font-medium">Operator review</span>
             <span className="text-[11px] text-muted">Analyst suppresses seasonal/cloud artifacts against cadastral boundary.</span>
           </div>
 
           <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
-            <span className="font-semibold text-accent font-mono text-[11px]">T+04:00 • Legal notice</span>
-            <span className="text-text font-medium">Ledger anchored notice</span>
-            <span className="text-[11px] text-muted">SHA-256 block committed; automated statutory notice issued.</span>
+            <span className="font-semibold text-accent font-mono text-[11px]">T+04:00 • Draft notice</span>
+            <span className="text-text font-medium">Notice Drafted</span>
+            <span className="text-[11px] text-muted">SHA-256 block committed; draft notice prepared for officer signature.</span>
+          </div>
+
+          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
+            <span className="font-semibold text-accent font-mono text-[11px]">T+24:00 • Execution</span>
+            <span className="text-text font-medium">Signed & Served</span>
+            <span className="text-[11px] text-muted">Competent Authority executes order and records block on ledger.</span>
           </div>
         </div>
       </div>

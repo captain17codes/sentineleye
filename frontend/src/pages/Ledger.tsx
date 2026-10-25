@@ -76,7 +76,7 @@ export function Ledger() {
             <span>Cryptographic chain of custody ledger</span>
           </h1>
           <p className="text-xs text-[#b4c2bb] mt-0.5">
-            Immutable SHA-256 block chain anchoring electronic evidence under Section 65B Indian Evidence Act
+            Immutable SHA-256 block chain anchoring electronic evidence under Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872)
           </p>
         </div>
 

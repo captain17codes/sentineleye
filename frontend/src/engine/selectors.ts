@@ -139,6 +139,7 @@ export function computeTotals(alerts: Alert[]) {
     low: lowCount(alerts),
     new_count: countByStatus(alerts, 'New'),
     verified: countByStatus(alerts, 'Verified'),
-    notice_issued: countByStatus(alerts, 'Notice Issued'),
+    notice_issued: countByStatus(alerts, 'Notice Issued') + countByStatus(alerts, 'Signed & Served'),
+    signed_and_served: countByStatus(alerts, 'Signed & Served'),
   };
 }

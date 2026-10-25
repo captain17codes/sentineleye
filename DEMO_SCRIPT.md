@@ -12,7 +12,7 @@ Use the built-in **Demo Director** panel at the bottom right of the screen (or a
 ```
 [Step 1: Landing & Login] ──► [Step 2: Live Map] ──► [Step 3: Scan Engine] ──► [Step 4: SAR vs Optical]
                                                                                        │
-[Step 8: Ledger Tampering] ◄── [Step 7: Section 65B PDF] ◄── [Step 6: Escalation] ◄── [Step 5: False+ Rejection]
+[Step 8: Ledger Tampering] ◄── [Step 7: Section 63 BSA PDF] ◄── [Step 6: Escalation] ◄── [Step 5: False+ Rejection]
 ```
 
 ---
@@ -88,21 +88,22 @@ Use the built-in **Demo Director** panel at the bottom right of the screen (or a
   > In real life this takes 4 statutory hours. With our built-in operational clock set to 960x speed, 4 hours elapse in 15 seconds. Let's click 'Run escalation (accelerated)'."
 * **What to Show:**
   1. Click "Run escalation (accelerated 960x)".
-  2. Watch the live progress bar and clock counter tick from T+00:00 to T+00:15 (Verified), then progress to T+04:00 (Notice Issued).
-  3. Show the audit history trail populating with block hashes.
+  2. Watch the live progress bar and clock counter tick from T+00:00 to T+00:15 (Verified), then progress to T+04:00 (Notice Drafted — Pending Officer Signature).
+  3. Click "Mark as Signed & Served by Competent Authority" to execute the final statutory step.
+  4. Show the audit history trail populating with block hashes.
 
 ---
 
-### Step 7: Section 65B Notice & Public QR Verification
-* **Route:** Alert Drawer ➔ Click **"Download Section 65B Notice (PDF)"**
+### Step 7: Section 63 BSA Notice & Public QR Verification
+* **Route:** Alert Drawer ➔ Click **"Download Section 63 Draft Notice (PDF)"**
 * **Presenter Script (25 seconds):**
-  > "We click 'Download Section 65B Notice'. Our system instantly generates a court-admissible PDF certified under Section 65B of the Indian Evidence Act (and Section 63 of Bharatiya Sakshya Adhiniyam, 2023).
+  > "We click 'Download Section 63 Draft Notice'. Our system instantly generates a court-admissible PDF certified under Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872).
   > 
-  > It contains the governing statutory act, the exact cadastral penalty, bitemporal satellite evidence crops, the issuing authority, and a cryptographic chain-of-custody seal.
+  > Notice the two-page statutory structure: Page 1 provides the draft eviction order and bitemporal satellite crops with an officer signature block for the Competent Authority. Page 2 provides the statutory Section 63(4) certificate in two parts: Part A executed by the lawful custodian with SHA-256 evidence package hashes, and Part B executed by a technical expert.
   > 
   > Anyone—including judges, defense attorneys, or citizens—can scan this QR code or navigate to /verify/<hash> to inspect our public verifier, which confirms the mathematical authenticity of the record without requiring a login."
 * **What to Show:**
-  1. Open the downloaded PDF: show header, statutory mapping table, evidence boxes, and QR code.
+  1. Open the downloaded PDF: show header, draft notice layout, Section 63(4) Part A & Part B certificates, evidence package hashes, and QR code.
   2. Click the external link icon or open `/verify/<hash>`: show the public page displaying **VALID CRYPTOGRAPHIC SEAL**.
 
 ---
@@ -158,18 +159,13 @@ Use the built-in **Demo Director** panel at the bottom right of the screen (or a
 
 ---
 
-### Q4: What makes your Section 65B notice legally admissible in an Indian court of law?
+### Q4: What makes your Section 63 BSA notice legally admissible in an Indian court of law?
 **Answer:**
-> "Under Section 65B of the Indian Evidence Act, 1872 (now Section 63 of the Bharatiya Sakshya Adhiniyam, 2023), electronic records are admissible only if four conditions are proven:
-> 1. The computer was used regularly by lawful authorities to produce information during regular activities.
-> 2. The data was fed into the computer in the ordinary course of activities without human interception.
-> 3. The computer was operating properly without integrity flaws.
-> 4. The electronic document reproduces authentic unmanipulated telemetry.
+> "Under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (which replaced Section 65B of the Indian Evidence Act, 1872 on 1 July 2024), electronic records are admissible only when accompanied by a statutory certificate under Section 63(4):
+> 1. **Part A (Custodian Statement):** Certifies that the computer system was operated lawfully during regular surveillance, was functioning properly without malfunction, and identifies the evidence package via cryptographic SHA-256 hashes.
+> 2. **Part B (Technical Expert Certificate):** Executed by an independent expert certifying the mathematical verification of the hash seals and pipeline integrity.
 > 
-> SentinelEye fulfills all four conditions through our cryptographic ledger:
-> - Every raw scene ingest produces a Genesis Block $H_0 = \text{SHA256}(\text{telemetry})$.
-> - Every state transition (Detection, Verification, Notice) appends a block linking `prevHash` and `timestamp`.
-> - The legal notice embeds the exact block hash, block index, and previous hash, alongside a QR code pointing to an independent public verifier. If anyone attempts to tamper with the records in the database, the hash chain breaks immediately."
+> SentinelEye fulfills both statutory parts directly in its two-page export, linking every scene ID, difference raster, and cadastral vector to the SHA-256 chain of custody."
 
 ---
 

@@ -1,7 +1,7 @@
 # SentinelEye 🛰️ — Planetary Intelligence & Automated Land Protection Platform
 
 > **AI-Powered Land Protection from Orbit to Enforcement**  
-> *Autonomous Remote Sensing • Bitemporal Change Detection • Tamper-Evident SHA-256 Ledger • Section 65B Court-Admissible Legal Notices*
+> *Autonomous Remote Sensing • Bitemporal Change Detection • Tamper-Evident SHA-256 Ledger • Section 63 BSA Court-Admissible Legal Notices*
 
 ---
 
@@ -9,7 +9,7 @@
 
 **SentinelEye** is an enterprise-grade planetary intelligence and cadastral surveillance platform designed to protect ecologically vulnerable corridors—such as the **Aravalli Biodiversity Corridor**, **Yamuna Floodplains**, and **Delhi Ridge Forest**—against unauthorized encroachment, illegal mining, deforestation, and unapproved commercial construction.
 
-By synthesizing **Copernicus Sentinel-1 Synthetic Aperture Radar (SAR)** and **Sentinel-2 Multi-Spectral Optical (MSI)** imagery with automated change detection algorithms and cryptographic chain-of-custody ledgers, SentinelEye compresses detection-to-enforcement cycles from months down to hours, producing tamper-evident legal eviction notices admissible under **Section 65B of the Indian Evidence Act, 1872**.
+By synthesizing **Copernicus Sentinel-1 Synthetic Aperture Radar (SAR)** and **Sentinel-2 Multi-Spectral Optical (MSI)** imagery with automated change detection algorithms and cryptographic chain-of-custody ledgers, SentinelEye compresses detection-to-enforcement cycles from months down to hours, producing tamper-evident legal eviction notices admissible under **Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872)**.
 
 ---
 
@@ -52,11 +52,11 @@ SentinelEye introduces an automated, closed-loop surveillance-to-enforcement arc
                  │
                  ▼
   [Rapid 3-Step Escalation Protocol]
-  T+00:00 Alert  ──►  T+00:15 Verification  ──►  T+04:00 Legal Notice
+  T+00:00 Alert  ──►  T+00:15 Verification  ──►  T+04:00 Draft Notice ──► Signed & Served
                  │
                  ▼
       [SHA-256 Ledger Chain]
-  (Tamper-evident chain of custody for Section 65B court evidence)
+  (Tamper-evident chain of custody for Section 63 BSA court evidence)
 ```
 
 ---
@@ -106,12 +106,12 @@ SentinelEye introduces an automated, closed-loop surveillance-to-enforcement arc
 ### 6. Accelerated Statutory Escalation & Forensic Ledger
 - **Accelerated Operational Clock (960x speed):**
   - Simulated operational clock where 4 statutory hours elapse in 15 seconds.
-  - State progression: $\text{New (T+00:00)} \rightarrow \text{Verified (T+00:15)} \rightarrow \text{Notice Issued (T+04:00)}$ with animated progress bar and countdown.
+  - State progression: $\text{New (T+00:00)} \rightarrow \text{Verified (T+00:15)} \rightarrow \text{Notice Drafted (T+04:00)} \rightarrow \text{Signed \& Served}$ with animated progress bar and countdown.
 - **SHA-256 Tamper-Evident Ledger (`/ledger`):**
   - Canonical key-sorted JSON hashing with Genesis block anchor.
   - Real-time tamper simulation and cryptographic self-healing verification.
-- **Section 65B Notice PDF Generator & Public Verifier (`/verify/:hash`):**
-  - Pure client-side PDF generation (`jspdf`) featuring bitemporal satellite crops, statutory mapping, and QR code seal.
+- **Section 63 BSA Notice PDF Generator & Public Verifier (`/verify/:hash`):**
+  - Pure client-side PDF generation (`jspdf`) featuring bitemporal satellite crops, statutory mapping, Section 63(4) Part A & Part B certificates, evidence package hashes, and QR code seal.
   - Public verification route requiring zero login to verify mathematical chain integrity.
 
 ### 7. Interactive Executive Demo Director
@@ -126,16 +126,16 @@ Every violation detected by SentinelEye is mapped to specific Indian statutory a
 
 | Encroachment Class | Governing Statutory Act | Applicable Legal Section | Enforcement Authority | Prescribed Legal Penalty |
 | :--- | :--- | :--- | :--- | :--- |
-| **Deforestation** | Indian Forest Act, 1927 & Forest (Conservation) Act, 1980 | Section 26 & Section 2 | State Forest Department / MoEFCC | Up to 6 months imprisonment, mandatory statutory compensation fine per hectare, and ecological restoration order. |
-| **Unauthorized Construction** | Delhi Development Act, 1957 / Public Premises Act, 1971 | Section 30 & Section 31A | Delhi Development Authority (DDA) / MCD | 5–15 day demolition notice, summary eviction, and recovery of full demolition costs as arrears of land revenue. |
+| **Deforestation** | Indian Forest Act, 1927 & Forest (Conservation) Act, 1980 (now Van (Sanrakshan Evam Samvardhan) Adhiniyam, 1980) | Section 26 & Section 2 | State Forest Department / MoEFCC | Up to 6 months imprisonment, mandatory statutory compensation fine per hectare, and ecological restoration order. |
+| **Unauthorized Construction** | Delhi Development Act, 1957 / Public Premises Act, 1971 | Section 29, 30, 31 & 31A | Delhi Development Authority (DDA) / MCD | Demolition notice, sealing of unauthorized development, summary eviction, and recovery of costs. |
 | **Illegal Mining** | Mines & Minerals (Development & Regulation) Act, 1957 | Section 4(1) & Section 21 | Dept. of Mines & Geology / NGT / SPCB | Immediate seizure of excavation machinery, imprisonment up to 5 years, and environmental damage compensation. |
 | **Land Encroachment** | Public Premises (Eviction of Unauthorised Occupants) Act, 1971 | Section 4 & Section 5 | Land & Development Office (L&DO) / District Collectorate | Eviction notice to show cause, forfeiture of illegal structures, and assessment of mesne profits/damages. |
 
 ---
 
-## 🔐 Cryptographic Chain-of-Custody (Section 65B)
+## 🔐 Cryptographic Chain-of-Custody (Section 63 BSA / Sec. 65B)
 
-Under **Section 65B of the Indian Evidence Act, 1872**, electronic records (satellite imagery, GIS coordinates, automated scans) are only admissible in court if the integrity of the data has remained uncorrupted from the moment of ingestion.
+Under **Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B of the Indian Evidence Act, 1872)**, electronic records (satellite imagery, GIS coordinates, automated scans) are only admissible in court if the integrity of the data has remained uncorrupted from the moment of ingestion.
 
 SentinelEye solves this using **SHA-256 Hash Chaining**:
 
@@ -193,7 +193,7 @@ The platform comes pre-configured with 8 cadastral monitoring zones across the N
 │  └─────────────────────────┘  └─────────────────────────────────────┘  │
 │  ┌─────────────────────────┐  ┌─────────────────────────────────────┐  │
 │  │ PDF Generation Service  │  │ Spatial Query & Policy Resolver     │  │
-│  │ Section 65B FIR Notices │  │ Forest, DDA, Mines Statutory Engine │  │
+│  │ Section 63 BSA Notices  │  │ Forest, DDA, Mines Statutory Engine │  │
 │  └─────────────────────────┘  └─────────────────────────────────────┘  │
 └────────────────────────────────────────────────────────────────────────┘
 ```
@@ -304,23 +304,24 @@ When presenting SentinelEye to evaluators, professors, or technical panels, use 
 #### Q2: How does the platform prevent false positives (e.g., seasonal farming vs illegal construction)?
 > **Answer:** SentinelEye uses multi-temporal spectral-radar fusion. Seasonal agricultural cycles cause changes in NDVI but exhibit low SAR backscatter (rough soil). In contrast, illegal concrete construction shows sharp NDVI drops accompanied by a massive increase in SAR radar "double-bounce" backscatter off rigid vertical structures. Correlating these two spectral signatures eliminates false positives.
 
-#### Q3: What is the significance of Section 65B of the Indian Evidence Act?
-> **Answer:** Under Section 65B (and the corresponding Bharatiya Sakshya Adhiniyam, 2023), digital evidence (satellite images, computer logs, coordinate records) is inadmissible in Indian courts without a certified electronic chain-of-custody verifying that the source computing system was operating properly and that the data was not tampered with. SentinelEye stamps every record with a SHA-256 cryptographic hash chain, allowing the system to output automated, court-admissible 65B legal notices.
+#### Q3: What is the significance of Section 63 BSA (formerly Section 65B)?
+> **Answer:** Under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (which replaced Section 65B of the Indian Evidence Act, 1872 on 1 July 2024), digital evidence (satellite images, computer logs, coordinate records) is inadmissible in Indian courts without a certified electronic chain-of-custody verifying that the source computing system was operating lawfully and normally, and that data integrity was mathematically preserved. SentinelEye generates Section 63(4) Part A (Custodian) and Part B (Technical Expert) certificates backed by SHA-256 evidence package hashes.
 
 #### Q4: What happens if the live backend is down or unreachable?
 > **Answer:** The frontend architecture utilizes a resilient dual-mode data provider (`client.ts` + `mockData.ts`). If the backend API returns a 404/405 or is unreachable, the system automatically falls back to an internal simulated data provider that retains full interactive state (38 seeded alerts, 8 cadastral zones, login/logout sessions, and scan simulations) directly in browser storage without crashing.
 
 #### Q5: What is the spatial resolution and revisit time of the Sentinel constellation?
-> **Answer:** Sentinel-2 MSI provides 10-meter spatial resolution in the visible (RGB) and Near-Infrared (NIR) bands. Sentinel-1 SAR provides approximately 5×20 meter spatial resolution in Interferometric Wide (IW) swath mode. The combined constellation offers a 5-day revisit cadence over the National Capital Region (NCR).
+> **Answer:** Sentinel-2 MSI provides 10-meter spatial resolution in the visible (RGB) and Near-Infrared (NIR) bands with a 5-day nominal revisit at the equator. Sentinel-1 SAR operates in C-band with the active constellation Sentinel-1C and Sentinel-1D offering a 6-day nominal revisit (Sentinel-1A was decommissioned on 29 June 2026; Sentinel-1B failed in 2021). Native GRD products (~20×22 m) are distributed at ~10 m pixel spacing.
 
 #### Q6: Why did you eliminate drone dispatch from the workflow?
 > **Answer:** Satellite-to-cadastral intelligence provides immediate, wide-area coverage ($>15,000\text{ km}^2$) with definitive boundary overlap metrics. Drone dispatch introduces physical flight permit restrictions (DGCA Red/Yellow zones in NCR), battery limitations ($<40$ minutes flight time), and manual field vulnerability. Transitioning directly from automated detection to legal notice issuance accelerates statutory enforcement without physical field bottlenecks.
 
-#### Q7: How does the 3-step rapid escalation timeline work?
+#### Q7: How does the rapid escalation timeline work?
 > **Answer:**  
 > - **T+00:00 (Automated Alert):** Satellite change detection algorithm flags an overlap $>35\%$ with a protected cadastral polygon.  
 > - **T+00:15 (Expert Verification):** An operator inspects the bitemporal false-color and SAR imagery, cross-checks revenue records, and confirms the violation.  
-> - **T+04:00 (Statutory Notice Issued):** The platform generates a Section 65B PDF eviction notice with SHA-256 hash seals, dispatching it to the DDA, Forest Department, or District Collectorate.
+> - **T+04:00 (Notice Drafted):** The platform generates a Section 63 BSA draft eviction notice with SHA-256 hash seals for Competent Authority signature.  
+> - **T+24:00 (Signed & Served):** The Competent Authority signs and formally serves the notice, completing the evidentiary workflow.
 
 #### Q8: What database architecture was chosen and why?
 > **Answer:** The backend uses SQLite configured in Write-Ahead Logging (`WAL`) mode via `better-sqlite3`. WAL mode enables concurrent readers while writing, delivering sub-millisecond query performance with zero administrative overhead, making it ideal for edge deployments and air-gapped mission-control environments.

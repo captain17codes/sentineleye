@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Alert } from '../../types/alert.types';
+import { Alert, AlertStatus, formatAlertStatus } from '../../types/alert.types';
 import { getPolicyForClass } from '../../utils/policy';
 import { getClassColor, severityColor } from '../../utils/riskColors';
 import { downloadNoticePdf } from '../../engine/pdfNotice';
 import { runAcceleratedEscalation, transitionAlert, EscalationProgress } from '../../engine/clock';
 import { getLedgerChain, verifyChain } from '../../engine/ledger';
+import { LEGAL } from '../../constants/legal';
 import {
   X,
   Shield,
@@ -26,7 +27,7 @@ interface DossierDrawerProps {
   onAlertUpdated: (updated: Alert) => void;
 }
 
-const STEPS = ['New', 'Verified', 'Notice Issued'] as const;
+const STEPS = ['New', 'Verified', 'Notice Issued', 'Signed & Served'] as const;
 
 export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerProps) {
   const [updating, setUpdating] = useState(false);
@@ -303,7 +304,13 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold text-[#b4c2bb]">Escalation protocol status</span>
             <span className="text-[10px] font-mono text-[#22c55e]">
-              {alert.status === 'New' ? 'T+00:00' : alert.status === 'Verified' ? 'T+00:15' : 'T+04:00 (Statutory Notice)'}
+              {alert.status === 'New'
+                ? 'T+00:00 (Detection)'
+                : alert.status === 'Verified'
+                ? 'T+00:15 (Verified)'
+                : alert.status === 'Notice Issued'
+                ? 'T+04:00 (Notice Drafted)'
+                : 'T+24:00 (Signed & Served)'}
             </span>
           </div>
 
@@ -312,6 +319,12 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
             {STEPS.map((step, idx) => {
               const isPast = idx <= currentStepIdx;
               const isCurrent = idx === currentStepIdx;
+              const stepLabels: Record<string, string> = {
+                New: 'New',
+                Verified: 'Verified',
+                'Notice Issued': 'Draft Notice',
+                'Signed & Served': 'Signed & Served',
+              };
 
               return (
                 <div key={step} className="flex flex-col items-center gap-1.5 z-10">
@@ -327,11 +340,11 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
                     {idx + 1}
                   </div>
                   <span
-                    className={`text-[10px] text-center max-w-[70px] leading-tight ${
+                    className={`text-[9.5px] font-mono text-center max-w-[65px] leading-tight ${
                       isCurrent ? 'font-semibold text-[#f1f5f3]' : 'text-[#b4c2bb]'
                     }`}
                   >
-                    {step}
+                    {stepLabels[step]}
                   </span>
                 </div>
               );
@@ -453,7 +466,7 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
         {/* Action Controls */}
         <div className="flex flex-col gap-2 pt-2 border-t border-[#2a3832]">
           {/* Accelerated escalation button (for demo) */}
-          {alert.status !== 'Notice Issued' && (
+          {alert.status !== 'Notice Issued' && alert.status !== 'Signed & Served' && (
             <button
               onClick={handleAcceleratedEscalation}
               disabled={isAccelerating || updating}
@@ -482,8 +495,26 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
               className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors"
             >
               <FileText className="w-4 h-4" />
-              <span>Issue legal notice manually</span>
+              <span>Generate draft notice (T+04:00)</span>
             </button>
+          )}
+
+          {alert.status === 'Notice Issued' && (
+            <button
+              onClick={() => handleAdvanceStatus('Signed & Served')}
+              disabled={updating || isAccelerating}
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors shadow-sm"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Mark as Signed & Served by Competent Authority</span>
+            </button>
+          )}
+
+          {alert.status === 'Signed & Served' && (
+            <div className="w-full p-2.5 rounded-lg bg-[#16201c] border border-[#22c55e]/40 flex items-center justify-center gap-2 text-[#22c55e] font-semibold text-xs">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Notice Executed: Formally Signed & Served</span>
+            </div>
           )}
 
           {/* Legal Notice PDF Generation */}
@@ -493,7 +524,7 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
             className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#16201c] hover:bg-[#111816] border border-[#2a3832] text-[#f1f5f3] font-medium text-xs transition-colors disabled:opacity-50"
           >
             <FileText className="w-4 h-4 text-[#22c55e]" />
-            <span>{downloadingPdf ? 'Generating Section 65B Notice...' : 'Download Section 65B Notice (PDF)'}</span>
+            <span>{downloadingPdf ? 'Generating Section 63 BSA Notice...' : 'Download Section 63 Draft Notice (PDF)'}</span>
           </button>
         </div>
       </div>
