@@ -20,7 +20,7 @@ By synthesizing **Copernicus Sentinel-1 Synthetic Aperture Radar (SAR)** and **S
 | **Live Production Platform** | [https://sentineleye-ebon.vercel.app/](https://sentineleye-ebon.vercel.app/) |
 | **GitHub Repository** | [https://github.com/captain17codes/sentineleye](https://github.com/captain17codes/sentineleye) |
 | **Demo Operator Credentials** | **Email:** `operator@sentineleye.com` <br> **Password:** `operator123` |
-| **Deployment Infrastructure** | Vercel SPA Edge + Client Resilient Data Provider (`mockData.ts`) |
+| **Deployment Infrastructure** | Vercel SPA Edge (Client-side simulation with Web Workers & WebCrypto; Express backend is optional and used for local development) |
 
 ---
 
@@ -219,10 +219,10 @@ The platform comes pre-configured with 8 cadastral monitoring zones across the N
 - **GIS Mapping:** Leaflet 1.9, React-Leaflet, Esri World Imagery Satellite Tiles
 - **3D Visualization:** Three.js, React-Globe.gl with 2K Blue Marble local texture mapping
 - **Charts & Telemetry:** Recharts (Scatter Plot, Donut Distribution, Multi-Temporal Area AreaChart)
-- **Data Architecture:** Dual-mode client with direct backend API support + zero-dependency static fallback provider (`mockData.ts`) for seamless edge deployment.
+- **Data Architecture:** Fully client-side reactive simulation with Web Workers, WebCrypto ECDSA, and IndexedDB/LocalStorage. Telemetry integrates real Element 84 STAC Sentinel-1/2 replay data alongside calibrated synthetic scenes. An optional Express/SQLite backend is provided for local institutional development.
 
-#### Backend:
-- **Runtime:** Node.js (v20+) with TypeScript and Express
+#### Backend (Optional / Local Development):
+- **Runtime:** Node.js (v20+) with TypeScript and Express (used for local multi-user testing and enterprise microservices; not required for the serverless Vercel demo)
 - **Database:** SQLite with Write-Ahead Logging (`WAL` mode) via `better-sqlite3`
 - **Security:** Helmet, CORS, Rate-Limiting, Bcrypt password hashing, JWT session cookies
 - **Document Generation:** PDFKit with dynamic vector layout and cryptographic hash verification stamps
@@ -320,8 +320,8 @@ When presenting SentinelEye to evaluators, professors, or technical panels, use 
 #### Q3: What is the significance of Section 63 BSA (formerly Section 65B)?
 > **Answer:** Under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (which replaced Section 65B of the Indian Evidence Act, 1872 on 1 July 2024), digital evidence (satellite images, computer logs, coordinate records) is inadmissible in Indian courts without a certified electronic chain-of-custody verifying that the source computing system was operating lawfully and normally, and that data integrity was mathematically preserved. SentinelEye generates Section 63(4) Part A (Custodian) and Part B (Technical Expert) certificates backed by SHA-256 evidence package hashes.
 
-#### Q4: What happens if the live backend is down or unreachable?
-> **Answer:** The frontend architecture utilizes a resilient dual-mode data provider (`client.ts` + `mockData.ts`). If the backend API returns a 404/405 or is unreachable, the system automatically falls back to an internal simulated data provider that retains full interactive state (38 seeded alerts, 8 cadastral zones, login/logout sessions, and scan simulations) directly in browser storage without crashing.
+#### Q4: What is the deployment architecture, and is a backend server required?
+> **Answer:** The production Vercel deployment operates completely self-contained in the browser as a high-performance Single Page Application (SPA). All detection pipelines run in background Web Workers, cryptographic signatures are executed via native WebCrypto ECDSA, and alert state is maintained in client-side storage. The Express/SQLite/JWT backend is an optional service provided for local development and institutional multi-tenant deployments.
 
 #### Q5: What is the spatial resolution and revisit time of the Sentinel constellation?
 > **Answer:** Sentinel-2 MSI provides 10-meter spatial resolution in the visible (RGB) and Near-Infrared (NIR) bands with a 5-day nominal revisit at the equator. Sentinel-1 SAR operates in C-band with the active constellation Sentinel-1C and Sentinel-1D offering a 6-day nominal revisit (Sentinel-1A was decommissioned on 29 June 2026; Sentinel-1B failed in 2021). Native GRD products (~20×22 m) are distributed at ~10 m pixel spacing.
@@ -336,8 +336,8 @@ When presenting SentinelEye to evaluators, professors, or technical panels, use 
 > - **T+04:00 (Notice Drafted):** The platform generates a Section 63 BSA draft eviction notice with SHA-256 hash seals for Competent Authority signature.  
 > - **T+24:00 (Signed & Served):** The Competent Authority signs and formally serves the notice, completing the evidentiary workflow.
 
-#### Q8: What database architecture was chosen and why?
-> **Answer:** The backend uses SQLite configured in Write-Ahead Logging (`WAL`) mode via `better-sqlite3`. WAL mode enables concurrent readers while writing, delivering sub-millisecond query performance with zero administrative overhead, making it ideal for edge deployments and air-gapped mission-control environments.
+#### Q8: What database architecture was chosen for the optional backend and why?
+> **Answer:** For institutional server deployment, the optional backend uses SQLite configured in Write-Ahead Logging (`WAL`) mode via `better-sqlite3`. WAL mode enables concurrent readers while writing, delivering sub-millisecond query performance with zero administrative overhead, making it ideal for on-premise air-gapped mission-control environments.
 
 #### Q9: How are cadastral boundaries stored and compared?
 > **Answer:** Boundaries are modeled as GeoJSON FeatureCollections storing polygon coordinate rings. When a scan detects an anomalous polygon, spatial intersection algorithms calculate the overlap percentage ($\text{Area}_{\text{intersection}} / \text{Area}_{\text{detection}}$) against the cadastral boundary to determine whether the violation is inside core or buffer territory.

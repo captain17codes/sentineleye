@@ -10,115 +10,131 @@
 Use the built-in **Demo Director** panel at the bottom right of the screen (or append `?demo=1` to the URL). You can advance steps using the `[→]` key or clicking **Next**.
 
 ```
-[Step 1: Landing & Login] ──► [Step 2: Live Map] ──► [Step 3: Scan Engine] ──► [Step 4: SAR vs Optical]
-                                                                                       │
-[Step 8: Ledger Tampering] ◄── [Step 7: Section 63 BSA PDF] ◄── [Step 6: Escalation] ◄── [Step 5: False+ Rejection]
+[Step 1: Landing & Overview] ──► [Step 2: Live Map & Cadastral] ──► [Step 3: Real Sentinel STAC Replay]
+                                                                                      │
+[Step 6: Escalation Protocol] ◄── [Step 5: Validation Panel & Sliders] ◄── [Step 4: SAR Cloud Penetration]
+         │
+         ▼
+[Step 7: Section 63 BSA PDF] ──► [Step 8: Two-Level Tamper Defense]
 ```
 
 ---
 
 ### Step 1: Landing Globe & Single Source of Truth
 * **Route:** `/` ➔ Click **"Use demo account (operator)"** ➔ `/overview`
-* **Presenter Script (25 seconds):**
-  > "Welcome to SentinelEye. We are addressing illegal encroachment on protected ecological corridors like the Delhi Ridge and Aravalli reserves. Rather than waiting weeks for manual forest ranger inspections, SentinelEye autonomously monitors these corridors from orbit. 
+* **Presenter Script (20 seconds):**
+  > "Welcome to SentinelEye. We are protecting critical ecological corridors—such as the Delhi Ridge and Aravalli reserves—from illegal encroachment using planetary radar and optical intelligence.
   > 
-  > Notice on our Mission Overview: every single metric across the system—the 38 alerts, the 6 Critical, 14 High, 11 Medium, and 7 Low threats, our severity donut, and our 30-day temporal trend—derives from a single deterministic engine. Furthermore, our entire ledger chain shows a cryptographically verified SHA-256 seal."
+  > Notice on our Mission Overview: every single metric—our 38 validated alerts, our target distribution of 6 Critical, 14 High, 11 Medium, and 7 Low threats, our total protected coverage of 64.8 square kilometers ($64,797,245\text{ m}^2$), and our cryptographic ledger seal—derives from a single deterministic engine."
 * **What to Show:**
   1. Solid tactical KPI cards showing 38 validated alerts and exact severity counts.
   2. Severity Donut matching the 38 total.
-  3. KPI Card 4: Green "Verified" link to the ledger chain.
+  3. Monitored area counter: $64,797,245\text{ m}^2$ computed geodesically via Turf.js.
+  4. KPI Card 4: Green "Verified" link to the ledger chain.
 
 ---
 
 ### Step 2: Live Protected Zone & Cadastral Boundaries
 * **Route:** `/map`
 * **Presenter Script (20 seconds):**
-  > "Moving to our Live Map, we overlay statutory GeoJSON cadastral boundaries over sub-meter Esri satellite imagery. Let's inspect Zone Z-101: Delhi Ridge Forest Sector C.
+  > "Moving to our Live Map, we overlay statutory OpenStreetMap cadastral boundary polygons (ODbL) over sub-meter Esri satellite imagery across zones Z-101 through Z-108.
   > 
-  > Here, our threat markers are grouped into incident clusters. Each alert polygon reflects real cadastral boundary overlap calculated using polygon intersection algorithms—red for critical core violations exceeding 85% overlap, orange for active mining and heavy construction."
+  > Unlike simple rectangular boxes, our zones feature realistic multi-vertex organic boundary contours. When we click on Zone Z-102: Mangar Bani Sacred Grove, we see incident clusters mapped with calculated overlap percentages—red for core violations exceeding 85% overlap, orange for mining, and yellow for peripheral clearings."
 * **What to Show:**
-  1. Click on Zone Z-101 in the jurisdiction picker or map.
-  2. Click an alert cluster to expand, then click an incident to open the right-side dossier drawer.
+  1. Select Zone Z-102 in the sector dropdown or click on the map.
+  2. Click an incident cluster to expand, then open the right-side dossier drawer.
+  3. Point out OpenStreetMap attribution and Section 63 BSA legal citations.
 
 ---
 
-### Step 3: Multi-Sensor Scan Execution & Web Worker
-* **Route:** `/scan`
+### Step 3: Real Sentinel-1/2 Telemetry Replay (Element 84 STAC)
+* **Route:** `/scan` ➔ Toggle **"Real Sentinel (replay)"** ➔ Select **Zone Z-102 (Mangar Bani)**
 * **Presenter Script (25 seconds):**
-  > "Now let's launch an active satellite pass. On our Scan console, we choose Zone Z-101, select Fused Optical + SAR mode, and set cloud cover to 40%.
+  > "Now let's inspect our orbital telemetry ingestion. We toggle the data source to 'Real Sentinel (replay)'.
   > 
-  > When I click 'Run multi-sensor scan', an asynchronous background Web Worker executes an end-to-end 9-stage pipeline: scene ingestion, cloud masking, bitemporal NDVI, SAR backscatter diffing, dual-sensor fusion, connected-component vectorization, and cadastral boundary clipping."
+  > This loads genuine Copernicus Level-2A surface reflectance (`S2B_43RFM`) and Sentinel-1 C-SAR backscatter archived directly from the Element 84 AWS Earth Search STAC API. Notice the genuine acquisition dates and real scene IDs. The engine automatically processes the Level-2A Scene Classification Layer (SCL) to mask clouds and shadows directly from optical telemetry.
+  > 
+  > We can also demonstrate clean negative control on Zone Z-107 (Bhindawas Wetland), which returns zero false alarms."
 * **What to Show:**
-  1. Watch the 9 stage badges light up in the status bar in under 3 seconds.
-  2. Toggle between layers: Composite, NDVI Diff, SAR Radar Diff, and Change Mask.
-  3. Point out the real pipeline counters: Raw Detections, Rejected False Positives, and Validated Encroachments.
+  1. Toggle between **Calibration (synthetic)** and **Real Sentinel (replay)**.
+  2. Show real telemetry metadata badge with Sentinel-2 and Sentinel-1 scene IDs and UTC timestamps.
+  3. Click "Run scan": watch the 9-stage pipeline execute with real NDVI loss and SAR backscatter shifts.
 
 ---
 
 ### Step 4: Why SAR Radar Matters (Cloud Penetration)
-* **Route:** `/scan`
-* **Presenter Script (25 seconds):**
-  > "Here is our core technical differentiator: Why can't optical satellites solve this alone?
+* **Route:** `/scan` ➔ Toggle **"Calibration (synthetic)"** ➔ Set Cloud Coverage to 40%
+* **Presenter Script (20 seconds):**
+  > "Why can't optical satellites solve this alone? In Northern India, monsoon clouds and winter smog blind optical sensors for months at a time.
   > 
-  > In India, monsoon clouds and winter smog blind optical sensors for up to 4 months a year. When we switch to Optical-only mode under 40% cloud cover, the unauthorized building at coordinates (130, 130) is completely missed because it is obscured by cloud.
+  > When we select Optical-only mode under 40% cloud cover, the illegal concrete warehouse at coordinates (130, 130) is completely missed because it is obscured by cloud.
   > 
-  > When we switch back to Fused mode, Sentinel-1 C-band radar penetrates directly through the cloud layer, detects the dielectric double-bounce off the concrete foundation, and flags the violation immediately."
+  > When we switch back to Fused mode, Sentinel-1 C-band radar penetrates through the cloud deck, measures the dielectric double-bounce off the masonry walls, and immediately flags the violation."
 * **What to Show:**
   1. Select Optical mode ➔ Run Scan ➔ Misses the cloud-covered building.
   2. Select Fused mode ➔ Run Scan ➔ Catches the building.
 
 ---
 
-### Step 5: False-Positive Rejection (Seasonal Farming)
-* **Route:** `/overview` (Spectral Analysis Chart)
-* **Presenter Script (20 seconds):**
-  > "A common failure mode of conventional satellite change detection is mistaking seasonal farming or crop harvesting for illegal deforestation, because both show a drop in NDVI.
+### Step 5: Empirical Validation Panel & Threshold Sensitivity
+* **Route:** `/scan` (Validation Panel at bottom)
+* **Presenter Script (25 seconds):**
+  > "Here is our empirical verification panel. We don't just claim the AI works—we prove it against ground truth across all 38 scenarios.
   > 
-  > SentinelEye solves this by correlating NDVI vegetation loss with SAR radar double-bounce. On our Spectral Analysis scatter chart, seasonal crop harvests fall into the low-SAR quadrant and are automatically rejected as false alarms, while permanent physical structures and deforestation trigger high backscatter shifts."
+  > Under calibrated defaults, our pipeline delivers 100% Precision and 100% Recall with an average spatial IoU of 0.82 across all 4 encroachment classes and seasonal false-positive distractors.
+  > 
+  > Watch what happens when we adjust our threshold sliders: If we increase ΔSAR threshold to strict +5.0 dB, subtle excavations are missed and Recall drops. If we loosen ΔSAR to +0.5 dB, seasonal wheat farming leaks through as false alarms. Our 5x5 confusion matrix updates dynamically in real time."
 * **What to Show:**
-  1. Spectral Analysis scatter plot: show valid alerts (green) vs rejected seasonal farming detections (grey/amber).
+  1. Show the 4 KPI cards: Precision, Recall, F1 Score, and Mean Spatial IoU.
+  2. Show the 5x5 Confusion Matrix: diagonal true positives highlighted in green.
+  3. Drag the ΔNDVI and ΔSAR sliders: watch precision and recall curves adjust interactively.
+  4. Click "Reset Defaults".
 
 ---
 
-### Step 6: Accelerated Escalation Protocol (T+00:00 ➔ T+04:00)
+### Step 6: Accelerated Statutory Escalation Protocol
 * **Route:** `/alerts` ➔ Open Alert Detail Drawer
-* **Presenter Script (25 seconds):**
+* **Presenter Script (20 seconds):**
   > "Once an encroachment is detected, our statutory escalation protocol begins: T+00:00 Detection ➔ T+00:15 Multi-spectral Verification ➔ T+04:00 Statutory Notice Issuance.
   > 
-  > In real life this takes 4 statutory hours. With our built-in operational clock set to 960x speed, 4 hours elapse in 15 seconds. Let's click 'Run escalation (accelerated)'."
+  > With our built-in operational clock set to 960x speed, 4 statutory hours elapse in 15 seconds. Let's click 'Run escalation (accelerated)'."
 * **What to Show:**
   1. Click "Run escalation (accelerated 960x)".
-  2. Watch the live progress bar and clock counter tick from T+00:00 to T+00:15 (Verified), then progress to T+04:00 (Notice Drafted — Pending Officer Signature).
+  2. Watch the status transition to **'Notice Drafted — Pending Officer Signature'** at T+04:00.
   3. Click "Mark as Signed & Served by Competent Authority" to execute the final statutory step.
   4. Show the audit history trail populating with block hashes.
 
 ---
 
-### Step 7: Section 63 BSA Notice & Public QR Verification
+### Step 7: Section 63 BSA Eviction Dossier & Public QR Verification
 * **Route:** Alert Drawer ➔ Click **"Download Section 63 Draft Notice (PDF)"**
 * **Presenter Script (25 seconds):**
   > "We click 'Download Section 63 Draft Notice'. Our system instantly generates a court-admissible PDF certified under Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872).
   > 
   > Notice the two-page statutory structure: Page 1 provides the draft eviction order and bitemporal satellite crops with an officer signature block for the Competent Authority. Page 2 provides the statutory Section 63(4) certificate in two parts: Part A executed by the lawful custodian with SHA-256 evidence package hashes, and Part B executed by a technical expert.
   > 
-  > Anyone—including judges, defense attorneys, or citizens—can scan this QR code or navigate to /verify/<hash> to inspect our public verifier, which confirms the mathematical authenticity of the record without requiring a login."
+  > Anyone—including judges, defense attorneys, or citizens—can scan the QR code or navigate to /verify/<hash> to inspect our public verifier, which confirms the mathematical authenticity of the record without requiring a login."
 * **What to Show:**
-  1. Open the downloaded PDF: show header, draft notice layout, Section 63(4) Part A & Part B certificates, evidence package hashes, and QR code.
+  1. Open the downloaded PDF: show Page 1 Draft Notice, Page 2 Section 63(4) Part A & Part B certificates, evidence package hashes, and QR code.
   2. Click the external link icon or open `/verify/<hash>`: show the public page displaying **VALID CRYPTOGRAPHIC SEAL**.
 
 ---
 
-### Step 8: Forensic Tamper Detection & Self-Healing
+### Step 8: Forensic Two-Level Tamper Defense
 * **Route:** `/ledger`
 * **Presenter Script (25 seconds):**
-  > "Finally, how do we guarantee this evidence cannot be bribed or altered in the database?
+  > "Finally, how do we guarantee this electronic evidence cannot be tampered with or retroactively rewritten in the database?
   > 
-  > On our Ledger page, we visualize the SHA-256 block chain. Let's click 'Simulate tampering'. We silently modify the coordinates of Block #12.
+  > On our Ledger page, every block is signed with WebCrypto ECDSA P-256 operator private keys and chained with SHA-256. We feature a two-level tamper defense:
   > 
-  > When I click 'Verify chain', the system mathematically detects the anomaly: 'Block #12 tampered! Expected hash does not match stored hash', and all descendant blocks are invalidated. When we click 'Restore chain', the system heals back to 100% verified integrity."
+  > If an attacker simply edits a record in DevTools, clicking 'Level 1: Naive Tamper' triggers an internal block hash mismatch at Block #14.
+  > 
+  > But what if a rogue administrator rewrites the entire database and recomputes every sequential hash? Clicking 'Level 2: Smart Tamper' demonstrates that even though the internal chain hashes appear valid, the Chain Head differs from our externally anchored public seal, triggering a critical red alert: 'Smart Rewrite Detected'. When we click 'Restore chain', the system heals back to 100% verified integrity."
 * **What to Show:**
-  1. Click **Simulate tampering** ➔ Click **Verify chain** ➔ Big Red "CHAIN TAMPERED AT BLOCK #12".
-  2. Click **Restore chain** ➔ Click **Verify chain** ➔ Clean Green "VALID CHAIN".
+  1. Show Active Chain Head card and public anchor seal.
+  2. Click **Level 1: Naive Tamper** ➔ Click **Verify chain** ➔ Amber banner: "Tampering Detected at Block #14".
+  3. Click **Level 2: Smart Tamper** ➔ Click **Verify chain** ➔ Red banner: "🚨 SMART REWRITE DETECTED: Chain Internally Valid but Anchored Head Mismatch!".
+  4. Click **Restore chain** ➔ Clean Green "Cryptographic Integrity Intact • 39 Blocks & ECDSA P-256 Signatures Verified".
 
 ---
 

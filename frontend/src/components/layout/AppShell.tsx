@@ -175,6 +175,23 @@ export function AppShell({ children }: AppShellProps) {
         >
           {children}
         </main>
+
+        {/* Honest Demo Mode Footer Banner */}
+        <footer className="h-7 flex-shrink-0 px-4 bg-[#0b0f0e] border-t border-[#2a3832] flex items-center justify-between text-[11px] text-[#8fa097] font-mono select-none">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
+            <span className="text-[#b4c2bb]">
+              Demo mode: client-side simulation. Accounts, workflow and ledger are stored in your browser.
+            </span>
+          </div>
+          <div className="hidden md:flex items-center gap-3 text-[10px]">
+            <span>Boundaries: OpenStreetMap (ODbL)</span>
+            <span>•</span>
+            <span>Real STAC Replay + Calibrated Seeds</span>
+            <span>•</span>
+            <span>Section 63 BSA</span>
+          </div>
+        </footer>
       </div>
     </div>
   );
