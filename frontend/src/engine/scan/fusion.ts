@@ -18,8 +18,15 @@ export function performFusion(
   dSAR: Float32Array,
   cloudMask: Uint8Array,
   mode: ScanMode,
-  size: number
+  size: number,
+  thresholds?: {
+    ndviChange?: number;
+    sarChangeDb?: number;
+  }
 ): FusionResult {
+  const ndviThreshold = thresholds?.ndviChange ?? THRESHOLDS.NDVI_CHANGE;
+  const sarThreshold = thresholds?.sarChangeDb ?? THRESHOLDS.SAR_CHANGE_DB;
+
   const total = size * size;
   const changeMask = new Uint8Array(total);
   const rawChangeMask = new Uint8Array(total);
@@ -31,8 +38,8 @@ export function performFusion(
     const sarDiff = dSAR[i];
     const isCloud = cloudMask[i] === 1;
 
-    const opticalFlag = !isCloud && ndviDiff < THRESHOLDS.NDVI_CHANGE;
-    const sarFlag = Math.abs(sarDiff) > THRESHOLDS.SAR_CHANGE_DB;
+    const opticalFlag = !isCloud && ndviDiff < ndviThreshold;
+    const sarFlag = Math.abs(sarDiff) > sarThreshold;
 
     if (mode === 'optical') {
       if (opticalFlag) {

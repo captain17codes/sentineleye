@@ -64,7 +64,7 @@ function createBmpDataUrl(pixelsRgb: Uint8Array, width: number, height: number):
 self.onmessage = async (event: MessageEvent<WorkerInput>) => {
   if (event.data.type !== 'RUN') return;
 
-  const { zone_id, scene_type, cloud_coverage, lat, lng, data_source } = event.data.payload;
+  const { zone_id, scene_type, cloud_coverage, lat, lng, data_source, thresholds } = event.data.payload;
   const isRealMode = data_source === 'real';
 
   try {
@@ -179,6 +179,7 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
       seed: 42 + zone_id,
       dataSource: isRealMode && realSceneInput ? 'real' : 'calibration',
       realScene: realSceneInput,
+      thresholds,
     });
 
     // Create 3-channel RGB Float32Array scenes for canvas rendering

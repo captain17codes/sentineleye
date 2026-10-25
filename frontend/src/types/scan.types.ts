@@ -62,6 +62,10 @@ export interface WorkerInput {
     lng: number;
     zoneCoordinates?: number[][];
     data_source?: DataSourceMode;
+    thresholds?: {
+      ndviChange?: number;
+      sarChangeDb?: number;
+    };
   };
 }
 

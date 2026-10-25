@@ -3,12 +3,15 @@ import { ScenePanel } from '../components/command/ScenePanel';
 import { CloudSlider } from '../components/command/CloudSlider';
 import { DetectionCanvas } from '../components/command/DetectionCanvas';
 import { ClassifierOutput } from '../components/command/ClassifierOutput';
+import { ValidationPanel } from '../components/command/ValidationPanel';
 import { useDetectionWorker } from '../hooks/useDetectionWorker';
 import { useZones } from '../hooks/useZones';
 import { useAlerts } from '../hooks/useAlerts';
 import { useJurisdiction, JURISDICTION_CONFIG } from '../context/JurisdictionContext';
 import { scansApi } from '../api/scans.api';
 import { SceneType, DataSourceMode } from '../types/scan.types';
+import { ThresholdSettings } from '../engine/scan/metrics';
+import { THRESHOLDS } from '../engine/config';
 import { Play, Check, Radar, Layers, CheckCircle2, Shield, Info, AlertCircle, Satellite } from 'lucide-react';
 
 export function Scan() {
@@ -23,6 +26,10 @@ export function Scan() {
   const [cloudCoverage, setCloudCoverage] = useState<number>(15);
   const [savingScan, setSavingScan] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [thresholds, setThresholds] = useState<ThresholdSettings>({
+    ndviChange: THRESHOLDS.NDVI_CHANGE,
+    sarChangeDb: THRESHOLDS.SAR_CHANGE_DB,
+  });
 
   // Filter zones by currently active jurisdiction from top bar
   const jurisdictionConfig = JURISDICTION_CONFIG[jurisdiction];
@@ -58,6 +65,7 @@ export function Scan() {
       lng: coords[0],
       lat: coords[1],
       data_source: dataSource,
+      thresholds,
     });
     setSaveStatus(null);
   };
@@ -367,6 +375,13 @@ export function Scan() {
           </div>
         </div>
       </div>
+
+      {/* Empirical Validation & Model Sensitivity Panel */}
+      <ValidationPanel
+        zoneId={selectedZoneId}
+        liveDetections={result?.blobs}
+        onThresholdsChange={setThresholds}
+      />
 
       {/* Limitations Panel: Transparent & Honest Remote Sensing Constraints */}
       <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">

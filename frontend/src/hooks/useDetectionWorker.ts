@@ -107,6 +107,10 @@ export function useDetectionWorker() {
       lat: number;
       lng: number;
       data_source?: DataSourceMode;
+      thresholds?: {
+        ndviChange?: number;
+        sarChangeDb?: number;
+      };
     }) => {
       if (!workerRef.current) return;
       setIsRunning(true);

@@ -26,6 +26,10 @@ export interface ScanPipelineInput {
     t1: SceneBands;
     cloudMask?: Uint8Array;
   };
+  thresholds?: {
+    ndviChange?: number;
+    sarChangeDb?: number;
+  };
   onProgress?: (stage: string, percent: number) => void;
 }
 
@@ -73,7 +77,7 @@ export function runScanPipeline(input: ScanPipelineInput): ScanPipelineOutput {
   const dSAR = computeSarDiff(scene.t1.sar, scene.t0.sar, size, true);
 
   input.onProgress?.('Fusion: Evaluating optical and microwave agreement', 70);
-  const fusion = performFusion(dNDVI, dSAR, cloudMask, input.mode, size);
+  const fusion = performFusion(dNDVI, dSAR, cloudMask, input.mode, size, input.thresholds);
 
   input.onProgress?.('Spatial: Connected-component vectorization of change masks', 80);
   const blobs = vectorizeChangeMask(fusion.changeMask, dNDVI, dSAR, fusion.confidenceMap, scene.geotransform, size);
