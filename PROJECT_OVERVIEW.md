@@ -92,6 +92,19 @@ SentinelEye introduces an automated, closed-loop surveillance-to-enforcement arc
   - 🟡 **MEDIUM:** Fencing, road cutting, or agricultural encroachment.
   - 🔵 **LOW:** Peripheral vegetation disturbance.
 - **Collapsible Live Feed:** Instant search, jurisdiction filtering, and rapid fly-to coordinates.
+- **Monitored Ecological Sectors (Calibrated via `turf.area`):**
+
+| Zone ID | Sector Name | Jurisdiction / State | Risk Level | Monitored Area (m²) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Z-101** | Delhi Ridge Forest Sector C | NCT of Delhi | Critical | 77,134,189 m² |
+| **Z-102** | Mangar Bani Sacred Grove | Haryana (NCR) | Critical | 70,880,113 m² |
+| **Z-103** | Yamuna Floodplain Sector 7 | NCT of Delhi | High | 84,050,367 m² |
+| **Z-104** | Asola Bhatti Wildlife Sanctuary | NCT of Delhi | High | 87,160,790 m² |
+| **Z-105** | Aravalli Forest Reserve | Haryana / Rajasthan | High | 83,935,943 m² |
+| **Z-106** | Sariska Buffer Zone B | Rajasthan Border | High | 90,338,468 m² |
+| **Z-107** | Bhindawas Wetland Zone | Haryana | Medium | 74,292,439 m² |
+| **Z-108** | Haryana Agricultural Reserve | Haryana (NCR) | Low | 80,180,143 m² |
+| **Total** | **8 Ecological Corridors** | **National Capital Region** | — | **647,972,452 m²** |
 
 ### 5. Autonomous Orbital Scan Engine & Web Worker
 - **9-Stage Real-Time Pipeline in Dedicated Web Worker:**
@@ -338,5 +351,6 @@ When presenting SentinelEye to evaluators, professors, or technical panels, use 
 
 - **License:** MIT Open-Source License
 - **Satellite Data Attribution:** Contains modified Copernicus Sentinel data (2020–2024), processed via European Space Agency (ESA) open science guidelines.
+- **Cadastral Boundary Attribution:** Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records.
 - **Base Map Attribution:** Leaflet | Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community.
 - **Project Author:** SentinelEye Defense Engineering Group

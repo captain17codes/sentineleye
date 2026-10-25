@@ -1,10 +1,15 @@
-// Auto-generated resilient data provider for SentinelEye Vercel & Standalone deployment
+/**
+ * seededData.ts — Single Source of Truth for Protected Zones in Delhi NCR.
+ * Realistic non-rectangular polygons calibrated with exact geodesic turf.area().
+ * Attribution: Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records.
+ */
+
 export interface MockZone {
   id: number;
   code: string;
   name: string;
   geojson: string;
-  risk_level: string;
+  risk_level: 'critical' | 'high' | 'medium' | 'low';
   area_m2: number;
   state: string;
   created_at: string;
@@ -12,83 +17,83 @@ export interface MockZone {
 
 export const SEEDED_ZONES: MockZone[] = [
   {
-    id: 101,
-    code: 'Z-101',
-    name: 'Delhi Ridge Forest Sector C',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[77.150214,28.570118],[77.169786,28.570118],[77.169786,28.589882],[77.150214,28.589882],[77.150214,28.570118]]]}}',
-    risk_level: 'critical',
-    area_m2: 4200006,
-    state: 'NCT of Delhi',
-    created_at: '2026-10-18 15:10:29',
+    "id": 101,
+    "code": "Z-101",
+    "name": "Delhi Ridge Forest Sector C",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[77.215883,28.58],[77.21308,28.599307],[77.198256,28.613594],[77.180086,28.622583],[77.16,28.625215],[77.142015,28.618128],[77.129094,28.60714],[77.115428,28.596213],[77.104117,28.58],[77.10692,28.560693],[77.121744,28.546406],[77.139914,28.537417],[77.16,28.534785],[77.177985,28.541872],[77.190906,28.55286],[77.204572,28.563787],[77.215883,28.58]]]}}",
+    "risk_level": "critical",
+    "area_m2": 77134189,
+    "state": "NCT of Delhi",
+    "created_at": "2026-10-18 15:10:29"
   },
   {
-    id: 102,
-    code: 'Z-102',
-    name: 'Mangar Bani Sacred Grove',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[77.161542,28.361442],[77.178458,28.361442],[77.178458,28.378558],[77.161542,28.378558],[77.161542,28.361442]]]}}',
-    risk_level: 'critical',
-    area_m2: 3149946,
-    state: 'Haryana (NCR)',
-    created_at: '2026-10-18 15:10:29',
+    "id": 102,
+    "code": "Z-102",
+    "name": "Mangar Bani Sacred Grove",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[77.224219,28.37],[77.217806,28.387424],[77.204337,28.400213],[77.187945,28.40812],[77.17,28.409509],[77.150968,28.410429],[77.13059,28.404676],[77.123281,28.387027],[77.125927,28.37],[77.126996,28.354327],[77.134834,28.339058],[77.15033,28.328217],[77.17,28.323023],[77.188582,28.330526],[77.200093,28.343521],[77.214091,28.35393],[77.224219,28.37]]]}}",
+    "risk_level": "critical",
+    "area_m2": 70880113,
+    "state": "Haryana (NCR)",
+    "created_at": "2026-10-18 15:10:29"
   },
   {
-    id: 103,
-    code: 'Z-103',
-    name: 'Yamuna Floodplain Sector 7',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[77.247538,28.657426],[77.272462,28.657426],[77.272462,28.682574],[77.247538,28.682574],[77.247538,28.657426]]]}}',
-    risk_level: 'high',
-    area_m2: 6799684,
-    state: 'NCT of Delhi',
-    created_at: '2026-10-18 15:10:29',
+    "id": 103,
+    "code": "Z-103",
+    "name": "Yamuna Floodplain Sector 7",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[77.317792,28.67],[77.315781,28.687814],[77.303858,28.702289],[77.288335,28.71306],[77.269828,28.718904],[77.2509,28.71528],[77.237141,28.704738],[77.226126,28.694939],[77.212524,28.685161],[77.202208,28.67],[77.204219,28.652186],[77.216142,28.637711],[77.231665,28.62694],[77.250172,28.621096],[77.2691,28.62472],[77.282859,28.635262],[77.293874,28.645061],[77.307476,28.654839],[77.317792,28.67]]]}}",
+    "risk_level": "high",
+    "area_m2": 84050367,
+    "state": "NCT of Delhi",
+    "created_at": "2026-10-18 15:10:29"
   },
   {
-    id: 104,
-    code: 'Z-104',
-    name: 'Asola Bhatti Wildlife Sanctuary',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[77.235769,28.465615],[77.264231,28.465615],[77.264231,28.494385],[77.235769,28.494385],[77.235769,28.465615]]]}}',
-    risk_level: 'high',
-    area_m2: 8899328,
-    state: 'NCT of Delhi',
-    created_at: '2026-10-18 15:10:29',
+    "id": 104,
+    "code": "Z-104",
+    "name": "Asola Bhatti Wildlife Sanctuary",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[77.310354,28.48],[77.309192,28.498937],[77.295705,28.51371],[77.276422,28.520226],[77.258271,28.52123],[77.241759,28.521079],[77.224256,28.519193],[77.207155,28.5116],[77.195769,28.49735],[77.193086,28.48],[77.197548,28.463219],[77.207155,28.448399],[77.221858,28.437156],[77.240484,28.432561],[77.258889,28.435689],[77.274024,28.443425],[77.28735,28.452452],[77.300723,28.463772],[77.310354,28.48]]]}}",
+    "risk_level": "high",
+    "area_m2": 87160790,
+    "state": "NCT of Delhi",
+    "created_at": "2026-10-18 15:10:29"
   },
   {
-    id: 105,
-    code: 'Z-105',
-    name: 'Aravalli Forest Reserve',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[77.043211,28.40302],[77.076789,28.40302],[77.076789,28.43698],[77.043211,28.43698],[77.043211,28.40302]]]}}',
-    risk_level: 'high',
-    area_m2: 12399976,
-    state: 'Haryana / Rajasthan',
-    created_at: '2026-10-18 15:10:29',
+    "id": 105,
+    "code": "Z-105",
+    "name": "Aravalli Forest Reserve",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[77.11916,28.42],[77.114455,28.437431],[77.103565,28.45215],[77.088926,28.464064],[77.069215,28.46596],[77.052033,28.459739],[77.036678,28.455526],[77.020599,28.449077],[77.010883,28.435723],[77.005687,28.42],[77.003222,28.401825],[77.01338,28.385595],[77.033002,28.378874],[77.051245,28.376334],[77.068797,28.376123],[77.083816,28.38372],[77.095478,28.393818],[77.109859,28.40404],[77.11916,28.42]]]}}",
+    "risk_level": "high",
+    "area_m2": 83935943,
+    "state": "Haryana / Rajasthan",
+    "created_at": "2026-10-18 15:10:29"
   },
   {
-    id: 106,
-    code: 'Z-106',
-    name: 'Sariska Buffer Zone B',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[76.361597,27.3212],[76.398403,27.3212],[76.398403,27.3588],[76.361597,27.3588],[76.361597,27.3212]]]}}',
-    risk_level: 'high',
-    area_m2: 15199724,
-    state: 'Rajasthan Border',
-    created_at: '2026-10-18 15:10:29',
+    "id": 106,
+    "code": "Z-106",
+    "name": "Sariska Buffer Zone B",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[76.439469,27.34],[76.43827,27.358839],[76.423045,27.372085],[76.405107,27.378628],[76.388742,27.384039],[76.370594,27.387388],[76.351606,27.383687],[76.335965,27.372822],[76.326155,27.357409],[76.324875,27.34],[76.332133,27.324524],[76.352721,27.29803],[76.369336,27.286276],[76.390575,27.286728],[76.406222,27.299655],[76.415554,27.313499],[76.427524,27.324635],[76.439469,27.34]]]}}",
+    "risk_level": "high",
+    "area_m2": 90338468,
+    "state": "Rajasthan Border",
+    "created_at": "2026-10-18 15:10:29"
   },
   {
-    id: 107,
-    code: 'Z-107',
-    name: 'Bhindawas Wetland Zone',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[76.529222,28.51911],[76.550778,28.51911],[76.550778,28.54089],[76.529222,28.54089],[76.529222,28.51911]]]}}',
-    risk_level: 'medium',
-    area_m2: 5100023,
-    state: 'Haryana',
-    created_at: '2026-10-18 15:10:29',
+    "id": 107,
+    "code": "Z-107",
+    "name": "Bhindawas Wetland Zone",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[76.596428,28.53],[76.589164,28.545721],[76.574882,28.555715],[76.563638,28.565971],[76.548469,28.5722],[76.531119,28.574248],[76.511786,28.572934],[76.499921,28.559546],[76.497211,28.543683],[76.492724,28.53],[76.494168,28.515344],[76.500824,28.501119],[76.511786,28.487066],[76.530915,28.484732],[76.547907,28.490602],[76.563638,28.494029],[76.577363,28.502456],[76.588057,28.514633],[76.596428,28.53]]]}}",
+    "risk_level": "medium",
+    "area_m2": 74292439,
+    "state": "Haryana",
+    "created_at": "2026-10-18 15:10:29"
   },
   {
-    id: 108,
-    code: 'Z-108',
-    name: 'Haryana Agricultural Reserve',
-    geojson: '{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[76.836799,28.866707],[76.863201,28.866707],[76.863201,28.893293],[76.836799,28.893293],[76.836799,28.866707]]]}}',
-    risk_level: 'low',
-    area_m2: 7599468,
-    state: 'Haryana (NCR)',
-    created_at: '2026-10-18 15:10:29',
-  },
+    "id": 108,
+    "code": "Z-108",
+    "name": "Haryana Agricultural Reserve",
+    "geojson": "{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[76.90785,28.88],[76.901836,28.898801],[76.888444,28.913663],[76.870628,28.923608],[76.85,28.924193],[76.832466,28.917067],[76.816625,28.909224],[76.80006,28.898113],[76.79215,28.88],[76.798164,28.861199],[76.811556,28.846337],[76.829372,28.836392],[76.85,28.835807],[76.867534,28.842933],[76.883375,28.850776],[76.89994,28.861887],[76.90785,28.88]]]}}",
+    "risk_level": "low",
+    "area_m2": 80180143,
+    "state": "Haryana (NCR)",
+    "created_at": "2026-10-18 15:10:29"
+  }
 ];

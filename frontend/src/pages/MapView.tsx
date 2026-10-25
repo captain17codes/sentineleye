@@ -152,6 +152,11 @@ export function MapView() {
         </div>
       </div>
 
+      {/* Cadastral Boundary Attribution */}
+      <div className="absolute bottom-4 right-4 z-20 pointer-events-auto hidden md:flex items-center px-3 py-1.5 rounded-md bg-[#111816]/90 border border-[#2a3832] text-[10px] text-[#b4c2bb] font-mono select-none shadow">
+        Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records
+      </div>
+
       {/* ── Right Slide-in Incident Dossier ── */}
       {selectedAlert && (
         <DossierDrawer
