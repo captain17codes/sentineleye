@@ -30,18 +30,18 @@ export function ClassifierOutput({
         <div>
           <h4 className="text-xs font-semibold text-text">Detections breakdown</h4>
           <p className="text-[11px] text-muted">
-            {validatedCount} validated encroachment{validatedCount !== 1 ? 's' : ''} inside protected polygon
+            {validatedCount} validated encroachment{validatedCount !== 1 ? 's' : ''} inside protected cadastral polygon
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-panel-light border border-border text-muted">
+          <span className="px-2.5 py-1 rounded text-xs font-mono bg-panel-light border border-border text-muted font-medium">
             Raw: {rawCount}
           </span>
-          <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-accent/15 border border-accent/40 text-accent font-semibold">
+          <span className="px-2.5 py-1 rounded text-xs font-mono bg-accent/20 border border-accent/50 text-accent font-bold">
             Validated: {validatedCount}
           </span>
           {falsePositivesFiltered > 0 && (
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-panel-light border border-border text-muted">
+            <span className="px-2.5 py-1 rounded text-xs font-mono bg-panel-light border border-border text-amber-400 font-medium">
               Filtered: {falsePositivesFiltered}
             </span>
           )}
@@ -56,16 +56,16 @@ export function ClassifierOutput({
           return (
             <div
               key={cls}
-              className="p-2.5 rounded-lg bg-panel-light border border-border flex flex-col gap-1"
+              className="p-3 rounded-lg bg-panel-light border border-border flex flex-col gap-1"
             >
               <div className="flex items-center gap-1.5">
                 <span
-                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                   style={{ backgroundColor: color }}
                 />
-                <span className="text-[11px] font-medium text-muted truncate">{cls}</span>
+                <span className="text-xs font-semibold text-muted truncate">{cls}</span>
               </div>
-              <span className="text-base font-semibold text-text font-mono pl-3.5">
+              <span className="text-xl font-bold text-text font-mono pl-4">
                 {count}
               </span>
             </div>

@@ -61,7 +61,7 @@ export function MapView() {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-48px)] overflow-hidden bg-[#0b0f0e]">
+    <div className="relative w-full h-full overflow-hidden bg-[#0b0f0e]">
       {/* ── Full-height Leaflet with Esri World Imagery tiles (zero gaps) ── */}
       <MapContainer
         center={mapCenter}
@@ -153,7 +153,7 @@ export function MapView() {
       </div>
 
       {/* Cadastral Boundary Attribution */}
-      <div className="absolute bottom-4 right-4 z-20 pointer-events-auto hidden md:flex items-center px-3 py-1.5 rounded-md bg-[#111816]/90 border border-[#2a3832] text-[10px] text-[#b4c2bb] font-mono select-none shadow">
+      <div className="absolute bottom-4 right-4 z-20 pointer-events-auto hidden md:flex items-center px-3 py-1.5 rounded-md bg-[#111816]/90 border border-[#2a3832] text-[10px] text-[#b4c2bb] font-mono select-none shadow presentation-hidden">
         Indicative zone polygons (generated)
       </div>
 

@@ -12,7 +12,15 @@ import { scansApi } from '../api/scans.api';
 import { SceneType, DataSourceMode } from '../types/scan.types';
 import { ThresholdSettings } from '../engine/scan/metrics';
 import { THRESHOLDS } from '../engine/config';
-import { Play, Check, Radar, Layers, CheckCircle2, Shield, Info, AlertCircle, Satellite } from 'lucide-react';
+import { Play, Check, Radar, Layers, CheckCircle2, Shield, Info, AlertCircle, Satellite, ArrowRight } from 'lucide-react';
+
+const PIPELINE_STAGES = [
+  { id: 'ingest', step: 1, name: 'Telemetry Ingest', desc: 'Sentinel-1 SAR & Sentinel-2 MSI rasters (10m GSD)' },
+  { id: 'atmospheric', step: 2, name: 'Atmospheric Mask', desc: 'Automated SCL cloud, cloud-shadow & haze suppression' },
+  { id: 'fusion', step: 3, name: 'Sensor Fusion', desc: 'Bitemporal ΔNDVI vegetation and ΔSAR radar cross-agreement' },
+  { id: 'vectorize', step: 4, name: 'Vectorization', desc: 'Connected-component spatial clustering of change rasters' },
+  { id: 'cadastral', step: 5, name: 'Cadastral Overlay', desc: 'Protected zone boundary intersection (≥35% statutory cutoff)' },
+];
 
 export function Scan() {
   const { zones, loading: zonesLoading } = useZones();
@@ -79,6 +87,7 @@ export function Scan() {
         zone_id: selectedZoneId,
         scene_type: sceneType,
         cloud_coverage: cloudCoverage,
+        data_source: dataSource,
         raw_count: result.raw_count,
         validated_count: result.validated_count,
         change_score: result.change_score,
@@ -127,11 +136,118 @@ export function Scan() {
           <button
             onClick={handleRunScan}
             disabled={isRunning || zonesLoading || !activeZone}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors shadow-sm min-h-[38px]"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             <span>{isRunning ? `Running scan (${progress}%)` : 'Run scan'}</span>
           </button>
+        </div>
+      </div>
+
+      {/* ── Prominent Pipeline Stage Counters (Big numbers for Raw / Rejected / Validated) ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Raw Detections */}
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Raw detections</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#93c5fd]" />
+          </div>
+          <span className="text-3xl sm:text-4xl font-bold font-mono text-[#93c5fd] kpi-number">
+            {result ? result.raw_count : '—'}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Raw detections: Initial candidate pixel clusters flagged by spectral &amp; radar diffs
+          </p>
+        </div>
+
+        {/* Rejected (False+) */}
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Rejected (False+)</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#fbbf24]" />
+          </div>
+          <span className="text-3xl sm:text-4xl font-bold font-mono text-[#fbbf24] kpi-number">
+            {result ? result.false_positives_filtered : '—'}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Rejected: False alarms eliminated by dual-sensor fusion &amp; cloud suppression
+          </p>
+        </div>
+
+        {/* Validated Alerts */}
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Validated alerts</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#22c55e]" />
+          </div>
+          <span className="text-3xl sm:text-4xl font-bold font-mono text-[#22c55e] kpi-number">
+            {result ? result.validated_count : '—'}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Validated alerts: Confirmed encroachments exceeding 35% cadastral boundary overlap
+          </p>
+        </div>
+
+        {/* Sub-threshold */}
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Sub-threshold</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#94a3b8]" />
+          </div>
+          <span className="text-3xl sm:text-4xl font-bold font-mono text-[#94a3b8] kpi-number">
+            {result ? (result.belowThresholdCount ?? 0) : '—'}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Sub-threshold: Minor anomalies located outside or below statutory boundary threshold
+          </p>
+        </div>
+      </div>
+
+      {/* ── Prominent Pipeline Processing Stages ── */}
+      <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
+        <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+          <div className="flex items-center gap-2">
+            <Radar className="w-4 h-4 text-[#22c55e]" />
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#f1f5f3]">
+              Orbital Analysis Pipeline Stages
+            </h3>
+          </div>
+          <span className="text-[11px] font-mono text-[#22c55e] font-semibold">
+            {isRunning ? `${progress}% In Progress` : result ? 'Pipeline Pass Verified' : 'Awaiting Execution'}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+          {PIPELINE_STAGES.map((stg) => {
+            const isDone = !isRunning && result !== null;
+            const isActive = isRunning && (currentStage || '').toLowerCase().includes(stg.id);
+            return (
+              <div
+                key={stg.id}
+                className={`p-3 rounded-lg border text-xs flex flex-col gap-1 transition-all ${
+                  isActive
+                    ? 'bg-[#16201c] border-[#22c55e] shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                    : isDone
+                    ? 'bg-[#16201c] border-[#22c55e]/50'
+                    : 'bg-[#0b0f0e] border-[#2a3832] opacity-75'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] text-[#22c55e] font-bold">
+                    STAGE 0{stg.step}
+                  </span>
+                  {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e]" />}
+                  {isActive && <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-ping" />}
+                </div>
+                <span className="font-semibold text-[13px] text-[#f1f5f3] leading-snug">
+                  {stg.name}
+                </span>
+                <span className="text-[11px] text-[#b4c2bb] leading-tight">
+                  {stg.desc}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -341,30 +457,30 @@ export function Scan() {
                   currentStage={currentStage}
                 />
 
-                {/* Metrics Footer with 4 Real Counters */}
+                {/* Metrics Summary Strip with 4 Counters */}
                 {result && (
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#2a3832]">
                     <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
                       <span className="text-[11px] text-[#b4c2bb]">Raw detections</span>
-                      <span className="text-base font-semibold font-mono text-[#f1f5f3]">
+                      <span className="text-xl font-bold font-mono text-[#93c5fd]">
                         {result.raw_count}
                       </span>
                     </div>
                     <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
                       <span className="text-[11px] text-[#b4c2bb]">Rejected (False+)</span>
-                      <span className="text-base font-semibold font-mono text-amber-400">
+                      <span className="text-xl font-bold font-mono text-[#fbbf24]">
                         {result.false_positives_filtered}
                       </span>
                     </div>
                     <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
                       <span className="text-[11px] text-[#b4c2bb]">Validated alerts</span>
-                      <span className="text-base font-semibold font-mono text-[#22c55e]">
+                      <span className="text-xl font-bold font-mono text-[#22c55e]">
                         {result.validated_count}
                       </span>
                     </div>
                     <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
                       <span className="text-[11px] text-[#b4c2bb]">Sub-threshold (&lt;35%)</span>
-                      <span className="text-base font-semibold font-mono text-[#8fa097]">
+                      <span className="text-xl font-bold font-mono text-[#94a3b8]">
                         {result.belowThresholdCount ?? 0}
                       </span>
                     </div>

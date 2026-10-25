@@ -48,3 +48,6 @@ Thumbs.db
 test_*.js
 capture_*.js
 cookies.txt
+
+.venv/
+tools/out/

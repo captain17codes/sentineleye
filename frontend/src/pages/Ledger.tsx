@@ -27,6 +27,7 @@ import {
   KeyRound,
   FileCode2,
 } from 'lucide-react';
+import { LoadingState, EmptyState } from '../components/ui/StatusStates';
 
 export function Ledger() {
   const [chain, setChain] = useState<LedgerBlock[]>([]);
@@ -130,7 +131,7 @@ export function Ledger() {
           <button
             onClick={handleVerify}
             disabled={isVerifying}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] transition-colors shadow-sm disabled:opacity-50"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] transition-colors shadow-sm disabled:opacity-50 min-h-[38px]"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
             <span>{isVerifying ? 'Verifying...' : 'Verify chain'}</span>
@@ -140,7 +141,7 @@ export function Ledger() {
             <>
               <button
                 onClick={handleNaiveTamper}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16201c] border border-amber-500/40 text-amber-400 text-xs font-medium hover:bg-amber-500/10 transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#16201c] border border-amber-500/40 text-amber-400 text-xs font-semibold hover:bg-amber-500/10 transition-colors min-h-[38px]"
                 title="Level 1: Mutates Block #14 payload without updating following hashes"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
@@ -149,7 +150,7 @@ export function Ledger() {
 
               <button
                 onClick={handleSmartTamper}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16201c] border border-red-500/40 text-red-400 text-xs font-medium hover:bg-red-500/10 transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#16201c] border border-red-500/40 text-red-400 text-xs font-semibold hover:bg-red-500/10 transition-colors min-h-[38px]"
                 title="Level 2: Mutates Block #14 payload AND recomputes all subsequent hashes to trick the chain"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
@@ -159,7 +160,7 @@ export function Ledger() {
           ) : (
             <button
               onClick={handleRestore}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16201c] border border-[#22c55e] text-[#22c55e] text-xs font-medium hover:bg-[#22c55e]/10 transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#16201c] border border-[#22c55e] text-[#22c55e] text-xs font-semibold hover:bg-[#22c55e]/10 transition-colors min-h-[38px]"
             >
               <RotateCcw className="w-3.5 h-3.5 text-[#22c55e]" />
               <span>Restore chain ({tamperedType === 'smart' ? 'Smart Tamper' : 'Naive Tamper'})</span>
@@ -182,15 +183,19 @@ export function Ledger() {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#b4c2bb]">
+          <p className="text-[11px] text-[#b4c2bb] kpi-subtitle">
+            Chain provenance seal: Current tip of the immutable chain anchored to external public timestamp
+          </p>
+          <div className="flex items-center gap-2 text-xs font-mono text-[#b4c2bb] mt-0.5">
             <span className="text-[#8fa097]">Current Head:</span>
             <span className="text-[#22c55e] font-semibold truncate max-w-md" title={currentHeadHash}>
               {currentHeadHash}
             </span>
             <button
               onClick={handleCopyHead}
-              className="p-1 hover:text-[#f1f5f3] transition-colors"
+              className="p-1.5 hover:text-[#f1f5f3] transition-colors min-h-[28px] min-w-[28px] flex items-center justify-center"
               title="Copy Chain Head Hash"
+              aria-label="Copy Chain Head Hash"
             >
               <Copy className="w-3.5 h-3.5" />
             </button>
@@ -215,7 +220,7 @@ export function Ledger() {
 
         <button
           onClick={handleAnchorNow}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#16201c] hover:bg-[#111816] border border-[#22c55e] text-[#22c55e] font-medium text-xs transition-colors shrink-0"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#16201c] hover:bg-[#111816] border border-[#22c55e] text-[#22c55e] font-semibold text-xs transition-colors shrink-0 min-h-[38px]"
         >
           <Anchor className="w-3.5 h-3.5" />
           <span>Anchor chain head</span>
@@ -247,6 +252,9 @@ export function Ledger() {
                   ? `🚨 SMART REWRITE DETECTED: Chain Internally Valid but Anchored Head Mismatch!`
                   : `Tampering Detected at Block #${verification.firstInvalidIndex}`}
               </div>
+              <p className="text-[11px] text-[#b4c2bb] kpi-subtitle mt-0.5">
+                Cryptographic integrity: SHA-256 block hash tree ensuring complete tamper resistance under Sec 63 BSA
+              </p>
               <div className="text-xs text-[#b4c2bb] mt-0.5 leading-relaxed">
                 {verification.valid
                   ? 'All sequential SHA-256 block hashes, ECDSA operator signatures, and external anchor match root provenance.'
@@ -289,8 +297,21 @@ export function Ledger() {
       </div>
 
       {/* Blocks List */}
-      <div className="flex flex-col gap-3">
-        {filteredChain.map((block) => {
+      {isVerifying && chain.length === 0 ? (
+        <LoadingState
+          title="VALIDATING CRYPTOGRAPHIC CHAIN..."
+          message="Computing SHA-256 block hash tree, ECDSA P-256 signatures, and external timestamp anchor..."
+        />
+      ) : filteredChain.length === 0 ? (
+        <EmptyState
+          title="No blocks found"
+          message="No ledger blocks match the selected block type filter. Reset to view the complete immutable chain."
+          actionLabel="Show all block types"
+          onAction={() => setFilterType('all')}
+        />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {filteredChain.map((block) => {
           const isBroken =
             verification &&
             !verification.valid &&
@@ -388,6 +409,7 @@ export function Ledger() {
           );
         })}
       </div>
+      )}
     </div>
   );
 }

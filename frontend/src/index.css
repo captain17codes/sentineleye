@@ -19,11 +19,48 @@
     background-color: #0b0f0e;
     color: #f1f5f3;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1.5;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+  }
+
+  /* Projector & Accessibility: Enforce minimum button hit area (min 36px) */
+  button:not(.compact-btn) {
+    min-height: 36px;
+  }
+
+  /* Presentation Mode styles */
+  html.presentation-mode {
+    font-size: 16px;
+  }
+
+  html.presentation-mode body {
+    font-size: 16px;
+    letter-spacing: 0.015em;
+  }
+
+  .presentation-mode .presentation-hidden {
+    display: none !important;
+  }
+
+  .presentation-mode .kpi-number {
+    font-size: 2.75rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .presentation-mode .kpi-subtitle {
+    font-size: 0.9rem !important;
+    color: #d1fae5 !important;
+  }
+
+  .presentation-mode button:not(.compact-btn),
+  .presentation-mode select,
+  .presentation-mode input {
+    min-height: 42px !important;
+    font-size: 14px !important;
   }
 
   /* Form controls: solid #0b0f0e, light text #f1f5f3, 1px #2a3832 border, 2px #22c55e focus ring */

@@ -1,23 +1,23 @@
 export type Severity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
 
-// Design System B: Severity colors only on badges and polygons
+// Design System B: Severity colors only on badges and polygons (min 4.5:1 contrast against #0b0f0e)
 export const severityColor: Record<Severity, string> = {
-  LOW: '#64748b',
+  LOW: '#94a3b8',
   MEDIUM: '#eab308',
   HIGH: '#f59e0b',
   CRITICAL: '#ef4444',
 };
 
 export const severityBg: Record<Severity, string> = {
-  LOW: 'rgba(100, 116, 139, 0.12)',
-  MEDIUM: 'rgba(234, 179, 8, 0.12)',
-  HIGH: 'rgba(245, 158, 11, 0.12)',
-  CRITICAL: 'rgba(239, 68, 68, 0.12)',
+  LOW: 'rgba(148, 163, 184, 0.15)',
+  MEDIUM: 'rgba(234, 179, 8, 0.15)',
+  HIGH: 'rgba(245, 158, 11, 0.15)',
+  CRITICAL: 'rgba(239, 68, 68, 0.15)',
 };
 
 export const riskLevelColor: Record<RiskLevel, string> = {
-  low: '#64748b',
+  low: '#94a3b8',
   medium: '#eab308',
   high: '#f59e0b',
   critical: '#ef4444',

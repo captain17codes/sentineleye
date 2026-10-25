@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useJurisdiction, JURISDICTION_CONFIG, JurisdictionOption } from '../../context/JurisdictionContext';
+import { usePresentationMode } from '../../context/PresentationModeContext';
 import {
   LayoutDashboard,
   MapPin,
@@ -16,6 +17,7 @@ import {
   Layers,
   ChevronDown,
   Lock,
+  Tv,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -27,6 +29,7 @@ export function AppShell({ children }: AppShellProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { jurisdiction, setJurisdiction } = useJurisdiction();
+  const { isPresentationMode, togglePresentationMode } = usePresentationMode();
 
   const handleLogout = async () => {
     await logout();
@@ -132,8 +135,35 @@ export function AppShell({ children }: AppShellProps) {
             </span>
           </div>
 
-          {/* Right Controls: Jurisdiction Picker + Ledger Status */}
-          <div className="flex items-center gap-4">
+          {/* Right Controls: Presentation Mode Toggle + Jurisdiction Picker + Ledger Status */}
+          <div className="flex items-center gap-3">
+            {/* Presentation Mode Toggle Button */}
+            <button
+              type="button"
+              onClick={togglePresentationMode}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md border text-xs font-semibold transition-all min-h-[36px] ${
+                isPresentationMode
+                  ? 'bg-[#22c55e]/20 border-[#22c55e] text-[#22c55e] shadow-[0_0_12px_rgba(34,197,94,0.35)]'
+                  : 'bg-[#0b0f0e] border-[#2a3832] text-[#b4c2bb] hover:text-[#f1f5f3] hover:border-[#22c55e]/50'
+              }`}
+              title={isPresentationMode ? 'Exit Presentation Mode' : 'Enter Presentation Mode (Projector & High Visibility)'}
+              aria-label="Toggle Presentation Mode"
+            >
+              <Tv className={`w-3.5 h-3.5 ${isPresentationMode ? 'text-[#22c55e]' : 'text-[#b4c2bb]'}`} />
+              <span className="hidden sm:inline font-medium">Presentation</span>
+              <span
+                className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
+                  isPresentationMode
+                    ? 'bg-[#22c55e] text-[#0b0f0e]'
+                    : 'bg-[#16201c] text-[#8fa097] border border-[#2a3832]'
+                }`}
+              >
+                {isPresentationMode ? 'ON' : 'OFF'}
+              </span>
+            </button>
+
+            <span className="text-border">|</span>
+
             {/* Jurisdiction Picker (Explicitly styled solid to avoid OS white-on-white) */}
             <div className="relative flex items-center">
               <select
@@ -170,7 +200,9 @@ export function AppShell({ children }: AppShellProps) {
         {/* Dynamic Page Content */}
         <main
           className={`flex-1 bg-bg ${
-            location.pathname === '/map' ? 'p-0 overflow-hidden' : 'p-4 sm:p-6 lg:p-7 overflow-y-auto'
+            location.pathname === '/map'
+              ? 'p-0 overflow-hidden'
+              : 'p-4 sm:p-6 lg:p-7 overflow-y-auto overflow-x-hidden'
           }`}
         >
           {children}
@@ -184,7 +216,7 @@ export function AppShell({ children }: AppShellProps) {
               Demo mode: client-side simulation. Accounts, workflow and ledger are stored in your browser.
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-3 text-[10px]">
+          <div className="hidden md:flex items-center gap-3 text-[10px] presentation-hidden">
             <span>Indicative zone polygons (generated)</span>
             <span>•</span>
             <span>Calibrated scenes modeled on real sites (synthetic arrays)</span>

@@ -187,7 +187,7 @@ export function DemoDirector() {
           setActive(true);
           localStorage.setItem('sentineleye_demo_active', '1');
         }}
-        className="fixed bottom-4 right-4 z-50 px-3 py-1.5 rounded-full bg-[#111816] hover:bg-[#16201c] border border-[#22c55e]/40 text-[#22c55e] text-xs font-mono font-semibold shadow-2xl flex items-center gap-1.5 transition-all"
+        className="fixed bottom-4 right-4 z-50 px-3 py-1.5 rounded-full bg-[#111816] hover:bg-[#16201c] border border-[#22c55e]/40 text-[#22c55e] text-xs font-mono font-semibold shadow-2xl flex items-center gap-1.5 transition-all presentation-hidden min-h-[36px]"
         title="Activate 3-Minute Executive Demo Mode"
       >
         <Sparkles className="w-3.5 h-3.5 text-[#22c55e]" />
@@ -197,7 +197,7 @@ export function DemoDirector() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 select-none">
+    <div className="fixed bottom-4 right-4 z-50 select-none presentation-hidden">
       {collapsed ? (
         <div className="bg-[#111816] border border-[#22c55e]/60 rounded-lg p-2.5 shadow-2xl flex items-center gap-3">
           <div className="flex items-center gap-1.5 text-xs font-mono text-[#22c55e]">

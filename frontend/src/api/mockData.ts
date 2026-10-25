@@ -202,6 +202,8 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
       after_img: body.after_img || '/evidence/after.webp',
       description: `[SIMULATED] Orbital change detected with score ${(body.change_score * 100).toFixed(1)}%`,
       created_at: new Date().toISOString(),
+      is_real_scene: body.data_source === 'real',
+      data_source: body.data_source || 'calibration',
     };
 
     addAlert(newAlert);

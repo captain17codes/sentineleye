@@ -3,6 +3,7 @@ import { Alert, AlertStatus } from '../../types/alert.types';
 import { Badge } from '../ui/Badge';
 import { StatusStepper } from '../ui/StatusStepper';
 import { SimulationBadge } from '../ui/SimulationBadge';
+import { AlertSourceBadge } from '../ui/AlertSourceBadge';
 import { casesApi } from '../../api/cases.api';
 import { ChevronDown, ChevronUp, FileText, Send, MapPin, Calendar, Clock } from 'lucide-react';
 import { cn } from '../../utils/cn';
@@ -75,6 +76,7 @@ export function AlertItem({ alert, onStatusChange }: AlertItemProps) {
               <span className="font-mono text-sm font-semibold text-white">
                 {alert.zone_name || `Zone #${alert.zone_id}`}
               </span>
+              <AlertSourceBadge alert={alert} />
               <span className="font-mono text-xs text-muted">ID #{alert.id}</span>
             </div>
             <div className="flex items-center gap-3 text-[11px] font-mono text-muted mt-0.5">
@@ -94,7 +96,15 @@ export function AlertItem({ alert, onStatusChange }: AlertItemProps) {
           <span className="font-mono text-xs px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-white/90">
             {alert.status}
           </span>
-          <button type="button" className="text-muted hover:text-white">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setExpanded(!expanded);
+            }}
+            aria-label="Toggle alert details"
+            className="text-muted hover:text-white p-1"
+          >
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
         </div>

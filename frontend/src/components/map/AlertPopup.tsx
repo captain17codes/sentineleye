@@ -1,6 +1,6 @@
 import { Alert } from '../../types/alert.types';
 import { Badge } from '../ui/Badge';
-import { SimulationBadge } from '../ui/SimulationBadge';
+import { AlertSourceBadge } from '../ui/AlertSourceBadge';
 import { casesApi } from '../../api/cases.api';
 import { useState } from 'react';
 import { FileText, MapPin, Calendar } from 'lucide-react';
@@ -56,7 +56,7 @@ export function AlertPopup({ alert, onCaseCreated }: AlertPopupProps) {
       </p>
 
       <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/10">
-        <SimulationBadge size="xs" />
+        <AlertSourceBadge alert={alert} />
         {created ? (
           <span className="text-neon text-[10px] font-bold">Case: {created}</span>
         ) : (

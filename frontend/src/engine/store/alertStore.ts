@@ -127,6 +127,8 @@ function generateSeedAlerts(): Alert[] {
         sar_delta: d.meanSarDiff,
         t0_timestamp,
         t1_timestamp,
+        is_real_scene: false,
+        data_source: 'calibration',
         audit_trail: [
           {
             timestamp: created_at,

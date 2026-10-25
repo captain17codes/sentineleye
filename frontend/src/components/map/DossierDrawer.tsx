@@ -6,6 +6,7 @@ import { getClassColor, severityColor } from '../../utils/riskColors';
 import { downloadNoticePdf } from '../../engine/pdfNotice';
 import { runAcceleratedEscalation, transitionAlert, EscalationProgress } from '../../engine/clock';
 import { getLedgerChain, verifyChain } from '../../engine/ledger';
+import { AlertSourceBadge } from '../ui/AlertSourceBadge';
 import { LEGAL } from '../../constants/legal';
 import {
   X,
@@ -167,6 +168,7 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
             >
               {alert.class}
             </span>
+            <AlertSourceBadge alert={alert} />
             <span
               className="px-2 py-0.5 rounded text-[11px] font-semibold border uppercase"
               style={{

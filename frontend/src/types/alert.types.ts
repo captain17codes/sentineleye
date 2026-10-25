@@ -42,6 +42,8 @@ export interface Alert {
   t0_timestamp?: string;
   t1_timestamp?: string;
   audit_trail?: AuditEntry[];
+  is_real_scene?: boolean;
+  data_source?: 'calibration' | 'real';
 }
 
 export interface AlertsResponse {

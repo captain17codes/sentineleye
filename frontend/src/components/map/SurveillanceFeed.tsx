@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert } from '../../types/alert.types';
+import { AlertSourceBadge } from '../ui/AlertSourceBadge';
 import { severityColor } from '../../utils/riskColors';
 import { formatTimeAgo } from '../../utils/formatters';
 import {
@@ -113,13 +114,16 @@ export function SurveillanceFeed({
                             : 'bg-[#111816] border-[#2a3832] hover:bg-[#16201c]'
                         }`}
                       >
-                        {/* Line 1: class name in white (Inter 14px semibold) + severity badge on the right */}
+                        {/* Line 1: class name in white (Inter 14px semibold) + source badge + severity badge */}
                         <div className="flex items-center justify-between gap-2 mb-1">
-                          <span className="font-semibold text-[14px] text-[#f1f5f3] truncate font-sans">
-                            {alert.class}
-                          </span>
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <span className="font-semibold text-[14px] text-[#f1f5f3] truncate font-sans">
+                              {alert.class}
+                            </span>
+                            <AlertSourceBadge alert={alert} />
+                          </div>
                           <span
-                            className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase border flex-shrink-0"
+                            className="px-2 py-0.5 rounded text-[10px] font-bold uppercase border flex-shrink-0 tracking-wider"
                             style={{
                               borderColor: sevColor,
                               backgroundColor: '#16201c',

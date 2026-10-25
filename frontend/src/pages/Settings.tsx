@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getLedgerChain, verifyChain, LedgerBlock } from '../engine/ledger';
+import { EmptyState } from '../components/ui/StatusStates';
 import { User, Shield, Lock, Server, CheckCircle2, AlertTriangle, RefreshCw } from 'lucide-react';
 
 export function Settings() {
@@ -54,9 +55,14 @@ export function Settings() {
 
       {/* Operator Identity Card */}
       <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-4">
-        <div className="flex items-center gap-2 pb-2 border-b border-[#2a3832]">
-          <User className="w-4 h-4 text-[#22c55e]" />
-          <h2 className="text-sm font-semibold text-[#f1f5f3]">Operator profile</h2>
+        <div className="flex flex-col gap-1 pb-2 border-b border-[#2a3832]">
+          <div className="flex items-center gap-2">
+            <User className="w-4 h-4 text-[#22c55e]" />
+            <h2 className="text-sm font-semibold text-[#f1f5f3]">Operator profile</h2>
+          </div>
+          <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+            Operator profile: Authenticated administrative session identity and active role permissions
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -79,9 +85,14 @@ export function Settings() {
 
       {/* System Telemetry Card */}
       <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-4">
-        <div className="flex items-center gap-2 pb-2 border-b border-[#2a3832]">
-          <Server className="w-4 h-4 text-[#22c55e]" />
-          <h2 className="text-sm font-semibold text-[#f1f5f3]">Node configuration</h2>
+        <div className="flex flex-col gap-1 pb-2 border-b border-[#2a3832]">
+          <div className="flex items-center gap-2">
+            <Server className="w-4 h-4 text-[#22c55e]" />
+            <h2 className="text-sm font-semibold text-[#f1f5f3]">Node configuration</h2>
+          </div>
+          <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+            Node configuration: Environmental runtime parameters, constellation ingest feeds, and worker threads
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -109,16 +120,21 @@ export function Settings() {
 
       {/* Cryptographic Ledger Viewer Card */}
       <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-4">
-        <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
-          <div className="flex items-center gap-2">
-            <Lock className="w-4 h-4 text-[#22c55e]" />
-            <h2 className="text-sm font-semibold text-[#f1f5f3]">Cryptographic ledger verification</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#2a3832]">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <Lock className="w-4 h-4 text-[#22c55e]" />
+              <h2 className="text-sm font-semibold text-[#f1f5f3]">Cryptographic ledger verification</h2>
+            </div>
+            <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+              Cryptographic ledger verification: Client-side validation of SHA-256 chain state roots
+            </p>
           </div>
 
           <button
             onClick={handleVerify}
             disabled={verifying}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors min-h-[38px] shrink-0"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${verifying ? 'animate-spin' : ''}`} />
             <span>{verifying ? 'Recomputing chain...' : 'Recompute SHA-256 chain'}</span>
@@ -157,28 +173,35 @@ export function Settings() {
         </div>
 
         {/* Recent Blocks Table */}
-        <div className="rounded-md border border-[#2a3832] overflow-hidden">
-          <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-[#16201c] border-b border-[#2a3832] text-[10px] text-[#b4c2bb] uppercase">
-              <tr>
-                <th className="py-2 px-3">Block #</th>
-                <th className="py-2 px-3">Type</th>
-                <th className="py-2 px-3">SHA-256 Hash</th>
-                <th className="py-2 px-3">Timestamp</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#2a3832] text-[11px]">
-              {safeBlocks.slice(0, 8).map((b) => (
-                <tr key={b.index ?? b.hash} className="hover:bg-[#16201c]/50">
-                  <td className="py-2 px-3 text-[#b4c2bb]">#{b.index}</td>
-                  <td className="py-2 px-3 text-[#f1f5f3] font-medium">{b.type}</td>
-                  <td className="py-2 px-3 text-[#22c55e] truncate max-w-[200px]">{b.hash}</td>
-                  <td className="py-2 px-3 text-[#b4c2bb]">{b.timestamp?.slice(0, 19).replace('T', ' ')}</td>
+        {safeBlocks.length === 0 ? (
+          <EmptyState
+            title="No ledger blocks recorded"
+            message="No cryptographic chain blocks have been recorded in the browser's database yet."
+          />
+        ) : (
+          <div className="rounded-md border border-[#2a3832] overflow-hidden">
+            <table className="w-full text-left text-xs font-mono">
+              <thead className="bg-[#16201c] border-b border-[#2a3832] text-[10px] text-[#b4c2bb] uppercase">
+                <tr>
+                  <th className="py-2 px-3">Block #</th>
+                  <th className="py-2 px-3">Type</th>
+                  <th className="py-2 px-3">SHA-256 Hash</th>
+                  <th className="py-2 px-3">Timestamp</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-[#2a3832] text-[11px]">
+                {safeBlocks.slice(0, 8).map((b) => (
+                  <tr key={b.index ?? b.hash} className="hover:bg-[#16201c]/50">
+                    <td className="py-2 px-3 text-[#b4c2bb]">#{b.index}</td>
+                    <td className="py-2 px-3 text-[#f1f5f3] font-medium">{b.type}</td>
+                    <td className="py-2 px-3 text-[#22c55e] truncate max-w-[200px]">{b.hash}</td>
+                    <td className="py-2 px-3 text-[#b4c2bb]">{b.timestamp?.slice(0, 19).replace('T', ' ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

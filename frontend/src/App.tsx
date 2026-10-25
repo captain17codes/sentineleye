@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AlertProvider } from './context/AlertContext';
 import { JurisdictionProvider } from './context/JurisdictionContext';
+import { PresentationModeProvider } from './context/PresentationModeContext';
 import { AppShell } from './components/layout/AppShell';
 import { RequireAuth } from './components/guards/RequireAuth';
 
@@ -38,7 +39,8 @@ export default function App() {
       <AuthProvider>
         <AlertProvider>
           <JurisdictionProvider>
-            <Routes>
+            <PresentationModeProvider>
+              <Routes>
               {/* Entry Page: Landing + Login on One Screen */}
               <Route path="/" element={<LandingRoute />} />
               <Route path="/landing" element={<Landing />} />
@@ -150,6 +152,7 @@ export default function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
             <DemoDirector />
+            </PresentationModeProvider>
           </JurisdictionProvider>
         </AlertProvider>
       </AuthProvider>

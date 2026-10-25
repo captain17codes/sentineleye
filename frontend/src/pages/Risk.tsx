@@ -3,6 +3,7 @@ import { statsApi, RiskStatsResponse } from '../api/stats.api';
 import { AlertAreaChart } from '../components/charts/AlertAreaChart';
 import { RiskBarChart } from '../components/charts/RiskBarChart';
 import { SeverityDonut } from '../components/charts/SeverityDonut';
+import { LoadingState, EmptyState } from '../components/ui/StatusStates';
 import { AlertOctagon, TrendingUp, ShieldAlert, CheckCircle } from 'lucide-react';
 import { useAlerts } from '../hooks/useAlerts';
 import {
@@ -76,107 +77,133 @@ export function Risk() {
         </div>
       </div>
 
-      {/* Aggregate KPI Cards (Solid #111816, high-contrast) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {/* Card 1 */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-            <span className="text-xs font-medium">Total intercepts</span>
-            <AlertOctagon className="w-4 h-4 text-[#22c55e]" />
-          </div>
-          <div>
-            <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-              {totalCount}
-            </span>
-            <div className="text-[12px] text-[#b4c2bb] mt-1">Cumulative records</div>
-          </div>
-        </div>
-
-        {/* Card 2 */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-            <span className="text-xs font-medium">Critical threats</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-critical" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-                {critical}
-              </span>
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#16201c] border border-critical text-critical uppercase">
-                Critical
-              </span>
+      {/* Loading state */}
+      {loading ? (
+        <LoadingState
+          title="CALCULATING VULNERABILITY INDICES..."
+          message="Aggregating spatial change rates, threat velocities, and sector risk profiles..."
+        />
+      ) : (
+        <>
+          {/* Aggregate KPI Cards (Solid #111816, high-contrast, projector readable) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Card 1: Total Intercepts */}
+            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
+                <span className="text-xs font-semibold text-[#f1f5f3]">Total intercepts</span>
+                <AlertOctagon className="w-4 h-4 text-[#22c55e]" />
+              </div>
+              <div>
+                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f1f5f3] kpi-number">
+                  {totalCount}
+                </span>
+                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Cumulative records</div>
+                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                  Total intercepts: Cumulative spatial anomalies identified by orbital change algorithms
+                </p>
+              </div>
             </div>
-            <div className="text-[12px] text-[#b4c2bb] mt-1">Immediate action required</div>
-          </div>
-        </div>
 
-        {/* Card 3 */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-            <span className="text-xs font-medium">Verified cases</span>
-            <CheckCircle className="w-4 h-4 text-[#22c55e]" />
-          </div>
-          <div>
-            <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-              {verified}
-            </span>
-            <div className="text-[12px] text-[#b4c2bb] mt-1">Confirmed spectral violations</div>
-          </div>
-        </div>
-
-        {/* Card 4 */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-            <span className="text-xs font-medium">Notices issued</span>
-            <TrendingUp className="w-4 h-4 text-[#22c55e]" />
-          </div>
-          <div>
-            <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-              {noticeIssued}
-            </span>
-            <div className="text-[12px] text-[#b4c2bb] mt-1">Enforcement actions</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Incident Velocity (8 cols) */}
-        <div className="lg:col-span-8 p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-          <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
-            <div>
-              <h3 className="text-sm font-semibold text-[#f1f5f3]">30-day incident velocity</h3>
-              <p className="text-xs text-[#b4c2bb]">Daily anomaly detection rate across all monitored corridors</p>
+            {/* Card 2: Critical Threats */}
+            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
+                <span className="text-xs font-semibold text-[#f1f5f3]">Critical threats</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-critical" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl sm:text-4xl font-bold font-mono text-critical kpi-number">
+                    {critical}
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#16201c] border border-critical text-critical uppercase tracking-wider">
+                    Critical
+                  </span>
+                </div>
+                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Immediate action required</div>
+                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                  Critical threats: High-confidence violations exceeding critical scale or reserve thresholds
+                </p>
+              </div>
             </div>
-          </div>
-          <AlertAreaChart data={alerts.length > 0 ? trend30d(alerts) : (stats?.byDay || [])} />
-        </div>
 
-        {/* Severity Breakdown (4 cols) */}
-        <div className="lg:col-span-4 p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-          <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
-            <div>
-              <h3 className="text-sm font-semibold text-[#f1f5f3]">Severity distribution</h3>
-              <p className="text-xs text-[#b4c2bb]">Threat level classification</p>
+            {/* Card 3: Verified Cases */}
+            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
+                <span className="text-xs font-semibold text-[#f1f5f3]">Verified cases</span>
+                <CheckCircle className="w-4 h-4 text-[#22c55e]" />
+              </div>
+              <div>
+                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#22c55e] kpi-number">
+                  {verified}
+                </span>
+                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Confirmed spectral violations</div>
+                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                  Verified cases: Multi-temporal detections confirmed by automated radar-optical cross validation
+                </p>
+              </div>
+            </div>
+
+            {/* Card 4: Notices Issued */}
+            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
+                <span className="text-xs font-semibold text-[#f1f5f3]">Notices issued</span>
+                <TrendingUp className="w-4 h-4 text-[#22c55e]" />
+              </div>
+              <div>
+                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f1f5f3] kpi-number">
+                  {noticeIssued}
+                </span>
+                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Enforcement actions</div>
+                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                  Notices issued: Statutory Section 63 BSA legal notices generated and drafted for enforcement
+                </p>
+              </div>
             </div>
           </div>
-          <SeverityDonut data={alerts.length > 0 ? severityDistribution(alerts) : (stats?.bySeverity || [])} />
-        </div>
-      </div>
 
-      {/* Sector Risk Score Bar Chart */}
-      <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-        <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
-          <div>
-            <h3 className="text-sm font-semibold text-[#f1f5f3]">Vulnerability index by ecological sector</h3>
-            <p className="text-xs text-[#b4c2bb]">
-              Computed threat exposure based on weighted severity scores
-            </p>
+          {/* Charts Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Incident Velocity (8 cols) */}
+            <div className="lg:col-span-8 p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+                <div>
+                  <h3 className="text-sm font-semibold text-[#f1f5f3]">30-day incident velocity</h3>
+                  <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+                    Incident velocity: Daily anomaly detection rate across all monitored conservation corridors
+                  </p>
+                </div>
+              </div>
+              <AlertAreaChart data={alerts.length > 0 ? trend30d(alerts) : (stats?.byDay || [])} />
+            </div>
+
+            {/* Severity Breakdown (4 cols) */}
+            <div className="lg:col-span-4 p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+                <div>
+                  <h3 className="text-sm font-semibold text-[#f1f5f3]">Severity distribution</h3>
+                  <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+                    Severity distribution: Proportion of active alerts categorized by environmental impact tier
+                  </p>
+                </div>
+              </div>
+              <SeverityDonut data={alerts.length > 0 ? severityDistribution(alerts) : (stats?.bySeverity || [])} />
+            </div>
           </div>
-        </div>
-        <RiskBarChart data={filteredZones} />
-      </div>
+
+          {/* Sector Risk Score Bar Chart */}
+          <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+              <div>
+                <h3 className="text-sm font-semibold text-[#f1f5f3]">Vulnerability index by ecological sector</h3>
+                <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+                  Vulnerability index: Comparative threat exposure based on weighted severity scores per protected zone
+                </p>
+              </div>
+            </div>
+            <RiskBarChart data={filteredZones} />
+          </div>
+        </>
+      )}
     </div>
   );
 }

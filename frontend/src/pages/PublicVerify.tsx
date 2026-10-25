@@ -83,7 +83,7 @@ export function PublicVerify() {
         <div className="flex items-center justify-between pb-5 border-b border-[#2a3832]">
           <Link
             to="/"
-            className="flex items-center gap-1.5 text-xs text-[#b4c2bb] hover:text-[#22c55e] transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#b4c2bb] hover:text-[#22c55e] transition-colors min-h-[36px] py-1 px-2 rounded"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to SentinelEye Portal</span>

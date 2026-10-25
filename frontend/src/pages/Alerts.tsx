@@ -8,10 +8,16 @@ import { formatTimeAgo } from '../utils/formatters';
 import { DossierDrawer } from '../components/map/DossierDrawer';
 import { downloadNoticePdf } from '../engine/pdfNotice';
 import { transitionAlert } from '../engine/clock';
+import { AlertSourceBadge } from '../components/ui/AlertSourceBadge';
+import { LoadingState, EmptyState } from '../components/ui/StatusStates';
 import {
   Search,
   Eye,
   Download,
+  ShieldAlert,
+  AlertOctagon,
+  CheckCircle,
+  TrendingUp,
 } from 'lucide-react';
 
 const STATUS_FLOW: AlertStatus[] = ['New', 'Verified', 'Notice Issued', 'Signed & Served'];
@@ -72,6 +78,11 @@ export function Alerts() {
     }
   };
 
+  const totalCount = alerts.length;
+  const criticalCount = alerts.filter((a) => a.severity === 'CRITICAL').length;
+  const verifiedCount = alerts.filter((a) => a.status === 'Verified').length;
+  const noticesCount = alerts.filter((a) => a.status === 'Notice Issued' || a.status === 'Signed & Served').length;
+
   return (
     <div className="flex flex-col gap-5 max-w-7xl mx-auto">
       {/* Page Header */}
@@ -87,6 +98,61 @@ export function Alerts() {
           <span>Total: {alerts.length}</span>
           <span>•</span>
           <span className="text-[#22c55e] font-semibold">Filtered: {filteredAlerts.length}</span>
+        </div>
+      </div>
+
+      {/* ── 4 KPI Summary Cards with One-line Subtitles ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Total intercepts</span>
+            <AlertOctagon className="w-4 h-4 text-[#22c55e]" />
+          </div>
+          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f1f5f3] kpi-number">
+            {totalCount}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Total intercepts: All candidate spatial change detections recorded
+          </p>
+        </div>
+
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Critical violations</span>
+            <ShieldAlert className="w-4 h-4 text-critical" />
+          </div>
+          <span className="text-2xl sm:text-3xl font-bold font-mono text-critical kpi-number">
+            {criticalCount}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Critical violations: Incidents requiring immediate emergency enforcement
+          </p>
+        </div>
+
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Verified cases</span>
+            <CheckCircle className="w-4 h-4 text-[#22c55e]" />
+          </div>
+          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#22c55e] kpi-number">
+            {verifiedCount}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Verified cases: Detections confirmed by automated radar-optical cross validation
+          </p>
+        </div>
+
+        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
+            <span className="text-xs font-semibold text-[#f1f5f3]">Statutory notices</span>
+            <TrendingUp className="w-4 h-4 text-[#22c55e]" />
+          </div>
+          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f1f5f3] kpi-number">
+            {noticesCount}
+          </span>
+          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+            Statutory notices: Formal evidentiary packages prepared or served under Sec 63 BSA
+          </p>
         </div>
       </div>
 
@@ -168,39 +234,45 @@ export function Alerts() {
       </div>
 
       {/* ── Compact Alerts Table (Sentence case headers, #b4c2bb 12px, cells >= 13px) ── */}
-      <div className="rounded-lg bg-[#111816] border border-[#2a3832] overflow-hidden select-none">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-[#16201c] border-b border-[#2a3832] text-[#b4c2bb] text-[12px] font-medium normal-case">
-                <th className="py-3 px-3.5">ID</th>
-                <th className="py-3 px-3.5">Class</th>
-                <th className="py-3 px-3.5">Zone</th>
-                <th className="py-3 px-3.5">Severity</th>
-                <th className="py-3 px-3.5">Area (m²)</th>
-                <th className="py-3 px-3.5">Overlap</th>
-                <th className="py-3 px-3.5">Status workflow</th>
-                <th className="py-3 px-3.5">Detected</th>
-                <th className="py-3 px-3.5 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#2a3832]">
-              {loading ? (
-                <tr>
-                  <td colSpan={9} className="py-10 text-center text-[#b4c2bb] text-sm">
-                    Loading telemetry alerts...
-                  </td>
+      {loading ? (
+        <LoadingState
+          title="SYNCHRONIZING TELEMETRY ALERTS..."
+          message="Retrieving bitemporal anomaly vectors, cadastral intersections, and ledger provenance..."
+        />
+      ) : filteredAlerts.length === 0 ? (
+        <EmptyState
+          title="No alerts match active filters"
+          message="No encroachment detections correspond to your search query or chosen filter criteria. Reset the filters to view all records."
+          actionLabel="Reset all filters"
+          onAction={() => {
+            setSearch('');
+            setSelectedClass('all');
+            setSelectedSeverity('all');
+            setSelectedStatus('all');
+          }}
+        />
+      ) : (
+        <div className="rounded-lg bg-[#111816] border border-[#2a3832] overflow-hidden select-none shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-[#16201c] border-b border-[#2a3832] text-[#b4c2bb] text-[12px] font-medium normal-case">
+                  <th className="py-3 px-3.5">ID</th>
+                  <th className="py-3 px-3.5">Source</th>
+                  <th className="py-3 px-3.5">Class</th>
+                  <th className="py-3 px-3.5">Zone</th>
+                  <th className="py-3 px-3.5">Severity</th>
+                  <th className="py-3 px-3.5">Area (m²)</th>
+                  <th className="py-3 px-3.5">Overlap</th>
+                  <th className="py-3 px-3.5">Status workflow</th>
+                  <th className="py-3 px-3.5">Detected</th>
+                  <th className="py-3 px-3.5 text-right">Actions</th>
                 </tr>
-              ) : filteredAlerts.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="py-10 text-center text-[#b4c2bb] text-sm">
-                    No alerts match the active filters
-                  </td>
-                </tr>
-              ) : (
-                filteredAlerts.map((alert) => {
+              </thead>
+              <tbody className="divide-y divide-[#2a3832]">
+                {filteredAlerts.map((alert) => {
                   const color = getClassColor(alert.class);
-                  const sevColor = severityColor[alert.severity] || '#64748b';
+                  const sevColor = severityColor[alert.severity] || '#94a3b8';
                   const currentIdx = STATUS_FLOW.indexOf(alert.status);
                   const canAdvance = currentIdx >= 0 && currentIdx < STATUS_FLOW.length - 1;
                   const nextStatus = canAdvance ? STATUS_FLOW[currentIdx + 1] : null;
@@ -214,6 +286,11 @@ export function Alerts() {
                       {/* ID */}
                       <td className="py-3 px-3.5 font-mono text-[12px] text-[#b4c2bb]">
                         #{alert.id}
+                      </td>
+
+                      {/* Source: SIMULATED on seeded, REAL on real scene alerts */}
+                      <td className="py-3 px-3.5" onClick={(e) => e.stopPropagation()}>
+                        <AlertSourceBadge alert={alert} />
                       </td>
 
                       {/* Class */}
@@ -240,7 +317,7 @@ export function Alerts() {
                       {/* Severity */}
                       <td className="py-3 px-3.5">
                         <span
-                          className="px-2 py-0.5 rounded text-[11px] font-semibold border inline-block uppercase"
+                          className="px-2 py-0.5 rounded text-[11px] font-bold border inline-block uppercase tracking-wider"
                           style={{
                             borderColor: sevColor,
                             backgroundColor: '#16201c',
@@ -269,9 +346,10 @@ export function Alerts() {
                           </span>
                           {canAdvance && (
                             <button
+                              type="button"
                               onClick={() => handleAdvanceStatus(alert)}
                               disabled={advancingId === alert.id}
-                              className="px-2.5 py-1 rounded text-[13px] font-medium bg-[#16201c] hover:bg-[#22c55e]/20 border border-[#22c55e] text-[#f1f5f3] transition-colors disabled:opacity-50"
+                              className="px-3 py-1.5 rounded-md text-xs font-semibold bg-[#16201c] hover:bg-[#22c55e]/25 border border-[#22c55e] text-[#f1f5f3] transition-colors disabled:opacity-50 min-h-[34px] shadow-sm"
                               title={`Advance to ${nextStatus}`}
                             >
                               {advancingId === alert.id ? '...' : `→ ${nextStatus}`}
@@ -289,31 +367,35 @@ export function Alerts() {
                       <td className="py-3 px-3.5 text-right" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-2">
                           <button
+                            type="button"
                             onClick={() => setSelectedAlert(alert)}
-                            className="p-1.5 rounded bg-[#16201c] border border-[#2a3832] text-[#b4c2bb] hover:text-[#f1f5f3] hover:border-[#22c55e] transition-colors"
+                            className="p-2 min-h-[36px] min-w-[36px] rounded-lg bg-[#16201c] border border-[#2a3832] text-[#b4c2bb] hover:text-[#f1f5f3] hover:border-[#22c55e] transition-colors flex items-center justify-center"
                             title="Inspect dossier"
+                            aria-label="Inspect incident dossier"
                           >
-                            <Eye className="w-3.5 h-3.5" />
+                            <Eye className="w-4 h-4" />
                           </button>
 
                           <button
+                            type="button"
                             onClick={() => handleDownloadPdf(alert)}
                             disabled={downloadingId === alert.id}
-                            className="p-1.5 rounded bg-[#16201c] border border-[#2a3832] text-[#b4c2bb] hover:text-[#22c55e] hover:border-[#22c55e] transition-colors disabled:opacity-50"
+                            className="p-2 min-h-[36px] min-w-[36px] rounded-lg bg-[#16201c] border border-[#2a3832] text-[#b4c2bb] hover:text-[#22c55e] hover:border-[#22c55e] transition-colors disabled:opacity-50 flex items-center justify-center"
                             title="Download Legal Notice PDF"
+                            aria-label="Download Legal Notice PDF"
                           >
-                            <Download className="w-3.5 h-3.5" />
+                            <Download className="w-4 h-4" />
                           </button>
                         </div>
                       </td>
                     </tr>
                   );
-                })
-              )}
-            </tbody>
-          </table>
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Slide-in Dossier Drawer */}
       {selectedAlert && (
