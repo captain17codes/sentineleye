@@ -9,6 +9,13 @@ import { SpectralAnalysisChart } from '../components/charts/SpectralAnalysisChar
 import { getClassColor, severityColor } from '../utils/riskColors';
 import { formatTimeAgo } from '../utils/formatters';
 import {
+  totalAlerts as selectTotalAlerts,
+  criticalCount as selectCriticalCount,
+  totalEncroachedAreaM2 as selectTotalAreaM2,
+  severityDistribution as selectSeverityDistribution,
+  trend30d as selectTrend30d,
+} from '../engine/selectors';
+import {
   ShieldAlert,
   Layers,
   MapPin,
@@ -40,11 +47,13 @@ export function Overview() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [alerts]);
 
-  const totalAlerts = stats?.totals?.total_alerts || alerts.length || 38;
-  const totalAreaM2 = stats?.totals?.total_area_m2 || 148500;
-  const criticalCount = stats?.totals?.critical || 6;
+  const totalAlertsCount = alerts.length > 0 ? selectTotalAlerts(alerts) : (stats?.totals?.total_alerts || 0);
+  const totalAreaM2 = alerts.length > 0 ? selectTotalAreaM2(alerts) : (stats?.totals?.total_area_m2 || 0);
+  const criticalCountVal = alerts.length > 0 ? selectCriticalCount(alerts) : (stats?.totals?.critical || 0);
+  const severityData = alerts.length > 0 ? selectSeverityDistribution(alerts) : (stats?.bySeverity || []);
+  const dayData = alerts.length > 0 ? selectTrend30d(alerts) : (stats?.byDay || []);
   const recentAlerts = alerts.slice(0, 6);
 
   return (
@@ -85,10 +94,10 @@ export function Overview() {
           </div>
           <div>
             <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-              {totalAlerts}
+              {totalAlertsCount}
             </span>
             <div className="flex items-center gap-1.5 text-xs text-[#b4c2bb] mt-1">
-              <span className="text-critical font-medium">{criticalCount} critical</span>
+              <span className="text-critical font-medium">{criticalCountVal} critical</span>
               <span>•</span>
               <span>100% verified</span>
             </div>
@@ -167,7 +176,7 @@ export function Overview() {
             </div>
             <span className="text-xs font-mono text-[#b4c2bb]">Current</span>
           </div>
-          <SeverityDonut data={stats?.bySeverity || []} />
+          <SeverityDonut data={severityData} />
         </div>
       </div>
 
@@ -185,7 +194,7 @@ export function Overview() {
             </div>
             <span className="text-xs font-mono text-[#b4c2bb]">Past 30 days</span>
           </div>
-          <AlertAreaChart data={stats?.byDay || []} />
+          <AlertAreaChart data={dayData} />
         </div>
 
         {/* Recent Alerts List - 6 Cols */}

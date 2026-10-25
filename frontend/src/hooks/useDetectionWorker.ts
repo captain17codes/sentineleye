@@ -9,9 +9,13 @@ export interface DetectionResult {
   t1_optical?: Float32Array;
   t1_sar?: Float32Array;
   change_mask: Float32Array;
+  dNDVI?: Float32Array;
+  dSAR?: Float32Array;
+  cloudMask?: Uint8Array;
   raw_count: number;
   validated_count: number;
   false_positives_filtered: number;
+  belowThresholdCount?: number;
   blobs: DetectionBlob[];
   raw_classes: DetectionBlob[];
   validated_classes: DetectionBlob[];
@@ -24,6 +28,7 @@ export interface DetectionResult {
 export function useDetectionWorker() {
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [currentStage, setCurrentStage] = useState<string>('');
   const [result, setResult] = useState<DetectionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const workerRef = useRef<Worker | null>(null);
@@ -39,6 +44,9 @@ export function useDetectionWorker() {
       const { type, payload } = event.data;
       if (type === 'PROGRESS') {
         setProgress(payload.progress || 0);
+        if (payload.currentStage) {
+          setCurrentStage(payload.currentStage);
+        }
       } else if (type === 'RESULT') {
         const t0 = payload.t0_scene || new Float32Array(256 * 256 * 3);
         const t1 = payload.t1_scene || new Float32Array(256 * 256 * 3);
@@ -53,9 +61,13 @@ export function useDetectionWorker() {
           t1_optical: payload.t1_optical,
           t1_sar: payload.t1_sar,
           change_mask: mask,
+          dNDVI: payload.dNDVI,
+          dSAR: payload.dSAR,
+          cloudMask: payload.cloudMask,
           raw_count: payload.raw_count ?? blobs.length,
           validated_count: payload.validated_count ?? blobs.filter((b) => b.isValidated).length,
           false_positives_filtered: payload.false_positives_filtered ?? 0,
+          belowThresholdCount: payload.belowThresholdCount ?? 0,
           blobs,
           raw_classes: payload.raw_classes || blobs,
           validated_classes: payload.validated_classes || blobs.filter((b) => b.isValidated),
@@ -65,6 +77,7 @@ export function useDetectionWorker() {
         });
         setIsRunning(false);
         setProgress(100);
+        setCurrentStage('Scan completed');
       } else if (type === 'ERROR') {
         setError(payload.error || 'Worker error');
         setIsRunning(false);
@@ -109,6 +122,7 @@ export function useDetectionWorker() {
     runDetection,
     isRunning,
     progress,
+    currentStage,
     result,
     error,
   };

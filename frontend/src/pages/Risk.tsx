@@ -4,8 +4,19 @@ import { AlertAreaChart } from '../components/charts/AlertAreaChart';
 import { RiskBarChart } from '../components/charts/RiskBarChart';
 import { SeverityDonut } from '../components/charts/SeverityDonut';
 import { AlertOctagon, TrendingUp, ShieldAlert, CheckCircle } from 'lucide-react';
+import { useAlerts } from '../hooks/useAlerts';
+import {
+  totalAlerts,
+  criticalCount,
+  countByStatus,
+  severityDistribution,
+  trend30d,
+  alertsByZone,
+} from '../engine/selectors';
+import { SEEDED_ZONES } from '../api/seededData';
 
 export function Risk() {
+  const { alerts } = useAlerts();
   const [stats, setStats] = useState<RiskStatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedZoneFilter, setSelectedZoneFilter] = useState<string>('all');
@@ -16,16 +27,21 @@ export function Risk() {
       .then((data) => setStats(data))
       .catch((err) => console.error('Failed to load risk statistics', err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [alerts]);
 
-  const totals = stats?.totals;
+  const totalCount = alerts.length > 0 ? totalAlerts(alerts) : (stats?.totals?.total_alerts ?? 0);
+  const critical = alerts.length > 0 ? criticalCount(alerts) : (stats?.totals?.critical ?? 0);
+  const verified = alerts.length > 0 ? countByStatus(alerts, 'Verified') : (stats?.totals?.verified ?? 0);
+  const noticeIssued = alerts.length > 0 ? countByStatus(alerts, 'Notice Issued') : (stats?.totals?.notice_issued ?? 0);
+
+  const zonesData = alerts.length > 0 ? alertsByZone(alerts, SEEDED_ZONES) : (stats?.byZone || []);
 
   // Filtered zone stats if user filters by zone
   const filteredZones = useMemo(() => {
-    if (!stats?.byZone) return [];
-    if (selectedZoneFilter === 'all') return stats.byZone;
-    return stats.byZone.filter((z) => String(z.id) === selectedZoneFilter);
-  }, [stats?.byZone, selectedZoneFilter]);
+    if (!zonesData) return [];
+    if (selectedZoneFilter === 'all') return zonesData;
+    return zonesData.filter((z) => String(z.id) === selectedZoneFilter);
+  }, [zonesData, selectedZoneFilter]);
 
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto">
@@ -70,7 +86,7 @@ export function Risk() {
           </div>
           <div>
             <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-              {totals?.total_alerts ?? 38}
+              {totalCount}
             </span>
             <div className="text-[12px] text-[#b4c2bb] mt-1">Cumulative records</div>
           </div>
@@ -85,7 +101,7 @@ export function Risk() {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-                {totals?.critical ?? 6}
+                {critical}
               </span>
               <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#16201c] border border-critical text-critical uppercase">
                 Critical
@@ -103,7 +119,7 @@ export function Risk() {
           </div>
           <div>
             <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-              {totals?.verified ?? 12}
+              {verified}
             </span>
             <div className="text-[12px] text-[#b4c2bb] mt-1">Confirmed spectral violations</div>
           </div>
@@ -117,7 +133,7 @@ export function Risk() {
           </div>
           <div>
             <span className="text-2xl font-bold font-mono text-[#f1f5f3]">
-              {totals?.notice_issued ?? 9}
+              {noticeIssued}
             </span>
             <div className="text-[12px] text-[#b4c2bb] mt-1">Enforcement actions</div>
           </div>
@@ -134,7 +150,7 @@ export function Risk() {
               <p className="text-xs text-[#b4c2bb]">Daily anomaly detection rate across all monitored corridors</p>
             </div>
           </div>
-          <AlertAreaChart data={stats?.byDay || []} />
+          <AlertAreaChart data={alerts.length > 0 ? trend30d(alerts) : (stats?.byDay || [])} />
         </div>
 
         {/* Severity Breakdown (4 cols) */}
@@ -145,7 +161,7 @@ export function Risk() {
               <p className="text-xs text-[#b4c2bb]">Threat level classification</p>
             </div>
           </div>
-          <SeverityDonut data={stats?.bySeverity || []} />
+          <SeverityDonut data={alerts.length > 0 ? severityDistribution(alerts) : (stats?.bySeverity || [])} />
         </div>
       </div>
 

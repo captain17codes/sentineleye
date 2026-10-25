@@ -1,26 +1,137 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { SceneRenderer } from '../canvas/SceneRenderer';
 import { Spinner } from '../ui/Spinner';
 import { DetectionResult } from '../../hooks/useDetectionWorker';
 import { DetectionBlob } from '../../types/scan.types';
 import { getClassColor } from '../../utils/riskColors';
+import { Layers } from 'lucide-react';
 
 interface DetectionCanvasProps {
   result: DetectionResult | null;
   isRunning: boolean;
   progress: number;
+  currentStage?: string;
 }
 
-export function DetectionCanvas({ result, isRunning, progress }: DetectionCanvasProps) {
+type LayerMode = 'composite' | 'ndvi' | 'sar' | 'mask';
+
+export function DetectionCanvas({ result, isRunning, progress, currentStage }: DetectionCanvasProps) {
+  const [activeLayer, setActiveLayer] = useState<LayerMode>('composite');
+
+  // Compute alternative raster representations for heatmaps
+  const t1LayerScene = useMemo(() => {
+    if (!result) return null;
+    const size = 256;
+    const total = size * size;
+
+    if (activeLayer === 'ndvi' && result.dNDVI) {
+      const rgb = new Float32Array(total * 3);
+      for (let i = 0; i < total; i++) {
+        const d = result.dNDVI[i];
+        if (d < 0) {
+          // Vegetation loss -> Red gradient
+          const intensity = Math.min(1.0, Math.abs(d) * 2.5);
+          rgb[i * 3 + 0] = intensity;
+          rgb[i * 3 + 1] = 0.08;
+          rgb[i * 3 + 2] = 0.08;
+        } else {
+          // Healthy vegetation -> Green gradient
+          const intensity = Math.min(1.0, d * 2.0);
+          rgb[i * 3 + 0] = 0.05;
+          rgb[i * 3 + 1] = 0.15 + intensity * 0.7;
+          rgb[i * 3 + 2] = 0.08;
+        }
+      }
+      return rgb;
+    }
+
+    if (activeLayer === 'sar' && result.dSAR) {
+      const rgb = new Float32Array(total * 3);
+      for (let i = 0; i < total; i++) {
+        const d = result.dSAR[i];
+        if (d > 0) {
+          // Double-bounce reflection increase -> Amber/Yellow
+          const intensity = Math.min(1.0, d / 6.0);
+          rgb[i * 3 + 0] = intensity;
+          rgb[i * 3 + 1] = intensity * 0.85;
+          rgb[i * 3 + 2] = 0.1;
+        } else {
+          // Roughness decrease / smoothing -> Cyan/Blue
+          const intensity = Math.min(1.0, Math.abs(d) / 6.0);
+          rgb[i * 3 + 0] = 0.05;
+          rgb[i * 3 + 1] = intensity * 0.6;
+          rgb[i * 3 + 2] = intensity;
+        }
+      }
+      return rgb;
+    }
+
+    if (activeLayer === 'mask' && result.change_mask) {
+      const rgb = new Float32Array(total * 3);
+      for (let i = 0; i < total; i++) {
+        const flag = result.change_mask[i] > 0;
+        rgb[i * 3 + 0] = flag ? 0.95 : 0.05;
+        rgb[i * 3 + 1] = flag ? 0.25 : 0.07;
+        rgb[i * 3 + 2] = flag ? 0.25 : 0.07;
+      }
+      return rgb;
+    }
+
+    // Default: Composite RGB scene
+    return result.t1_scene;
+  }, [result, activeLayer]);
+
   return (
     <div className="flex flex-col gap-4">
-      {/* Progress Bar */}
+      {/* Stage-by-Stage Progress Bar & Indicator */}
       {isRunning && (
-        <div className="w-full bg-panel-light border border-border rounded-full h-2 overflow-hidden">
-          <div
-            className="bg-accent h-full rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="p-3 rounded-lg bg-[#16201c] border border-[#22c55e]/40 flex flex-col gap-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-medium text-[#f1f5f3] flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-ping" />
+              {currentStage || 'Running multi-temporal pipeline...'}
+            </span>
+            <span className="font-mono text-[#22c55e] font-semibold">{progress}%</span>
+          </div>
+          <div className="w-full bg-[#111816] border border-[#2a3832] rounded-full h-2 overflow-hidden">
+            <div
+              className="bg-[#22c55e] h-full rounded-full transition-all duration-200"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Layer Toggle Buttons (when result is available) */}
+      {result && (
+        <div className="flex items-center justify-between gap-2 p-1.5 rounded-lg bg-[#0b0f0e] border border-[#2a3832]">
+          <div className="flex items-center gap-1 text-xs text-[#b4c2bb]">
+            <Layers className="w-3.5 h-3.5 text-[#22c55e]" />
+            <span className="font-medium text-[11px] hidden sm:inline">Layer view:</span>
+          </div>
+          <div className="flex items-center gap-1">
+            {(
+              [
+                { id: 'composite', label: 'Composite (Fused)' },
+                { id: 'ndvi', label: 'NDVI Diff Heatmap' },
+                { id: 'sar', label: 'SAR Radar Diff' },
+                { id: 'mask', label: 'Change Mask' },
+              ] as const
+            ).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveLayer(tab.id)}
+                className={`px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
+                  activeLayer === tab.id
+                    ? 'bg-[#16201c] text-[#22c55e] border border-[#22c55e]'
+                    : 'text-[#b4c2bb] hover:text-[#f1f5f3] border border-transparent'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
@@ -43,7 +154,7 @@ export function DetectionCanvas({ result, isRunning, progress }: DetectionCanvas
             ) : isRunning ? (
               <div className="flex flex-col items-center gap-2">
                 <Spinner color="neon" size="md" />
-                <span className="text-xs text-[#b4c2bb]">Synthesizing scene...</span>
+                <span className="text-xs text-[#b4c2bb]">Synthesizing baseline scene...</span>
               </div>
             ) : (
               <div className="text-xs text-[#b4c2bb] text-center px-4">
@@ -57,24 +168,30 @@ export function DetectionCanvas({ result, isRunning, progress }: DetectionCanvas
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-[#f1f5f3]">
-              Simulated scene & validated detections (T1)
+              {activeLayer === 'composite'
+                ? 'Simulated scene & validated detections (T1)'
+                : activeLayer === 'ndvi'
+                ? 'NDVI Vegetation Delta Heatmap (T1 − T0)'
+                : activeLayer === 'sar'
+                ? 'SAR Double-Bounce dB Delta (T1 − T0)'
+                : 'Binary Classified Change Mask'}
             </span>
             <span className="text-[10px] text-[#22c55e] font-mono px-1.5 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
               Simulated scene · Sentinel-1/2
             </span>
           </div>
 
-          <div className="relative aspect-square rounded-lg overflow-hidden border border-border bg-panel-light flex items-center justify-center">
-            {result?.t1_scene ? (
+          <div className="relative aspect-square rounded-lg overflow-hidden border border-border bg-[#16201c] flex items-center justify-center">
+            {t1LayerScene ? (
               <div className="relative w-full h-full">
                 <SceneRenderer
-                  data={result.t1_scene}
-                  changeMask={result.change_mask}
+                  data={t1LayerScene}
+                  changeMask={activeLayer === 'composite' ? result?.change_mask : null}
                   className="w-full h-full"
                 />
 
-                {/* SVG Overlay for Validated Detections with Class Colors */}
-                {result.blobs && (
+                {/* SVG Overlay for Validated Detections with Class Colors (shown on composite & mask) */}
+                {(activeLayer === 'composite' || activeLayer === 'mask') && result?.blobs && (
                   <svg
                     className="absolute inset-0 w-full h-full pointer-events-none"
                     viewBox="0 0 256 256"
@@ -86,7 +203,6 @@ export function DetectionCanvas({ result, isRunning, progress }: DetectionCanvas
                       const color = getClassColor(blob.class);
 
                       if (!blob.isValidated) {
-                        // Stippled gray outline for filtered false-positive
                         return (
                           <g key={blob.id}>
                             <rect

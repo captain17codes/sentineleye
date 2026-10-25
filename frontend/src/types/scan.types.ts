@@ -67,6 +67,11 @@ export interface WorkerOutput {
     validated_classes?: DetectionBlob[];
     change_score?: number;
     progress?: number;
+    currentStage?: string;
+    dNDVI?: Float32Array;
+    dSAR?: Float32Array;
+    cloudMask?: Uint8Array;
+    belowThresholdCount?: number;
     error?: string;
   };
 }

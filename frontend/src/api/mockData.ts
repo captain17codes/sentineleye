@@ -1,34 +1,21 @@
-import { SEEDED_ZONES, SEEDED_ALERTS } from './seededData';
+import { SEEDED_ZONES } from './seededData';
 import { ZoneCollection } from '../types/zone.types';
-import { AlertsResponse, Alert } from '../types/alert.types';
+import { AlertsResponse, Alert, AlertStatus } from '../types/alert.types';
 import { RiskStatsResponse } from './stats.api';
 import { AuthResponse, User } from '../types/auth.types';
+import { getAlerts, updateAlertStatus, addAlert } from '../engine/store/alertStore';
+import {
+  computeTotals,
+  severityDistribution,
+  trend30d,
+  alertsByZone,
+} from '../engine/selectors';
 
 const STORAGE_KEYS = {
   USER: 'sentineleye_active_user',
   REGISTERED: 'sentineleye_registered_users',
-  ALERTS: 'sentineleye_alerts_v1',
   SCANS: 'sentineleye_scans_v1',
 };
-
-// Ensure initial alerts stored in localStorage for interactivity
-function getStoredAlerts(): Alert[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.ALERTS);
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  // Initialize with seeded alerts
-  try {
-    localStorage.setItem(STORAGE_KEYS.ALERTS, JSON.stringify(SEEDED_ALERTS));
-  } catch {}
-  return [...SEEDED_ALERTS];
-}
-
-function saveStoredAlerts(alerts: Alert[]): void {
-  try {
-    localStorage.setItem(STORAGE_KEYS.ALERTS, JSON.stringify(alerts));
-  } catch {}
-}
 
 export async function handleMockRequest<T>(path: string, options?: RequestInit): Promise<T> {
   const method = (options?.method || 'GET').toUpperCase();
@@ -122,7 +109,7 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
 
   // 6. Alerts: GET /alerts
   if (pathname === '/alerts' && method === 'GET') {
-    let alerts = getStoredAlerts();
+    let alerts = getAlerts();
     const zone = searchParams.get('zone');
     const severity = searchParams.get('severity');
     const status = searchParams.get('status');
@@ -144,83 +131,20 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
   if (pathname.match(/^\/alerts\/\d+\/status$/) && method === 'PATCH') {
     const id = parseInt(pathname.split('/')[2], 10);
     const body = options?.body ? JSON.parse(options.body as string) : {};
-    const alerts = getStoredAlerts();
-    const alert = alerts.find((a) => a.id === id);
-    if (alert) {
-      alert.status = body.status || alert.status;
-      saveStoredAlerts(alerts);
+    if (body.status) {
+      updateAlertStatus(id, body.status as AlertStatus, body.notes);
     }
+    const alert = getAlerts().find((a) => a.id === id);
     return (alert || {}) as unknown as T;
   }
 
   // 8. Stats: GET /stats/risk
   if (pathname === '/stats/risk' && method === 'GET') {
-    const alerts = getStoredAlerts();
-    const total_alerts = alerts.length;
-    const total_area_m2 = alerts.reduce((acc, a) => acc + (a.area_m2 || 0), 0);
-    const critical = alerts.filter((a) => a.severity === 'CRITICAL').length;
-    const high = alerts.filter((a) => a.severity === 'HIGH').length;
-    const medium = alerts.filter((a) => a.severity === 'MEDIUM').length;
-    const low = alerts.filter((a) => a.severity === 'LOW').length;
-    const new_count = alerts.filter((a) => a.status === 'New').length;
-    const verified = alerts.filter((a) => a.status === 'Verified').length;
-    const notice_issued = alerts.filter((a) => a.status === 'Notice Issued').length;
-
-    const totals = {
-      total_alerts,
-      total_area_m2,
-      critical,
-      high,
-      medium,
-      low,
-      new_count,
-      verified,
-      notice_issued,
-    };
-
-    const bySeverity = [
-      { severity: 'CRITICAL' as const, count: critical },
-      { severity: 'HIGH' as const, count: high },
-      { severity: 'MEDIUM' as const, count: medium },
-      { severity: 'LOW' as const, count: low },
-    ];
-
-    const byZone = SEEDED_ZONES.map((z) => {
-      const zoneAlerts = alerts.filter((a) => a.zone_id === z.id);
-      const score = zoneAlerts.reduce((acc, a) => {
-        return acc + (a.severity === 'CRITICAL' ? 4 : a.severity === 'HIGH' ? 3 : a.severity === 'MEDIUM' ? 2 : 1);
-      }, 0);
-      return {
-        id: z.id,
-        name: z.name,
-        risk_level: z.risk_level,
-        alert_count: zoneAlerts.length,
-        total_area_m2: zoneAlerts.reduce((acc, a) => acc + (a.area_m2 || 0), 0),
-        risk_score: score,
-      };
-    }).sort((a, b) => b.risk_score - a.risk_score);
-
-    // Group by day over the last 30 days
-    const dayMap: Record<string, { count: number; area: number }> = {};
-    for (let i = 29; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const dayStr = d.toISOString().split('T')[0];
-      dayMap[dayStr] = { count: 0, area: 0 };
-    }
-    alerts.forEach((a) => {
-      const day = (a.created_at || '').split('T')[0] || (a.created_at || '').split(' ')[0];
-      if (dayMap[day]) {
-        dayMap[day].count++;
-        dayMap[day].area += (a.area_m2 || 0);
-      }
-    });
-
-    const byDay = Object.entries(dayMap).map(([day, val]) => ({
-      day,
-      count: val.count,
-      area_m2: val.area,
-    }));
+    const alerts = getAlerts();
+    const totals = computeTotals(alerts);
+    const bySeverity = severityDistribution(alerts);
+    const byZone = alertsByZone(alerts, SEEDED_ZONES);
+    const byDay = trend30d(alerts);
 
     // Group by class
     const classMap: Record<string, { count: number; area: number }> = {};
@@ -250,7 +174,7 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
   // 9. Scans: POST /scans
   if (pathname === '/scans' && method === 'POST') {
     const body = options?.body ? JSON.parse(options.body as string) : {};
-    const alerts = getStoredAlerts();
+    const alerts = getAlerts();
     const newId = alerts.length > 0 ? Math.max(...alerts.map((a) => a.id)) + 1 : 1;
 
     const newAlert: Alert = {
@@ -271,8 +195,7 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
       created_at: new Date().toISOString(),
     };
 
-    alerts.unshift(newAlert);
-    saveStoredAlerts(alerts);
+    addAlert(newAlert);
 
     return {
       scan: { id: Date.now(), ...body, created_at: new Date().toISOString() },

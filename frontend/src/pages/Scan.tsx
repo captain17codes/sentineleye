@@ -15,7 +15,7 @@ export function Scan() {
   const { zones, loading: zonesLoading } = useZones();
   const { refreshAlerts } = useAlerts();
   const { jurisdiction } = useJurisdiction();
-  const { runDetection, isRunning, progress, result } = useDetectionWorker();
+  const { runDetection, isRunning, progress, currentStage, result } = useDetectionWorker();
 
   const [selectedZoneId, setSelectedZoneId] = useState<number>(1);
   const [sceneType, setSceneType] = useState<SceneType>('fused');
@@ -229,17 +229,16 @@ export function Scan() {
             ) : (
               /* Canvas with side-by-side scenes and overlay */
               <div className="flex flex-col gap-4">
-                <DetectionCanvas result={result} isRunning={isRunning} progress={progress} />
+                <DetectionCanvas
+                  result={result}
+                  isRunning={isRunning}
+                  progress={progress}
+                  currentStage={currentStage}
+                />
 
-                {/* Metrics Footer */}
+                {/* Metrics Footer with 4 Real Counters */}
                 {result && (
-                  <div className="grid grid-cols-3 gap-3 pt-3 border-t border-[#2a3832]">
-                    <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
-                      <span className="text-[11px] text-[#b4c2bb]">Change score</span>
-                      <span className="text-base font-semibold font-mono text-[#f1f5f3]">
-                        {(result.change_score * 100).toFixed(1)}%
-                      </span>
-                    </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#2a3832]">
                     <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
                       <span className="text-[11px] text-[#b4c2bb]">Raw detections</span>
                       <span className="text-base font-semibold font-mono text-[#f1f5f3]">
@@ -247,9 +246,21 @@ export function Scan() {
                       </span>
                     </div>
                     <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
-                      <span className="text-[11px] text-[#b4c2bb]">Validated detections</span>
+                      <span className="text-[11px] text-[#b4c2bb]">Rejected (False+)</span>
+                      <span className="text-base font-semibold font-mono text-amber-400">
+                        {result.false_positives_filtered}
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
+                      <span className="text-[11px] text-[#b4c2bb]">Validated alerts</span>
                       <span className="text-base font-semibold font-mono text-[#22c55e]">
                         {result.validated_count}
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
+                      <span className="text-[11px] text-[#b4c2bb]">Sub-threshold (&lt;35%)</span>
+                      <span className="text-base font-semibold font-mono text-[#8fa097]">
+                        {result.belowThresholdCount ?? 0}
                       </span>
                     </div>
                   </div>

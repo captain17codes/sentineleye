@@ -8,32 +8,40 @@ import {
   ZAxis,
   Tooltip,
   CartesianGrid,
+  Legend,
 } from 'recharts';
+import { useAlerts } from '../../hooks/useAlerts';
+import { Alert } from '../../types/alert.types';
 
-// Multi-spectral scatter signatures:
-// NDVI (-0.2 to 0.9) vs SAR Backscatter (dB / normalized 0 to 1)
-const SPECTRAL_SIGNATURE_DATA = [
-  // Deforestation: Drop in NDVI with moderate/low SAR
-  { name: 'Aravalli Ridge', ndvi: 0.12, sar: 0.28, class: 'Deforestation', area: 5400 },
-  { name: 'Sariska Corridor', ndvi: 0.15, sar: 0.32, class: 'Deforestation', area: 4200 },
-  { name: 'Mangar Bani', ndvi: 0.08, sar: 0.25, class: 'Deforestation', area: 7100 },
+export interface SpectralAnalysisChartProps {
+  alerts?: Alert[];
+}
 
-  // Unauthorized Construction: Low NDVI, Very High SAR double-bounce
-  { name: 'Yamuna Floodplain S', ndvi: 0.05, sar: 0.88, class: 'Unauthorized Construction', area: 3800 },
-  { name: 'Delhi Ridge West', ndvi: 0.09, sar: 0.92, class: 'Unauthorized Construction', area: 4900 },
-  { name: 'Haryana Reserve E', ndvi: 0.04, sar: 0.85, class: 'Unauthorized Construction', area: 6200 },
+export function SpectralAnalysisChart({ alerts: propAlerts }: SpectralAnalysisChartProps) {
+  const { alerts: contextAlerts } = useAlerts();
+  const alerts = propAlerts || contextAlerts || [];
 
-  // Mining: Negative/near-zero NDVI, Jagged/Rough SAR
-  { name: 'Aravalli S-Buffer', ndvi: -0.05, sar: 0.62, class: 'Mining', area: 8900 },
-  { name: 'Sariska Quarry', ndvi: -0.02, sar: 0.68, class: 'Mining', area: 9500 },
+  // Generate real points derived from the alert store
+  const validPoints = alerts.map((a) => {
+    const ndvi = (a as any).ndvi_delta ?? -0.25;
+    const sar = (a as any).sar_delta ? ((a as any).sar_delta / 8) : 0.6; // normalized 0..1 for graph
+    return {
+      name: a.zone_name || `Alert #${a.id}`,
+      ndvi: Number(ndvi.toFixed(2)),
+      sar: Number(Math.max(0.1, Math.min(0.98, sar)).toFixed(2)),
+      class: a.class,
+      area: a.area_m2 || 3500,
+      rejected: false,
+    };
+  });
 
-  // Land Encroachment: Mixed perimeter footprint
-  { name: 'Yamuna Floodplain N', ndvi: 0.22, sar: 0.58, class: 'Land Encroachment', area: 3600 },
-  { name: 'Bhindawas Buffer', ndvi: 0.18, sar: 0.54, class: 'Land Encroachment', area: 4400 },
-  { name: 'Okhla Bird Sanctuary', ndvi: 0.25, sar: 0.49, class: 'Land Encroachment', area: 3100 },
-];
+  // Seeded rejected seasonal-farming detections (showing why SAR+NDVI fusion rejects false positives)
+  const rejectedPoints = [
+    { name: 'Crop Harvest Patch A', ndvi: -0.32, sar: 0.12, class: 'Seasonal Farming (Rejected)', area: 4200, rejected: true },
+    { name: 'Fallow Field Beta', ndvi: -0.28, sar: 0.15, class: 'Seasonal Farming (Rejected)', area: 3100, rejected: true },
+    { name: 'Seasonal Grazing Land', ndvi: -0.22, sar: 0.18, class: 'Seasonal Farming (Rejected)', area: 2800, rejected: true },
+  ];
 
-export function SpectralAnalysisChart() {
   return (
     <div className="w-full h-64 select-none">
       <ResponsiveContainer width="100%" height="100%">
@@ -42,26 +50,26 @@ export function SpectralAnalysisChart() {
           <XAxis
             type="number"
             dataKey="ndvi"
-            name="NDVI Index"
-            domain={[-0.1, 0.4]}
+            name="NDVI Change"
+            domain={[-0.6, 0.4]}
             tickFormatter={(v) => v.toFixed(2)}
             stroke="#b4c2bb"
             fontSize={12}
             tickLine={false}
-            label={{ value: 'Normalized NDVI (Vegetation Index)', position: 'insideBottom', offset: -12, fill: '#b4c2bb', fontSize: 12 }}
+            label={{ value: 'Normalized NDVI Change (Vegetation Index)', position: 'insideBottom', offset: -12, fill: '#b4c2bb', fontSize: 12 }}
           />
           <YAxis
             type="number"
             dataKey="sar"
             name="SAR Radar Backscatter"
-            domain={[0, 1]}
+            domain={[0, 1.1]}
             tickFormatter={(v) => v.toFixed(1)}
             stroke="#b4c2bb"
             fontSize={12}
             tickLine={false}
             label={{ value: 'SAR Radar Backscatter', angle: -90, position: 'insideLeft', offset: 5, fill: '#b4c2bb', fontSize: 12 }}
           />
-          <ZAxis type="number" dataKey="area" range={[50, 180]} />
+          <ZAxis type="number" dataKey="area" range={[40, 140]} />
           <Tooltip
             cursor={{ strokeDasharray: '3 3' }}
             content={({ active, payload }) => {
@@ -70,11 +78,14 @@ export function SpectralAnalysisChart() {
                 return (
                   <div className="p-3 rounded-md bg-[#111816] border border-[#2a3832] text-xs shadow-xl flex flex-col gap-1 font-mono">
                     <span className="font-semibold text-[#f1f5f3] font-sans">{data.name}</span>
-                    <span className="text-[#22c55e] text-xs font-sans">{data.class}</span>
+                    <span className={data.rejected ? 'text-slate-400 font-semibold' : 'text-[#22c55e] text-xs font-sans'}>
+                      {data.class}
+                    </span>
                     <div className="text-[#b4c2bb] text-xs space-y-0.5 pt-1 border-t border-[#2a3832]">
-                      <div>NDVI: {data.ndvi.toFixed(2)}</div>
-                      <div>SAR Backscatter: {data.sar.toFixed(2)}</div>
+                      <div>NDVI Change: {data.ndvi}</div>
+                      <div>SAR Backscatter: {data.sar}</div>
                       <div>Area: {data.area.toLocaleString()} m²</div>
+                      {data.rejected && <div className="text-amber-400 mt-1">Status: Rejected (Low SAR change)</div>}
                     </div>
                   </div>
                 );
@@ -82,25 +93,36 @@ export function SpectralAnalysisChart() {
               return null;
             }}
           />
+          <Legend
+            verticalAlign="top"
+            height={28}
+            wrapperStyle={{ fontSize: '11px', color: '#b4c2bb' }}
+          />
           <Scatter
             name="Deforestation"
-            data={SPECTRAL_SIGNATURE_DATA.filter((d) => d.class === 'Deforestation')}
+            data={validPoints.filter((d) => d.class === 'Deforestation')}
             fill="#ef4444"
           />
           <Scatter
             name="Unauthorized Construction"
-            data={SPECTRAL_SIGNATURE_DATA.filter((d) => d.class === 'Unauthorized Construction')}
+            data={validPoints.filter((d) => d.class === 'Unauthorized Construction')}
             fill="#f59e0b"
           />
           <Scatter
             name="Mining"
-            data={SPECTRAL_SIGNATURE_DATA.filter((d) => d.class === 'Mining')}
+            data={validPoints.filter((d) => d.class === 'Mining')}
             fill="#eab308"
           />
           <Scatter
             name="Land Encroachment"
-            data={SPECTRAL_SIGNATURE_DATA.filter((d) => d.class === 'Land Encroachment')}
+            data={validPoints.filter((d) => d.class === 'Land Encroachment')}
             fill="#22c55e"
+          />
+          <Scatter
+            name="Seasonal Farm (Rejected)"
+            data={rejectedPoints}
+            fill="#64748b"
+            shape="triangle"
           />
         </ScatterChart>
       </ResponsiveContainer>

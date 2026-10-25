@@ -2,24 +2,21 @@ import React from 'react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { SeverityStat } from '../../api/stats.api';
 import { severityColor } from '../../utils/riskColors';
+import { useAlerts } from '../../hooks/useAlerts';
+import { severityDistribution } from '../../engine/selectors';
 
 interface SeverityDonutProps {
-  data: SeverityStat[];
+  data?: SeverityStat[];
 }
 
-export function SeverityDonut({ data }: SeverityDonutProps) {
-  const chartData =
-    data && data.length > 0
-      ? data.map((d) => ({
-          name: d.severity,
-          value: d.count,
-        }))
-      : [
-          { name: 'CRITICAL', value: 6 },
-          { name: 'HIGH', value: 10 },
-          { name: 'MEDIUM', value: 14 },
-          { name: 'LOW', value: 8 },
-        ];
+export function SeverityDonut({ data: propData }: SeverityDonutProps) {
+  const { alerts } = useAlerts();
+  const effectiveData = (propData && propData.length > 0) ? propData : severityDistribution(alerts);
+
+  const chartData = effectiveData.map((d) => ({
+    name: d.severity,
+    value: d.count,
+  }));
 
   return (
     <div className="w-full h-64 flex flex-col items-center justify-between select-none">
