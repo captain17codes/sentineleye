@@ -2,7 +2,7 @@
 // Deterministic Sentinel-1 SAR & Sentinel-2 Optical Bitemporal Pipeline
 // Reports real stage progress, false-alarm rejection, and vector polygons.
 
-import { WorkerInput, WorkerOutput, DetectionBlob, EncroachmentClass } from '../types/scan.types';
+import { WorkerInput, WorkerOutput, DetectionBlob, EncroachmentClass, RealSceneMetadata } from '../types/scan.types';
 import { runScanPipeline } from '../engine/scan/pipeline';
 import { SEEDED_ZONES } from '../api/seededData';
 
@@ -64,7 +64,8 @@ function createBmpDataUrl(pixelsRgb: Uint8Array, width: number, height: number):
 self.onmessage = async (event: MessageEvent<WorkerInput>) => {
   if (event.data.type !== 'RUN') return;
 
-  const { zone_id, scene_type, cloud_coverage, lat, lng } = event.data.payload;
+  const { zone_id, scene_type, cloud_coverage, lat, lng, data_source } = event.data.payload;
+  const isRealMode = data_source === 'real';
 
   try {
     // Find zone geometry or fallback to bounding box around center lat/lng
@@ -88,10 +89,66 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
       });
     };
 
-    postStageProgress('Stage 1/9: Ingesting Sentinel-1 SAR and Sentinel-2 optical scenes', 10);
+    let realSceneInput: { t0: any; t1: any; cloudMask?: Uint8Array } | undefined = undefined;
+    let sceneMetadata: RealSceneMetadata | undefined = undefined;
+
+    if (isRealMode) {
+      postStageProgress('Stage 1/9: Replay: Fetching archived Sentinel-1/2 telemetry bundles', 10);
+      try {
+        const [t0Resp, t1Resp] = await Promise.all([
+          fetch(`/real/${zone_id}/t0.json`),
+          fetch(`/real/${zone_id}/t1.json`),
+        ]);
+        if (t0Resp.ok && t1Resp.ok) {
+          const t0Data = await t0Resp.json();
+          const t1Data = await t1Resp.json();
+
+          const realCloudMask = new Uint8Array(SCENE_SIZE * SCENE_SIZE);
+          for (let i = 0; i < SCENE_SIZE * SCENE_SIZE; i++) {
+            const sclVal = t1Data.scl ? t1Data.scl[i] : 4;
+            // SCL classes: 3 = cloud shadow, 8 = cloud medium prob, 9 = cloud high prob, 10 = thin cirrus
+            if (sclVal === 3 || sclVal === 8 || sclVal === 9 || sclVal === 10) {
+              realCloudMask[i] = 1;
+            }
+          }
+
+          realSceneInput = {
+            t0: {
+              red: new Float32Array(t0Data.red),
+              nir: new Float32Array(t0Data.nir),
+              sar: new Float32Array(t0Data.sar),
+            },
+            t1: {
+              red: new Float32Array(t1Data.red),
+              nir: new Float32Array(t1Data.nir),
+              sar: new Float32Array(t1Data.sar),
+            },
+            cloudMask: realCloudMask,
+          };
+
+          sceneMetadata = {
+            t0SceneId: t0Data.scene_id,
+            t1SceneId: t1Data.scene_id,
+            t0Date: t0Data.datetime,
+            t1Date: t1Data.datetime,
+            sarT0SceneId: t0Data.sar_scene_id,
+            sarT1SceneId: t1Data.sar_scene_id,
+            telemetrySource: 'Copernicus Sentinel-2 MSI (AWS Earth Search STAC) + Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)',
+            isControl: zone_id === 107,
+          };
+        }
+      } catch (fetchErr) {
+        console.warn('[Worker] Real crop fetch fallback:', fetchErr);
+      }
+    } else {
+      postStageProgress('Stage 1/9: Ingesting Sentinel-1 SAR and Sentinel-2 optical scenes', 10);
+    }
     await delay(120);
 
-    postStageProgress('Stage 2/9: Generating multi-octave atmospheric cloud mask', 22);
+    postStageProgress(
+      isRealMode ? 'Stage 2/9: Reading Sentinel-2 SCL (Scene Classification Layer) cloud mask' : 'Stage 2/9: Generating multi-octave atmospheric cloud mask',
+      22
+    );
     await delay(120);
 
     postStageProgress('Stage 3/9: Computing bitemporal NDVI vegetation loss gradient', 35);
@@ -120,6 +177,8 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
       mode: scene_type,
       cloudCoverage: cloud_coverage,
       seed: 42 + zone_id,
+      dataSource: isRealMode && realSceneInput ? 'real' : 'calibration',
+      realScene: realSceneInput,
     });
 
     // Create 3-channel RGB Float32Array scenes for canvas rendering
@@ -239,6 +298,8 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
         raw_classes: blobs,
         validated_classes: blobs.filter((b) => b.isValidated),
         change_score: changeScore,
+        data_source: isRealMode && realSceneInput ? 'real' : 'calibration',
+        scene_metadata: sceneMetadata,
       },
     };
 

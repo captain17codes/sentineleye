@@ -4,7 +4,7 @@
  */
 
 import { DEMO_SEED, SCENE } from '../config';
-import { generateBitemporalScene, BoundingBox, BitemporalScene } from './scene';
+import { generateBitemporalScene, BoundingBox, BitemporalScene, SceneBands, createGeotransform } from './scene';
 import { generateCloudMask } from './cloud';
 import { computeNdviGrid, computeNdviDiff } from './ndvi';
 import { computeSarDiff } from './sar';
@@ -20,6 +20,12 @@ export interface ScanPipelineInput {
   mode: ScanMode;
   cloudCoverage: number;
   seed?: number;
+  dataSource?: 'calibration' | 'real';
+  realScene?: {
+    t0: SceneBands;
+    t1: SceneBands;
+    cloudMask?: Uint8Array;
+  };
   onProgress?: (stage: string, percent: number) => void;
 }
 
@@ -45,10 +51,18 @@ export function runScanPipeline(input: ScanPipelineInput): ScanPipelineOutput {
   const size = SCENE.SIZE;
 
   input.onProgress?.('Ingest: Reading Sentinel-1 SAR and Sentinel-2 optical rasters', 10);
-  const scene = generateBitemporalScene(input.zoneId, input.bbox, seed, size);
+  const scene: BitemporalScene = input.realScene
+    ? {
+        size,
+        t0: input.realScene.t0,
+        t1: input.realScene.t1,
+        geotransform: createGeotransform(input.bbox, size),
+        scenarios: [],
+      }
+    : generateBitemporalScene(input.zoneId, input.bbox, seed, size);
 
   input.onProgress?.('Atmospheric: Generating cloud and haze mask', 25);
-  const cloudMask = generateCloudMask(size, input.cloudCoverage, seed);
+  const cloudMask = input.realScene?.cloudMask ?? generateCloudMask(size, input.cloudCoverage, seed);
 
   input.onProgress?.('Spectral: Computing bitemporal NDVI vegetation gradient', 40);
   const ndviT0 = computeNdviGrid(scene.t0.nir, scene.t0.red, size);

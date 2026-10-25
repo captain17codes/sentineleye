@@ -8,8 +8,8 @@ import { useZones } from '../hooks/useZones';
 import { useAlerts } from '../hooks/useAlerts';
 import { useJurisdiction, JURISDICTION_CONFIG } from '../context/JurisdictionContext';
 import { scansApi } from '../api/scans.api';
-import { SceneType } from '../types/scan.types';
-import { Play, Check, Radar, Layers, CheckCircle2, Shield } from 'lucide-react';
+import { SceneType, DataSourceMode } from '../types/scan.types';
+import { Play, Check, Radar, Layers, CheckCircle2, Shield, Info, AlertCircle, Satellite } from 'lucide-react';
 
 export function Scan() {
   const { zones, loading: zonesLoading } = useZones();
@@ -17,7 +17,8 @@ export function Scan() {
   const { jurisdiction } = useJurisdiction();
   const { runDetection, isRunning, progress, currentStage, result } = useDetectionWorker();
 
-  const [selectedZoneId, setSelectedZoneId] = useState<number>(1);
+  const [selectedZoneId, setSelectedZoneId] = useState<number>(102);
+  const [dataSource, setDataSource] = useState<DataSourceMode>('calibration');
   const [sceneType, setSceneType] = useState<SceneType>('fused');
   const [cloudCoverage, setCloudCoverage] = useState<number>(15);
   const [savingScan, setSavingScan] = useState(false);
@@ -56,6 +57,7 @@ export function Scan() {
       cloud_coverage: cloudCoverage,
       lng: coords[0],
       lat: coords[1],
+      data_source: dataSource,
     });
     setSaveStatus(null);
   };
@@ -96,17 +98,19 @@ export function Scan() {
 
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto select-none">
-      {/* Page Header with ONE Single Green Run Scan Button */}
+      {/* Page Header with Single Green Run Scan Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2a3832]">
         <div>
           <div className="flex items-center gap-2.5 flex-wrap">
             <h1 className="text-xl font-semibold text-[#f1f5f3]">Orbital scan & anomaly detection</h1>
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-[#16201c] border border-[#2a3832] text-[#b4c2bb]">
-              Data source: Calibration scenes (synthetic, ground truth known)
+              {dataSource === 'calibration'
+                ? 'Data source: Calibration scenes (synthetic, ground truth known)'
+                : 'Data source: Real Sentinel replay (Element 84 STAC AWS Sentinel-2 + Sentinel-1)'}
             </span>
           </div>
           <p className="text-xs text-[#b4c2bb] mt-0.5">
-            Bitemporal synthetic radar and optical fusion with automated false-alarm rejection
+            Bitemporal radar and optical fusion with automated false-alarm rejection & statutory classification
           </p>
         </div>
 
@@ -137,10 +141,50 @@ export function Scan() {
               </span>
             </div>
 
+            {/* Data Source Selector Toggle */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-[#f1f5f3]">
+                Telemetry Data Source
+              </label>
+              <div className="grid grid-cols-2 gap-2 p-1 rounded-lg bg-[#0b0f0e] border border-[#2a3832]">
+                <button
+                  type="button"
+                  onClick={() => setDataSource('calibration')}
+                  disabled={isRunning}
+                  className={`py-1.5 px-2.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
+                    dataSource === 'calibration'
+                      ? 'bg-[#16201c] text-[#22c55e] border border-[#22c55e]/50 font-semibold shadow-sm'
+                      : 'text-[#b4c2bb] hover:text-[#f1f5f3]'
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Calibration (synthetic)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDataSource('real')}
+                  disabled={isRunning}
+                  className={`py-1.5 px-2.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
+                    dataSource === 'real'
+                      ? 'bg-[#16201c] text-[#22c55e] border border-[#22c55e]/50 font-semibold shadow-sm'
+                      : 'text-[#b4c2bb] hover:text-[#f1f5f3]'
+                  }`}
+                >
+                  <Satellite className="w-3.5 h-3.5" />
+                  <span>Real Sentinel (replay)</span>
+                </button>
+              </div>
+              <span className="text-[10px] text-[#b4c2bb] font-mono">
+                {dataSource === 'calibration'
+                  ? 'Controlled seeds with simulated cloud masks & known ground truth.'
+                  : 'Element 84 STAC AWS Sentinel-2 L2A + Sentinel-1 C-SAR with SCL cloud mask.'}
+              </span>
+            </div>
+
             {/* Zone Selector Filtered to Active Jurisdiction */}
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-medium text-[#f1f5f3]">
-                Protected zone ({filteredZones.length} in jurisdiction)
+                Protected Sector Target ({filteredZones.length} available)
               </label>
               <select
                 value={selectedZoneId}
@@ -156,6 +200,7 @@ export function Scan() {
                     style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
                   >
                     {z.properties.code || `Z-${z.properties.id}`}: {z.properties.name} ({z.properties.risk_level})
+                    {dataSource === 'real' && [102, 103, 105, 107].includes(z.properties.id) ? ' • [Real AOI]' : ''}
                   </option>
                 ))}
               </select>
@@ -170,8 +215,20 @@ export function Scan() {
             {/* Sensor Band Toggle: 3 equal cards */}
             <ScenePanel value={sceneType} onChange={setSceneType} disabled={isRunning} />
 
-            {/* Cloud Coverage Slider with custom track, 18px thumb, floating label */}
-            <CloudSlider value={cloudCoverage} onChange={setCloudCoverage} disabled={isRunning} />
+            {/* Cloud Coverage Slider (disabled in real replay mode as SCL mask is used) */}
+            {dataSource === 'calibration' ? (
+              <CloudSlider value={cloudCoverage} onChange={setCloudCoverage} disabled={isRunning} />
+            ) : (
+              <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col gap-1 text-xs">
+                <div className="flex items-center justify-between text-[#b4c2bb]">
+                  <span className="font-semibold text-[#f1f5f3]">Scene Classification Layer (SCL)</span>
+                  <span className="text-[10px] font-mono text-[#22c55e]">Active</span>
+                </div>
+                <p className="text-[11px] text-[#b4c2bb] leading-relaxed">
+                  Real Sentinel-2 Level-2A SCL mask automatically filters cirrus clouds (SCL 10), high-probability clouds (SCL 9), and cloud shadows (SCL 3) directly from spectral telemetry.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Detections Breakdown (when scan finishes) */}
@@ -224,6 +281,35 @@ export function Scan() {
               </div>
             )}
 
+            {/* Real Telemetry Metadata Badge if Replay Mode Active */}
+            {result?.scene_metadata && (
+              <div className="p-3 rounded-lg bg-[#16201c] border border-[#22c55e]/40 flex flex-col gap-1.5 font-mono text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[#22c55e] font-semibold flex items-center gap-1.5">
+                    <Satellite className="w-3.5 h-3.5" />
+                    Real Sentinel Telemetry Provenance
+                  </span>
+                  {result.scene_metadata.isControl && (
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/40 font-bold">
+                      VERIFIED NEGATIVE CONTROL
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-[#b4c2bb] pt-1 border-t border-[#2a3832]">
+                  <div>
+                    <span className="text-white block font-medium">T0 Optical Baseline:</span>
+                    <span className="truncate block">{result.scene_metadata.t0SceneId}</span>
+                    <span className="text-[10px] text-muted">{new Date(result.scene_metadata.t0Date).toUTCString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-white block font-medium">T1 Optical Detection:</span>
+                    <span className="truncate block">{result.scene_metadata.t1SceneId}</span>
+                    <span className="text-[10px] text-muted">{new Date(result.scene_metadata.t1Date).toUTCString()}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Empty State when no scan has run */}
             {!result && !isRunning ? (
               <div className="flex-1 flex flex-col items-center justify-center p-12 text-center border border-dashed border-[#2a3832] rounded-lg bg-[#16201c]/40 min-h-[360px]">
@@ -234,7 +320,7 @@ export function Scan() {
                   No scan executed for this zone yet
                 </h4>
                 <p className="text-xs text-[#b4c2bb] max-w-sm">
-                  Configure parameters and click Run scan.
+                  Select {dataSource === 'real' ? 'a real Sentinel replay target' : 'parameters'} and click Run scan.
                 </p>
               </div>
             ) : (
@@ -278,6 +364,30 @@ export function Scan() {
                 )}
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Limitations Panel: Transparent & Honest Remote Sensing Constraints */}
+      <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
+        <div className="flex items-center gap-2 pb-2 border-b border-[#2a3832]">
+          <Info className="w-4 h-4 text-[#22c55e]" />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#f1f5f3]">
+            Physical Detection Limitations & Evidentiary Methodology
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-[#b4c2bb] leading-relaxed">
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832]">
+            <span className="text-white font-semibold block mb-1">Spatial Resolution Cutoff</span>
+            Sentinel-2 MSI pixel size is 10 m (100 m² per pixel). Connected-component detections below 5 contiguous pixels (&lt;500 m²) are automatically filtered to suppress sensor noise and minor agricultural tilling.
+          </div>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832]">
+            <span className="text-white font-semibold block mb-1">Dual-Sensor Radar Requirement</span>
+            Optical vegetation loss (ΔNDVI &lt; -0.25) alone cannot differentiate legal seasonal crop harvest from illegal clearing. Sentinel-1 C-SAR radar backscatter (+dB) is required to identify rigid double-bounce masonry or quarry gouging.
+          </div>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832]">
+            <span className="text-white font-semibold block mb-1">Candidate Evidentiary Status</span>
+            Orbital detections are algorithmic candidates for human administrative verification. Under Section 63 BSA, automated alerts must be confirmed by an authorized officer prior to executing statutory demolition or eviction orders.
           </div>
         </div>
       </div>

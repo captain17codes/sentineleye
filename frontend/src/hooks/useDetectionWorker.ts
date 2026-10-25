@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { WorkerInput, WorkerOutput, SceneType, DetectionBlob } from '../types/scan.types';
+import { WorkerInput, WorkerOutput, SceneType, DetectionBlob, DataSourceMode, RealSceneMetadata } from '../types/scan.types';
 
 export interface DetectionResult {
   t0_scene: Float32Array;
@@ -20,6 +20,8 @@ export interface DetectionResult {
   raw_classes: DetectionBlob[];
   validated_classes: DetectionBlob[];
   change_score: number;
+  data_source?: DataSourceMode;
+  scene_metadata?: RealSceneMetadata;
   // Legacy aliases
   raw_scene: Float32Array;
   validated_scene: Float32Array;
@@ -72,6 +74,8 @@ export function useDetectionWorker() {
           raw_classes: payload.raw_classes || blobs,
           validated_classes: payload.validated_classes || blobs.filter((b) => b.isValidated),
           change_score: payload.change_score || 0,
+          data_source: payload.data_source,
+          scene_metadata: payload.scene_metadata,
           raw_scene: t0,
           validated_scene: t1,
         });
@@ -102,6 +106,7 @@ export function useDetectionWorker() {
       cloud_coverage: number;
       lat: number;
       lng: number;
+      data_source?: DataSourceMode;
     }) => {
       if (!workerRef.current) return;
       setIsRunning(true);

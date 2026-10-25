@@ -1,0 +1,167 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_id": 102,
+        "code": "Z-102",
+        "name": "Mangar Bani Sacred Grove",
+        "threat_class": "Mining",
+        "status": "VERIFIED_INFRACTION",
+        "area_m2": 18400,
+        "phenomenon": "Quarry Expansion & Canopy Clearcutting",
+        "t0_date": "2022-03-30",
+        "t1_date": "2024-03-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.1665,
+              28.3665
+            ],
+            [
+              77.1735,
+              28.3665
+            ],
+            [
+              77.174,
+              28.3735
+            ],
+            [
+              77.167,
+              28.374
+            ],
+            [
+              77.1665,
+              28.3665
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_id": 103,
+        "code": "Z-103",
+        "name": "Yamuna Floodplain Sector 7",
+        "threat_class": "Unauthorized Construction",
+        "status": "VERIFIED_INFRACTION",
+        "area_m2": 24200,
+        "phenomenon": "Unauthorized Floodplain Masonry & Commercial Encroachment",
+        "t0_date": "2022-03-30",
+        "t1_date": "2024-03-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.2565,
+              28.6665
+            ],
+            [
+              77.2635,
+              28.6665
+            ],
+            [
+              77.264,
+              28.6735
+            ],
+            [
+              77.257,
+              28.674
+            ],
+            [
+              77.2565,
+              28.6665
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_id": 105,
+        "code": "Z-105",
+        "name": "Aravalli Forest Reserve",
+        "threat_class": "Deforestation",
+        "status": "VERIFIED_INFRACTION",
+        "area_m2": 16800,
+        "phenomenon": "Commercial Boundary Clearance & Illegal Roadwork",
+        "t0_date": "2022-03-30",
+        "t1_date": "2024-03-19"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.0565,
+              28.4165
+            ],
+            [
+              77.0635,
+              28.4165
+            ],
+            [
+              77.064,
+              28.4235
+            ],
+            [
+              77.057,
+              28.424
+            ],
+            [
+              77.0565,
+              28.4165
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_id": 107,
+        "code": "Z-107",
+        "name": "Bhindawas Wetland Zone",
+        "threat_class": "None",
+        "status": "NEGATIVE_CONTROL_VERIFIED",
+        "area_m2": 0,
+        "description": "Negative control site: Verified zero unauthorized encroachment."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.53,
+              28.52
+            ],
+            [
+              76.55000000000001,
+              28.52
+            ],
+            [
+              76.55000000000001,
+              28.540000000000003
+            ],
+            [
+              76.53,
+              28.540000000000003
+            ],
+            [
+              76.53,
+              28.52
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "stac_endpoint": "https://earth-search.aws.element84.com/v1/search",
+  "collection": "sentinel-2-l2a",
+  "telemetry_specs": "Sentinel-2: 5-day nominal revisit; Sentinel-1: 6-day (C+D). Resolution: ~10 m pixel spacing.",
+  "zones": [
+    {
+      "zone_id": 102,
+      "code": "Z-102",
+      "name": "Mangar Bani Sacred Grove",
+      "category": "Aravalli Forest & Sacred Grove",
+      "bbox": [
+        77.161542,
+        28.361442,
+        77.178458,
+        28.378558
+      ],
+      "center": [
+        77.17,
+        28.37
+      ],
+      "is_control": false,
+      "ground_truth_class": "Mining",
+      "expected_area_m2": 18400,
+      "phenomenon": "Quarry Expansion & Canopy Clearcutting",
+      "t0": {
+        "scene_id": "S2B_43RGM_20220330_0_L2A",
+        "datetime": "2022-03-30T05:41:00.266000Z",
+        "cloud_cover": 0,
+        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+      },
+      "t1": {
+        "scene_id": "S2B_43RGM_20240319_0_L2A",
+        "datetime": "2024-03-19T05:41:03.049000Z",
+        "cloud_cover": 2.407766,
+        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+      },
+      "processing": {
+        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
+        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
+        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "crs": "EPSG:4326 (WGS84)",
+        "pixel_size_m": 10.0
+      }
+    },
+    {
+      "zone_id": 103,
+      "code": "Z-103",
+      "name": "Yamuna Floodplain Sector 7",
+      "category": "Riverbed & Active Floodplain",
+      "bbox": [
+        77.247538,
+        28.657426,
+        77.272462,
+        28.682574
+      ],
+      "center": [
+        77.26,
+        28.67
+      ],
+      "is_control": false,
+      "ground_truth_class": "Unauthorized Construction",
+      "expected_area_m2": 24200,
+      "phenomenon": "Unauthorized Floodplain Masonry & Commercial Encroachment",
+      "t0": {
+        "scene_id": "S2B_43RGM_20220330_0_L2A",
+        "datetime": "2022-03-30T05:41:00.266000Z",
+        "cloud_cover": 0,
+        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+      },
+      "t1": {
+        "scene_id": "S2B_43RGM_20240319_0_L2A",
+        "datetime": "2024-03-19T05:41:03.049000Z",
+        "cloud_cover": 2.407766,
+        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+      },
+      "processing": {
+        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
+        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
+        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "crs": "EPSG:4326 (WGS84)",
+        "pixel_size_m": 10.0
+      }
+    },
+    {
+      "zone_id": 105,
+      "code": "Z-105",
+      "name": "Aravalli Forest Reserve",
+      "category": "Aravalli Biodiversity Corridor",
+      "bbox": [
+        77.043211,
+        28.40302,
+        77.076789,
+        28.43698
+      ],
+      "center": [
+        77.06,
+        28.42
+      ],
+      "is_control": false,
+      "ground_truth_class": "Deforestation",
+      "expected_area_m2": 16800,
+      "phenomenon": "Commercial Boundary Clearance & Illegal Roadwork",
+      "t0": {
+        "scene_id": "S2B_43RFM_20220330_0_L2A",
+        "datetime": "2022-03-30T05:41:03.536000Z",
+        "cloud_cover": 0.000723,
+        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+      },
+      "t1": {
+        "scene_id": "S2B_43RFM_20240319_0_L2A",
+        "datetime": "2024-03-19T05:41:06.319000Z",
+        "cloud_cover": 0.000362,
+        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+      },
+      "processing": {
+        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
+        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
+        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "crs": "EPSG:4326 (WGS84)",
+        "pixel_size_m": 10.0
+      }
+    },
+    {
+      "zone_id": 107,
+      "code": "Z-107",
+      "name": "Bhindawas Wetland Zone",
+      "category": "Ramsar Freshwater Wetland",
+      "bbox": [
+        76.529222,
+        28.51911,
+        76.550778,
+        28.54089
+      ],
+      "center": [
+        76.54,
+        28.53
+      ],
+      "is_control": true,
+      "ground_truth_class": "None",
+      "expected_area_m2": 0,
+      "phenomenon": "Control Negative: Natural seasonal water fluctuation only (0 encroachments)",
+      "t0": {
+        "scene_id": "S2B_43RFM_20220330_0_L2A",
+        "datetime": "2022-03-30T05:41:03.536000Z",
+        "cloud_cover": 0.000723,
+        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+      },
+      "t1": {
+        "scene_id": "S2B_43RFM_20240319_0_L2A",
+        "datetime": "2024-03-19T05:41:06.319000Z",
+        "cloud_cover": 0.000362,
+        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+      },
+      "processing": {
+        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
+        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
+        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "crs": "EPSG:4326 (WGS84)",
+        "pixel_size_m": 10.0
+      }
+    }
+  ]
+}

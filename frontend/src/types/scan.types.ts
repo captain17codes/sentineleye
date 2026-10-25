@@ -1,4 +1,17 @@
 export type SceneType = 'optical' | 'sar' | 'fused';
+export type DataSourceMode = 'calibration' | 'real';
+
+export interface RealSceneMetadata {
+  t0SceneId: string;
+  t1SceneId: string;
+  t0Date: string;
+  t1Date: string;
+  sarT0SceneId?: string;
+  sarT1SceneId?: string;
+  telemetrySource?: string;
+  isControl?: boolean;
+}
+
 export type EncroachmentClass =
   | 'Deforestation'
   | 'Unauthorized Construction'
@@ -35,6 +48,8 @@ export interface ScanResult {
   after_img?: string;
   lat?: number;
   lng?: number;
+  data_source?: DataSourceMode;
+  scene_metadata?: RealSceneMetadata;
 }
 
 export interface WorkerInput {
@@ -46,6 +61,7 @@ export interface WorkerInput {
     lat: number;
     lng: number;
     zoneCoordinates?: number[][];
+    data_source?: DataSourceMode;
   };
 }
 
@@ -72,6 +88,8 @@ export interface WorkerOutput {
     dSAR?: Float32Array;
     cloudMask?: Uint8Array;
     belowThresholdCount?: number;
+    data_source?: DataSourceMode;
+    scene_metadata?: RealSceneMetadata;
     error?: string;
   };
 }
