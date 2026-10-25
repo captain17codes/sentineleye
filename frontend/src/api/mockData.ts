@@ -4,6 +4,7 @@ import { AlertsResponse, Alert, AlertStatus } from '../types/alert.types';
 import { RiskStatsResponse } from './stats.api';
 import { AuthResponse, User } from '../types/auth.types';
 import { getAlerts, updateAlertStatus, addAlert } from '../engine/store/alertStore';
+import { getLedgerChain, verifyChain } from '../engine/ledger';
 import {
   computeTotals,
   severityDistribution,
@@ -225,9 +226,22 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
     return dummyBlob as unknown as T;
   }
 
-  // 12. Ledger: GET /ledger/verify
+  // 12. Ledger: GET /ledger/verify or /ledger
+  if (pathname === '/ledger/verify') {
+    const chain = await getLedgerChain();
+    const result = await verifyChain(chain);
+    return {
+      valid: result.valid,
+      blocksVerified: result.blocksVerified,
+      chainLength: chain.length,
+      brokenAt: result.firstInvalidIndex,
+      lastHash: chain[chain.length - 1]?.hash || '',
+    } as unknown as T;
+  }
+
   if (pathname.includes('/ledger')) {
-    return { valid: true, blocksVerified: 38, lastHash: '0x8f2a93c7d4e1...' } as unknown as T;
+    const chain = await getLedgerChain();
+    return { blocks: chain } as unknown as T;
   }
 
   // 13. Notifications: GET /notifications

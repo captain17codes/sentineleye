@@ -21,16 +21,13 @@ import { NotFound } from './pages/NotFound';
 import { DemoDirector } from './components/demo/DemoDirector';
 
 function LandingRoute() {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0b0f0e] flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-[#22c55e] border-t-transparent rounded-full animate-spin" />
       </div>
     );
-  }
-  if (user) {
-    return <Navigate to="/overview" replace />;
   }
   return <Landing />;
 }
@@ -44,6 +41,7 @@ export default function App() {
             <Routes>
               {/* Entry Page: Landing + Login on One Screen */}
               <Route path="/" element={<LandingRoute />} />
+              <Route path="/landing" element={<Landing />} />
 
               {/* Redirect legacy auth paths to entry page */}
               <Route path="/login" element={<Navigate to="/" replace />} />

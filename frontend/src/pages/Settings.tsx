@@ -1,25 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { ledgerApi } from '../api/ledger.api';
+import { getLedgerChain, verifyChain, LedgerBlock } from '../engine/ledger';
 import { User, Shield, Lock, Server, CheckCircle2, AlertTriangle, RefreshCw } from 'lucide-react';
 
 export function Settings() {
   const { user } = useAuth();
-  const [ledgerBlocks, setLedgerBlocks] = useState<any[]>([]);
+  const [ledgerBlocks, setLedgerBlocks] = useState<LedgerBlock[]>([]);
   const [verifying, setVerifying] = useState(false);
   const [verifyResult, setVerifyResult] = useState<{ valid: boolean; chainLength: number; brokenAt: number | null } | null>(null);
 
   useEffect(() => {
-    ledgerApi.getAll().then((data: any) => {
-      setLedgerBlocks(data?.blocks || data || []);
-    }).catch(() => {});
+    let mounted = true;
+    getLedgerChain()
+      .then((chain) => {
+        if (mounted) setLedgerBlocks(Array.isArray(chain) ? chain : []);
+      })
+      .catch((err) => {
+        console.error('Failed to load ledger in settings:', err);
+      });
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const handleVerify = async () => {
     setVerifying(true);
     try {
-      const res: any = await ledgerApi.verify();
-      setVerifyResult(res);
+      const chain = await getLedgerChain();
+      const res = await verifyChain(chain);
+      setVerifyResult({
+        valid: res.valid,
+        chainLength: res.blocksVerified,
+        brokenAt: res.firstInvalidIndex,
+      });
     } catch {
       setVerifyResult({ valid: false, chainLength: 0, brokenAt: 1 });
     } finally {
@@ -27,83 +40,85 @@ export function Settings() {
     }
   };
 
+  const safeBlocks = Array.isArray(ledgerBlocks) ? ledgerBlocks : [];
+
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto">
+    <div className="flex flex-col gap-6 max-w-4xl mx-auto select-none">
       {/* Header */}
-      <div className="pb-4 border-b border-border">
-        <h1 className="text-xl font-semibold text-text">System settings & operator console</h1>
-        <p className="text-xs text-muted mt-0.5">
+      <div className="pb-4 border-b border-[#2a3832]">
+        <h1 className="text-xl font-semibold text-[#f1f5f3]">System settings & operator console</h1>
+        <p className="text-xs text-[#b4c2bb] mt-0.5">
           Account identity, node parameters, and cryptographic ledger verification
         </p>
       </div>
 
       {/* Operator Identity Card */}
-      <div className="p-5 rounded-lg bg-panel border border-border flex flex-col gap-4">
-        <div className="flex items-center gap-2 pb-2 border-b border-border">
-          <User className="w-4 h-4 text-accent" />
-          <h2 className="text-sm font-semibold text-text">Operator profile</h2>
+      <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-4">
+        <div className="flex items-center gap-2 pb-2 border-b border-[#2a3832]">
+          <User className="w-4 h-4 text-[#22c55e]" />
+          <h2 className="text-sm font-semibold text-[#f1f5f3]">Operator profile</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col">
-            <span className="text-muted text-[10px]">Email address</span>
-            <span className="text-text font-mono font-medium mt-0.5 truncate">{user?.email}</span>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col">
+            <span className="text-[#b4c2bb] text-[10px]">Email address</span>
+            <span className="text-[#f1f5f3] font-mono font-medium mt-0.5 truncate">{user?.email || 'operator@sentineleye.com'}</span>
           </div>
 
-          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col">
-            <span className="text-muted text-[10px]">Security role</span>
-            <span className="text-accent font-mono font-semibold uppercase mt-0.5">{user?.role}</span>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col">
+            <span className="text-[#b4c2bb] text-[10px]">Security role</span>
+            <span className="text-[#22c55e] font-mono font-semibold uppercase mt-0.5">{user?.role || 'operator'}</span>
           </div>
 
-          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col">
-            <span className="text-muted text-[10px]">Session auth</span>
-            <span className="text-text font-mono mt-0.5">JWT HttpOnly Cookie</span>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col">
+            <span className="text-[#b4c2bb] text-[10px]">Session auth</span>
+            <span className="text-[#f1f5f3] font-mono mt-0.5">JWT HttpOnly / Local Session</span>
           </div>
         </div>
       </div>
 
       {/* System Telemetry Card */}
-      <div className="p-5 rounded-lg bg-panel border border-border flex flex-col gap-4">
-        <div className="flex items-center gap-2 pb-2 border-b border-border">
-          <Server className="w-4 h-4 text-accent" />
-          <h2 className="text-sm font-semibold text-text">Node configuration</h2>
+      <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-4">
+        <div className="flex items-center gap-2 pb-2 border-b border-[#2a3832]">
+          <Server className="w-4 h-4 text-[#22c55e]" />
+          <h2 className="text-sm font-semibold text-[#f1f5f3]">Node configuration</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
-            <span className="text-muted text-[10px]">Primary data feed</span>
-            <span className="text-text font-medium">Copernicus Sentinel-1 (C-Band SAR) & Sentinel-2 (MSI)</span>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col gap-1">
+            <span className="text-[#b4c2bb] text-[10px]">Primary data feed</span>
+            <span className="text-[#f1f5f3] font-medium">Copernicus Sentinel-1 (C-Band SAR) & Sentinel-2 (MSI)</span>
           </div>
 
-          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
-            <span className="text-muted text-[10px]">Database engine</span>
-            <span className="text-text font-medium">SQLite WAL mode (sentineleye.db)</span>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col gap-1">
+            <span className="text-[#b4c2bb] text-[10px]">Database engine</span>
+            <span className="text-[#f1f5f3] font-medium">Deterministic In-Browser Ingestion Engine + LocalStorage WAL</span>
           </div>
 
-          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
-            <span className="text-muted text-[10px]">Detection engine</span>
-            <span className="text-text font-medium">Off-thread Web Worker with multi-spectral tensor fusion</span>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col gap-1">
+            <span className="text-[#b4c2bb] text-[10px]">Detection engine</span>
+            <span className="text-[#f1f5f3] font-medium">Dedicated Web Worker with bitemporal SAR/NDVI tensor fusion</span>
           </div>
 
-          <div className="p-3 rounded-md bg-panel-light border border-border flex flex-col gap-1">
-            <span className="text-muted text-[10px]">Cadastral boundary engine</span>
-            <span className="text-text font-medium">GeoJSON polygon intersection with area_m2 computation</span>
+          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832] flex flex-col gap-1">
+            <span className="text-[#b4c2bb] text-[10px]">Cadastral boundary engine</span>
+            <span className="text-[#f1f5f3] font-medium">Turf.js computational geometry intersection & area_m² calculation</span>
           </div>
         </div>
       </div>
 
       {/* Cryptographic Ledger Viewer Card */}
-      <div className="p-5 rounded-lg bg-panel border border-border flex flex-col gap-4">
-        <div className="flex items-center justify-between pb-2 border-b border-border">
+      <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-4">
+        <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
           <div className="flex items-center gap-2">
-            <Lock className="w-4 h-4 text-accent" />
-            <h2 className="text-sm font-semibold text-text">Cryptographic ledger verification</h2>
+            <Lock className="w-4 h-4 text-[#22c55e]" />
+            <h2 className="text-sm font-semibold text-[#f1f5f3]">Cryptographic ledger verification</h2>
           </div>
 
           <button
             onClick={handleVerify}
             disabled={verifying}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-accent text-bg font-semibold text-xs hover:bg-accent/90 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${verifying ? 'animate-spin' : ''}`} />
             <span>{verifying ? 'Recomputing chain...' : 'Recompute SHA-256 chain'}</span>
@@ -114,8 +129,8 @@ export function Settings() {
           <div
             className={`p-3 rounded-md border text-xs flex items-center gap-2 ${
               verifyResult.valid
-                ? 'bg-accent/10 border-accent/30 text-accent'
-                : 'bg-critical/10 border-critical/30 text-critical'
+                ? 'bg-[#22c55e]/10 border-[#22c55e]/30 text-[#22c55e]'
+                : 'bg-[#ef4444]/10 border-[#ef4444]/30 text-[#ef4444]'
             }`}
           >
             {verifyResult.valid ? (
@@ -136,29 +151,29 @@ export function Settings() {
           </div>
         )}
 
-        <div className="flex items-center justify-between text-xs text-muted">
-          <span>Recorded blocks: {ledgerBlocks.length}</span>
+        <div className="flex items-center justify-between text-xs text-[#b4c2bb]">
+          <span>Recorded blocks: {safeBlocks.length}</span>
           <span className="font-mono text-[11px]">Algorithm: SHA-256 sequential state root</span>
         </div>
 
         {/* Recent Blocks Table */}
-        <div className="rounded-md border border-border overflow-hidden">
+        <div className="rounded-md border border-[#2a3832] overflow-hidden">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-panel-light border-b border-border text-[10px] text-muted uppercase">
+            <thead className="bg-[#16201c] border-b border-[#2a3832] text-[10px] text-[#b4c2bb] uppercase">
               <tr>
                 <th className="py-2 px-3">Block #</th>
-                <th className="py-2 px-3">Case ID</th>
+                <th className="py-2 px-3">Type</th>
                 <th className="py-2 px-3">SHA-256 Hash</th>
                 <th className="py-2 px-3">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border text-[11px]">
-              {ledgerBlocks.slice(0, 8).map((b: any) => (
-                <tr key={b.id || b.block_number} className="hover:bg-panel-light/50">
-                  <td className="py-2 px-3 text-muted">#{b.id || b.block_number}</td>
-                  <td className="py-2 px-3 text-text font-medium">{b.case_id}</td>
-                  <td className="py-2 px-3 text-accent truncate max-w-[200px]">{b.hash}</td>
-                  <td className="py-2 px-3 text-muted">{b.timestamp?.slice(0, 19).replace('T', ' ')}</td>
+            <tbody className="divide-y divide-[#2a3832] text-[11px]">
+              {safeBlocks.slice(0, 8).map((b) => (
+                <tr key={b.index ?? b.hash} className="hover:bg-[#16201c]/50">
+                  <td className="py-2 px-3 text-[#b4c2bb]">#{b.index}</td>
+                  <td className="py-2 px-3 text-[#f1f5f3] font-medium">{b.type}</td>
+                  <td className="py-2 px-3 text-[#22c55e] truncate max-w-[200px]">{b.hash}</td>
+                  <td className="py-2 px-3 text-[#b4c2bb]">{b.timestamp?.slice(0, 19).replace('T', ' ')}</td>
                 </tr>
               ))}
             </tbody>
