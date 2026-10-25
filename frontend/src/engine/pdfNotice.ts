@@ -247,23 +247,42 @@ export async function generateNoticePdf({
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
   doc.setTextColor(20, 20, 20);
-  doc.text('3. BITEMPORAL SATELLITE EVIDENCE OF INFRACTION', 14, imgY);
+  doc.text('3. BITEMPORAL SATELLITE EVIDENCE OF INFRACTION (TWO TIMELINES)', 14, imgY);
+
+  const t0Date = alert.t0_timestamp ? new Date(alert.t0_timestamp) : new Date(new Date(alert.created_at).getTime() - 730 * 86400000);
+  const t1Date = alert.t1_timestamp ? new Date(alert.t1_timestamp) : new Date(alert.created_at);
+  const t0Str = t0Date.toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
+  const t1Str = t1Date.toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
 
   const imgW = (pageWidth - 34) / 2;
-  const imgH = 46;
+  const imgH = 42;
+
+  // Timeline capture timestamps header
+  doc.setFont('courier', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(34, 130, 70);
+  doc.text(`TIMELINE T0 BASELINE : ${t0Str}`, 14, imgY + 4.5);
+  doc.setTextColor(190, 40, 40);
+  doc.text(`TIMELINE T1 DETECTION: ${t1Str}`, 14 + imgW + 6, imgY + 4.5);
 
   try {
-    doc.addImage(t0Img, 'PNG', 14, imgY + 3, imgW, imgH);
-    doc.rect(14, imgY + 3, imgW, imgH, 'S');
+    doc.addImage(t0Img, 'PNG', 14, imgY + 6.5, imgW, imgH);
+    doc.rect(14, imgY + 6.5, imgW, imgH, 'S');
 
-    doc.addImage(t1Img, 'PNG', 14 + imgW + 6, imgY + 3, imgW, imgH);
-    doc.rect(14 + imgW + 6, imgY + 3, imgW, imgH, 'S');
+    doc.addImage(t1Img, 'PNG', 14 + imgW + 6, imgY + 6.5, imgW, imgH);
+    doc.rect(14 + imgW + 6, imgY + 6.5, imgW, imgH, 'S');
+
+    doc.setFont('courier', 'normal');
+    doc.setFontSize(6.5);
+    doc.setTextColor(90, 90, 90);
+    doc.text(`Sensor: Copernicus Sentinel-2 MSI (10m True-Color)`, 14, imgY + imgH + 10);
+    doc.text(`Sensor: Sentinel-1 C-SAR (VV) & Sentinel-2 MSI Fusion`, 14 + imgW + 6, imgY + imgH + 10);
   } catch (err) {
     console.warn('[PDF] Failed to draw images:', err);
   }
 
   // ── Cryptographic Proof & Ledger Seal (Section 65B) ──
-  const sealY = imgY + imgH + 8;
+  const sealY = imgY + imgH + 14;
   doc.setFillColor(240, 244, 241);
   doc.rect(14, sealY, pageWidth - 28, 44, 'F');
   doc.rect(14, sealY, pageWidth - 28, 44, 'S');

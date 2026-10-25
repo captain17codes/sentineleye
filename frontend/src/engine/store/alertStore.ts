@@ -110,6 +110,8 @@ function generateSeedAlerts(): Alert[] {
     // Distribute timestamps over last 30 days deterministically
     const daysAgo = randRange(rand, 0, 30);
     const created_at = new Date(now - daysAgo * 86400000).toISOString();
+    const t1_timestamp = created_at;
+    const t0_timestamp = new Date(new Date(created_at).getTime() - (730 + (i % 25)) * 86400000).toISOString();
 
     // Area proportional to severity
     const baseArea = severity === 'CRITICAL' ? 12000 : severity === 'HIGH' ? 8000 : severity === 'MEDIUM' ? 4500 : 2000;
@@ -160,6 +162,8 @@ function generateSeedAlerts(): Alert[] {
       confidence,
       ndvi_delta,
       sar_delta,
+      t0_timestamp,
+      t1_timestamp,
       audit_trail: [
         {
           timestamp: created_at,

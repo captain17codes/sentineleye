@@ -140,11 +140,16 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage }: D
         {/* T0 Baseline */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#f1f5f3]">
-              Simulated scene (T0 baseline)
-            </span>
-            <span className="text-[10px] text-[#b4c2bb] font-mono px-1.5 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
-              Simulated scene · Sentinel-2 MSI
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold text-[#f1f5f3]">
+                Timeline T0 · Baseline Reference
+              </span>
+              <span className="text-[10px] font-mono text-[#22c55e]">
+                14 Mar 2022, 10:42 UTC
+              </span>
+            </div>
+            <span className="text-[10px] text-[#b4c2bb] font-mono px-2 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
+              Sentinel-2 MSI (10m)
             </span>
           </div>
 
@@ -167,17 +172,22 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage }: D
         {/* T1 Validated Scene with Overlay */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#f1f5f3]">
-              {activeLayer === 'composite'
-                ? 'Simulated scene & validated detections (T1)'
-                : activeLayer === 'ndvi'
-                ? 'NDVI Vegetation Delta Heatmap (T1 − T0)'
-                : activeLayer === 'sar'
-                ? 'SAR Double-Bounce dB Delta (T1 − T0)'
-                : 'Binary Classified Change Mask'}
-            </span>
-            <span className="text-[10px] text-[#22c55e] font-mono px-1.5 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
-              Simulated scene · Sentinel-1/2
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold text-[#f1f5f3]">
+                {activeLayer === 'composite'
+                  ? 'Timeline T1 · Detection Pass'
+                  : activeLayer === 'ndvi'
+                  ? 'NDVI Vegetation Delta (T1 − T0)'
+                  : activeLayer === 'sar'
+                  ? 'SAR Double-Bounce dB (T1 − T0)'
+                  : 'Binary Classified Change Mask'}
+              </span>
+              <span className="text-[10px] font-mono text-[#ef4444] font-bold">
+                18 Oct 2026, 10:48 UTC
+              </span>
+            </div>
+            <span className="text-[10px] text-[#22c55e] font-mono px-2 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
+              Sentinel-1 SAR + MSI
             </span>
           </div>
 

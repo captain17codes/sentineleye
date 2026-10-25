@@ -218,21 +218,29 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
             />
           </div>
 
-          {/* Top-Left Corner Chip: Before Date (Green-tinted) */}
-          <div className="absolute top-4 left-4 z-20 pointer-events-none flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#111816] border border-[#2a3832] text-[#22c55e] text-xs font-medium font-sans shadow-lg">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
-            <span>Before · {data.beforeDate}</span>
+          {/* Top-Left Corner Chip: Timeline T0 (Green-tinted) */}
+          <div className="absolute top-4 left-4 z-20 pointer-events-none flex flex-col gap-0.5 px-3 py-1.5 rounded-md bg-[#111816]/95 border border-[#22c55e]/50 text-xs shadow-xl">
+            <div className="flex items-center gap-1.5 text-[#22c55e] font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
+              <span>Timeline T0 · Baseline Reference</span>
+            </div>
+            <span className="text-[10px] font-mono text-[#f1f5f3]">{data.beforeDate} · 10:32 UTC</span>
           </div>
 
-          {/* Top-Right Corner Chip: After Date (Muted Red) */}
-          <div className="absolute top-4 right-4 z-20 pointer-events-none flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#111816] border border-[#2a3832] text-[#ef4444] text-xs font-medium font-sans shadow-lg">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ef4444]" />
-            <span>After · {data.afterDate}</span>
-            {hasError && (
-              <span className="ml-1 px-1.5 py-0.2 rounded text-[9px] font-mono bg-[#16201c] text-amber-400 border border-amber-400/30">
-                Simulation
-              </span>
-            )}
+          {/* Top-Right Corner Chip: Timeline T1 (Muted Red) */}
+          <div className="absolute top-4 right-4 z-20 pointer-events-none flex flex-col gap-0.5 px-3 py-1.5 rounded-md bg-[#111816]/95 border border-[#ef4444]/50 text-xs shadow-xl items-end">
+            <div className="flex items-center gap-1.5 text-[#ef4444] font-semibold">
+              <span>Timeline T1 · Active Encroachment</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ef4444]" />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-mono text-[#f1f5f3]">{data.afterDate} · 10:48 UTC</span>
+              {hasError && (
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-[#16201c] text-amber-400 border border-amber-400/30">
+                  Simulation
+                </span>
+              )}
+            </div>
           </div>
 
           {/* ── 3px Green Vertical Divider Line & 40px Round Handle ── */}

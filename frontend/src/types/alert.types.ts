@@ -34,6 +34,8 @@ export interface Alert {
   confidence?: number;
   ndvi_delta?: number;
   sar_delta?: number;
+  t0_timestamp?: string;
+  t1_timestamp?: string;
   audit_trail?: AuditEntry[];
 }
 

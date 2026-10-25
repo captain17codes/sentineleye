@@ -44,6 +44,26 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
   const sevCol = severityColor[alert.severity] || '#64748b';
   const currentStepIdx = STEPS.indexOf(alert.status as any);
 
+  const t0Date = alert.t0_timestamp
+    ? new Date(alert.t0_timestamp)
+    : new Date(new Date(alert.created_at).getTime() - 730 * 86400000);
+  const t1Date = alert.t1_timestamp
+    ? new Date(alert.t1_timestamp)
+    : new Date(alert.created_at);
+
+  const formatUtcDateTime = (d: Date) => {
+    return (
+      d.toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'UTC',
+      }) + ' UTC'
+    );
+  };
+
   const handleAdvanceStatus = async (nextStatus: typeof STEPS[number]) => {
     setUpdating(true);
     setActionError(null);
@@ -215,16 +235,19 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
           </div>
         </div>
 
-        {/* Bitemporal Evidence Imagery */}
-        <div className="flex flex-col gap-2">
+        {/* Bitemporal Evidence Imagery with Explicit T0 & T1 Timelines */}
+        <div className="flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-[#f1f5f3]">Bitemporal satellite evidence</span>
-            <span className="text-xs font-mono text-[#b4c2bb]">Sentinel-1/2 fusion</span>
+            <span className="text-[10px] font-mono text-[#22c55e] px-1.5 py-0.5 rounded bg-[#16201c] border border-[#2a3832]">
+              Δt = 2 Years Comparative
+            </span>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1">
-              <div className="aspect-square rounded-lg overflow-hidden border border-[#2a3832] bg-[#0b0f0e] flex items-center justify-center">
+            {/* Timeline T0 Column */}
+            <div className="flex flex-col gap-1.5">
+              <div className="aspect-square rounded-lg overflow-hidden border border-[#2a3832] bg-[#0b0f0e] flex items-center justify-center relative">
                 {alert.before_img ? (
                   <img src={alert.before_img} alt="Baseline T0" className="w-full h-full object-cover" />
                 ) : (
@@ -233,11 +256,19 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
                     <span className="text-[11px] mt-1">Pre-infringement</span>
                   </div>
                 )}
+                <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-[#111816]/90 text-[#22c55e] border border-[#22c55e]/40">
+                  T0 BASELINE
+                </span>
               </div>
-              <span className="text-[11px] font-mono text-[#b4c2bb] text-center">Baseline Reference (T0)</span>
+              <div className="flex flex-col text-center px-1">
+                <span className="text-[11px] font-semibold text-[#f1f5f3]">Timeline T0 (Reference)</span>
+                <span className="text-[10px] font-mono font-bold text-[#22c55e] mt-0.5">{formatUtcDateTime(t0Date)}</span>
+                <span className="text-[9px] font-mono text-[#b4c2bb]">Sentinel-2 MSI (10m)</span>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-1">
+            {/* Timeline T1 Column */}
+            <div className="flex flex-col gap-1.5">
               <div className="aspect-square rounded-lg overflow-hidden border border-[#ef4444] bg-[#0b0f0e] flex items-center justify-center relative">
                 {alert.after_img ? (
                   <img src={alert.after_img} alt="Current T1" className="w-full h-full object-cover" />
@@ -247,11 +278,18 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
                     <span className="text-[11px] mt-1">Active Encroachment</span>
                   </div>
                 )}
+                <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-[#ef4444]/90 text-white">
+                  T1 DETECTION
+                </span>
                 <span className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-[#ef4444] text-white">
                   CHANGE
                 </span>
               </div>
-              <span className="text-[11px] font-mono text-[#b4c2bb] text-center">Current Scene (T1)</span>
+              <div className="flex flex-col text-center px-1">
+                <span className="text-[11px] font-semibold text-[#f1f5f3]">Timeline T1 (Infraction)</span>
+                <span className="text-[10px] font-mono font-bold text-[#ef4444] mt-0.5">{formatUtcDateTime(t1Date)}</span>
+                <span className="text-[9px] font-mono text-[#b4c2bb]">Sentinel-1 C-SAR + MSI</span>
+              </div>
             </div>
           </div>
         </div>
