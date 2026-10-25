@@ -7,9 +7,9 @@
 
 ## 📌 Executive Summary
 
-**SentinelEye** is an enterprise-grade planetary intelligence and cadastral surveillance platform designed to protect ecologically vulnerable corridors—such as the **Aravalli Biodiversity Corridor**, **Yamuna Floodplains**, and **Delhi Ridge Forest**—against unauthorized encroachment, illegal mining, deforestation, and unapproved commercial construction.
+**SentinelEye** is a planetary intelligence and cadastral surveillance platform designed to protect ecologically vulnerable corridors—such as the **Aravalli Biodiversity Corridor**, **Yamuna Floodplains**, and **Delhi Ridge Forest**—against unauthorized encroachment, illegal mining, deforestation, and unapproved commercial construction.
 
-By synthesizing **Copernicus Sentinel-1 Synthetic Aperture Radar (SAR)** and **Sentinel-2 Multi-Spectral Optical (MSI)** imagery with automated change detection algorithms and cryptographic chain-of-custody ledgers, SentinelEye compresses detection-to-enforcement cycles from months down to hours, producing tamper-evident legal eviction notices admissible under **Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872)**.
+By synthesizing multi-sensor remote sensing models (Sentinel-1 Synthetic Aperture Radar and Sentinel-2 Multi-Spectral Optical) with automated change detection algorithms and cryptographic chain-of-custody ledgers, SentinelEye compresses detection to draft notice in hours, producing tamper-evident legal eviction notices admissible under **Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872)**.
 
 ---
 
@@ -146,7 +146,7 @@ Every violation detected by SentinelEye is mapped to specific Indian statutory a
 
 ---
 
-## 🔐 Cryptographic Chain-of-Custody (Section 63 BSA / Sec. 65B)
+## 🔐 Cryptographic Chain-of-Custody (Section 63, Bharatiya Sakshya Adhiniyam, 2023)
 
 Under **Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B of the Indian Evidence Act, 1872)**, electronic records (satellite imagery, GIS coordinates, automated scans) are only admissible in court if the integrity of the data has remained uncorrupted from the moment of ingestion.
 
@@ -159,23 +159,6 @@ $$H_{i} = \text{SHA256}(i + H_{i-1} + \text{Timestamp} + \text{Violation Details
 1. When a satellite scene is captured, its raw sensor raster is cryptographically fingerprinted ($H_0$).
 2. When the change detection engine flags an anomaly, the violation geometry, area ($m^2$), and coordinates are hashed with $H_{i-1}$.
 3. When the operator validates the case, the ledger block is sealed. Any modification to the coordinates, timestamps, or imagery invalidates the hash chain, immediately alerting the court or audit authority.
-
----
-
-## 📐 Monitored Ecological Sectors
-
-The platform comes pre-configured with 8 cadastral monitoring zones across the National Capital Territory (NCT) of Delhi and the Aravalli belt:
-
-| Zone ID | Sector Name | State / Jurisdiction | Total Monitored Area | Risk Level | Primary Vulnerability |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Z-101** | Delhi Ridge Forest Sector C | NCT of Delhi | 4,200,000 m² | Critical | Illegal quarrying & urban encroachment |
-| **Z-102** | Mangar Bani Sacred Grove | Haryana (NCR) | 3,150,000 m² | Critical | Commercial road cutting & deforesting |
-| **Z-103** | Yamuna Floodplain Sector 7 | NCT of Delhi | 6,800,000 m² | High | Unapproved concrete construction on flood banks |
-| **Z-104** | Asola Bhatti Wildlife Sanctuary | NCT of Delhi | 8,900,000 m² | High | Peripheral boundary fencing breaches |
-| **Z-105** | Aravalli Forest Reserve | Haryana / Rajasthan | 12,400,000 m² | High | Sand and quartzite stone mining |
-| **Z-106** | Sariska Buffer Zone B | Rajasthan Border | 15,200,000 m² | High | Illegal excavation & tree felling |
-| **Z-107** | Bhindawas Wetland Zone | Haryana | 5,100,000 m² | Medium | Agricultural runoff & bund construction |
-| **Z-108** | Haryana Agricultural Reserve | Haryana (NCR) | 7,600,000 m² | Low | Unauthorized commercial godowns |
 
 ---
 
@@ -327,7 +310,7 @@ When presenting SentinelEye to evaluators, professors, or technical panels, use 
 > **Answer:** Sentinel-2 MSI provides 10-meter spatial resolution in the visible (RGB) and Near-Infrared (NIR) bands with a 5-day nominal revisit at the equator. Sentinel-1 SAR operates in C-band with the active constellation Sentinel-1C and Sentinel-1D offering a 6-day nominal revisit (Sentinel-1A was decommissioned on 29 June 2026; Sentinel-1B failed in 2021). Native GRD products (~20×22 m) are distributed at ~10 m pixel spacing.
 
 #### Q6: Why did you eliminate drone dispatch from the workflow?
-> **Answer:** Satellite-to-cadastral intelligence provides immediate, wide-area coverage ($>15,000\text{ km}^2$) with definitive boundary overlap metrics. Drone dispatch introduces physical flight permit restrictions (DGCA Red/Yellow zones in NCR), battery limitations ($<40$ minutes flight time), and manual field vulnerability. Transitioning directly from automated detection to legal notice issuance accelerates statutory enforcement without physical field bottlenecks.
+> **Answer:** Satellite-to-cadastral intelligence provides immediate, wide-area coverage ($648\text{ km}^2$ across 8 protected zones) with definitive boundary overlap metrics. Drone dispatch introduces physical flight permit restrictions (DGCA Red/Yellow zones in NCR), battery limitations ($<40$ minutes flight time), and manual field vulnerability. Transitioning directly from automated detection to legal notice issuance accelerates statutory enforcement without physical field bottlenecks.
 
 #### Q7: How does the rapid escalation timeline work?
 > **Answer:**  
@@ -343,14 +326,14 @@ When presenting SentinelEye to evaluators, professors, or technical panels, use 
 > **Answer:** Boundaries are modeled as GeoJSON FeatureCollections storing polygon coordinate rings. When a scan detects an anomalous polygon, spatial intersection algorithms calculate the overlap percentage ($\text{Area}_{\text{intersection}} / \text{Area}_{\text{detection}}$) against the cadastral boundary to determine whether the violation is inside core or buffer territory.
 
 #### Q10: What makes the UI/UX suitable for an emergency operations center (EOC)?
-> **Answer:** Designed following tactical command-and-control principles: solid dark surfaces (`#0b0f0e`, `#111816`) that reduce eye fatigue during 24/7 monitoring, zero transparent/blurred panels for instant readability under varying lighting conditions, high-contrast neon green accents (`#22c55e`) for immediate focus, and WCAG AA compliant typography.
+> **Answer:** Designed following tactical command-and-control principles: solid dark surfaces (`#0b0f0e`, `#111816`) that reduce eye fatigue during 24/7 monitoring, zero transparent/blurred panels for instant readability under varying lighting conditions, high-contrast neon green accents (`#22c55e`) for immediate focus, and clear high-readability typography.
 
 ---
 
 ## 📄 License & Attribution
 
 - **License:** MIT Open-Source License
-- **Satellite Data Attribution:** Contains modified Copernicus Sentinel data (2020–2024), processed via European Space Agency (ESA) open science guidelines.
-- **Cadastral Boundary Attribution:** Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records.
+- **Remote Sensing Modeling:** Optical and SAR telemetry parameters modeled on physical Sentinel-2 and Sentinel-1 characteristics for demonstration.
+- **Cadastral Boundary Attribution:** Indicative zone polygons (generated).
 - **Base Map Attribution:** Leaflet | Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community.
 - **Project Author:** SentinelEye Defense Engineering Group

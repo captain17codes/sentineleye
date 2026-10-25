@@ -114,7 +114,7 @@ export function Scan() {
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-[#16201c] border border-[#2a3832] text-[#b4c2bb]">
               {dataSource === 'calibration'
                 ? 'Data source: Calibration scenes (synthetic, ground truth known)'
-                : 'Data source: Real Sentinel replay (Element 84 STAC AWS Sentinel-2 + Sentinel-1)'}
+                : 'Data source: Calibrated scenes modeled on real sites (synthetic arrays)'}
             </span>
           </div>
           <p className="text-xs text-[#b4c2bb] mt-0.5">
@@ -179,13 +179,13 @@ export function Scan() {
                   }`}
                 >
                   <Satellite className="w-3.5 h-3.5" />
-                  <span>Real Sentinel (replay)</span>
+                  <span>Calibrated scenes modeled on real sites (synthetic arrays)</span>
                 </button>
               </div>
               <span className="text-[10px] text-[#b4c2bb] font-mono">
                 {dataSource === 'calibration'
                   ? 'Controlled seeds with simulated cloud masks & known ground truth.'
-                  : 'Element 84 STAC AWS Sentinel-2 L2A + Sentinel-1 C-SAR with SCL cloud mask.'}
+                  : 'Calibrated synthetic arrays modeled on physical optical/SAR scattering characteristics of real target sites.'}
               </span>
             </div>
 
@@ -208,7 +208,7 @@ export function Scan() {
                     style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
                   >
                     {z.properties.code || `Z-${z.properties.id}`}: {z.properties.name} ({z.properties.risk_level})
-                    {dataSource === 'real' && [102, 103, 105, 107].includes(z.properties.id) ? ' • [Real AOI]' : ''}
+                    {dataSource === 'real' && [102, 103, 105, 107].includes(z.properties.id) ? ' • [Modeled site]' : ''}
                   </option>
                 ))}
               </select>
@@ -216,8 +216,8 @@ export function Scan() {
 
             {/* Constellation Specs Callout */}
             <div className="p-2.5 rounded bg-[#16201c] border border-[#2a3832] text-[11px] text-[#b4c2bb] font-mono leading-relaxed">
-              <span className="text-[#22c55e] font-semibold block">Copernicus Constellation Telemetry</span>
-              Sentinel-2: 5-day nominal revisit; Sentinel-1: 6-day (C+D). Resolution: ~10 m pixel spacing.
+              <span className="text-[#22c55e] font-semibold block">Constellation Model Parameters</span>
+              Modeled on Sentinel-2 (5-day nominal revisit) and Sentinel-1 C-SAR (~10 m pixel spacing).
             </div>
 
             {/* Sensor Band Toggle: 3 equal cards */}
@@ -229,11 +229,11 @@ export function Scan() {
             ) : (
               <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col gap-1 text-xs">
                 <div className="flex items-center justify-between text-[#b4c2bb]">
-                  <span className="font-semibold text-[#f1f5f3]">Scene Classification Layer (SCL)</span>
+                  <span className="font-semibold text-[#f1f5f3]">Modeled Scene Classification Layer (SCL)</span>
                   <span className="text-[10px] font-mono text-[#22c55e]">Active</span>
                 </div>
                 <p className="text-[11px] text-[#b4c2bb] leading-relaxed">
-                  Real Sentinel-2 Level-2A SCL mask automatically filters cirrus clouds (SCL 10), high-probability clouds (SCL 9), and cloud shadows (SCL 3) directly from spectral telemetry.
+                  Modeled atmospheric classification mask automatically filters cirrus clouds (SCL 10), high-probability clouds (SCL 9), and cloud shadows (SCL 3) directly from spectral telemetry.
                 </p>
               </div>
             )}
@@ -289,13 +289,13 @@ export function Scan() {
               </div>
             )}
 
-            {/* Real Telemetry Metadata Badge if Replay Mode Active */}
+            {/* Telemetry Metadata Badge if Modeled Site Active */}
             {result?.scene_metadata && (
               <div className="p-3 rounded-lg bg-[#16201c] border border-[#22c55e]/40 flex flex-col gap-1.5 font-mono text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-[#22c55e] font-semibold flex items-center gap-1.5">
                     <Satellite className="w-3.5 h-3.5" />
-                    Real Sentinel Telemetry Provenance
+                    Modeled Scene Telemetry (Calibrated Synthetic Arrays)
                   </span>
                   {result.scene_metadata.isControl && (
                     <span className="px-2 py-0.5 rounded text-[10px] bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/40 font-bold">
@@ -305,12 +305,12 @@ export function Scan() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-[#b4c2bb] pt-1 border-t border-[#2a3832]">
                   <div>
-                    <span className="text-white block font-medium">T0 Optical Baseline:</span>
+                    <span className="text-white block font-medium">T0 Optical Reference ID:</span>
                     <span className="truncate block">{result.scene_metadata.t0SceneId}</span>
                     <span className="text-[10px] text-muted">{new Date(result.scene_metadata.t0Date).toUTCString()}</span>
                   </div>
                   <div>
-                    <span className="text-white block font-medium">T1 Optical Detection:</span>
+                    <span className="text-white block font-medium">T1 Optical Reference ID:</span>
                     <span className="truncate block">{result.scene_metadata.t1SceneId}</span>
                     <span className="text-[10px] text-muted">{new Date(result.scene_metadata.t1Date).toUTCString()}</span>
                   </div>
@@ -328,7 +328,7 @@ export function Scan() {
                   No scan executed for this zone yet
                 </h4>
                 <p className="text-xs text-[#b4c2bb] max-w-sm">
-                  Select {dataSource === 'real' ? 'a real Sentinel replay target' : 'parameters'} and click Run scan.
+                  Select {dataSource === 'real' ? 'a modeled real target site' : 'parameters'} and click Run scan.
                 </p>
               </div>
             ) : (

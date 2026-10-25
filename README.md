@@ -2,18 +2,18 @@
 
 > **Planetary Intelligence Platform** — AI-powered land protection from orbit to enforcement.
 
-SentinelEye combines satellite remote sensing (Copernicus Sentinel-2 optical & synthetic aperture radar / SAR), bitemporal change detection, and tamper-evident blockchain verification to monitor and defend ecologically sensitive corridors (such as the Aravalli Biodiversity Corridor) against unauthorized encroachment, illegal construction, mining, and deforestation.
+SentinelEye combines multi-sensor remote sensing models (optical vegetation indexing & synthetic aperture radar / SAR), bitemporal change detection, and tamper-evident blockchain verification to monitor and defend ecologically sensitive corridors (such as the Aravalli Biodiversity Corridor) against unauthorized encroachment, illegal construction, mining, and deforestation.
 
 ---
 
 ## 🌟 Key Features
 
 - **Orbital Planetary Intelligence**: 3D interactive Earth globe (NCT of Delhi focus, auto-rotation, satellite orbit arcs) built with `react-globe.gl` and Three.js with pure CSS fallbacks.
-- **Evidence Validation Engine**: Bitemporal (2020 vs 2024) high-resolution Sentinel-2 true-color ortho-imagery comparison with 60fps smooth divider slider, keyboard navigation, and vector violation polygon overlays.
+- **Evidence Validation Engine**: Bitemporal (2020 vs 2024) true-color ortho-imagery comparison with 60fps smooth divider slider, keyboard navigation, and vector violation polygon overlays (calibrated synthetic imagery modeled on real sites).
 - **Automated Synthetic Radar & Optical Fusion**: High-throughput multi-temporal change detection worker analyzing optical cloud penetration and surface roughness changes.
 - **Tamper-Evident Ledger**: Cryptographic SHA-256 hash chaining of verified violations and legal action notices.
 - **Rapid Escalation Workflow**: 3-step rapid intervention pipeline (`Alert T+00:00` → `Expert Verification T+00:15` → `Legal Notice T+04:00`).
-- **Dark Mission-Control Design System**: High-contrast, WCAG AA compliant interface with zero blur/semi-transparent panels, solid surfaces (`#0b0f0e`, `#111816`, `#16201c`), and tactical green accents (`#22c55e`).
+- **Dark Mission-Control Design System**: High-contrast tactical interface with zero blur/semi-transparent panels, solid surfaces (`#0b0f0e`, `#111816`, `#16201c`), and tactical green accents (`#22c55e`).
 
 ---
 
@@ -24,7 +24,7 @@ sentineleye/
 ├── frontend/             # React 18 + Vite + TypeScript + Tailwind CSS
 │   ├── public/
 │   │   ├── textures/     # Local Earth texture (2K blue marble, no CDN dependency)
-│   │   └── evidence/     # High-resolution true-color Sentinel-2 ortho-imagery
+│   │   └── evidence/     # Calibrated true-color ortho-imagery (modeled on Sentinel-2 10m GSD)
 │   ├── src/
 │   │   ├── components/   # HeroGlobe, EvidenceSlider, Map, Charts, UI
 │   │   ├── pages/        # Landing/Login, Overview, MapView, Scan, Alerts, Risk

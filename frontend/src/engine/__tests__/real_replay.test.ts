@@ -4,8 +4,8 @@ import path from 'path';
 import { runScanPipeline } from '../scan/pipeline';
 import { SEEDED_ZONES } from '../../api/seededData';
 
-describe('Real Sentinel-1/2 Telemetry Replay Engine', () => {
-  it('loads real scene crops and executes dual-sensor change detection without errors', () => {
+describe('Calibrated Telemetry Engine Modeled on Real Sites', () => {
+  it('loads calibrated scene arrays modeled on real coordinates and executes dual-sensor change detection without errors', () => {
     const t0Path = path.resolve(__dirname, '../../../public/real/102/t0.json');
     const t1Path = path.resolve(__dirname, '../../../public/real/102/t1.json');
 

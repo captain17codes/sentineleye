@@ -6,8 +6,6 @@ export interface RealSceneMetadata {
   t1SceneId: string;
   t0Date: string;
   t1Date: string;
-  sarT0SceneId?: string;
-  sarT1SceneId?: string;
   telemetrySource?: string;
   isControl?: boolean;
 }

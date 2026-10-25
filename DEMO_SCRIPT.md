@@ -10,7 +10,7 @@
 Use the built-in **Demo Director** panel at the bottom right of the screen (or append `?demo=1` to the URL). You can advance steps using the `[→]` key or clicking **Next**.
 
 ```
-[Step 1: Landing & Overview] ──► [Step 2: Live Map & Cadastral] ──► [Step 3: Real Sentinel STAC Replay]
+[Step 1: Landing & Overview] ──► [Step 2: Live Map & Cadastral] ──► [Step 3: Modeled Site Arrays]
                                                                                       │
 [Step 6: Escalation Protocol] ◄── [Step 5: Validation Panel & Sliders] ◄── [Step 4: SAR Cloud Penetration]
          │
@@ -25,11 +25,11 @@ Use the built-in **Demo Director** panel at the bottom right of the screen (or a
 * **Presenter Script (20 seconds):**
   > "Welcome to SentinelEye. We are protecting critical ecological corridors—such as the Delhi Ridge and Aravalli reserves—from illegal encroachment using planetary radar and optical intelligence.
   > 
-  > Notice on our Mission Overview: every single metric—our 38 validated alerts, our target distribution of 6 Critical, 14 High, 11 Medium, and 7 Low threats, our total protected coverage of 64.8 square kilometers ($64,797,245\text{ m}^2$), and our cryptographic ledger seal—derives from a single deterministic engine."
+  > Notice on our Mission Overview: every single metric—our 38 validated alerts, our target distribution of 6 Critical, 14 High, 11 Medium, and 7 Low threats, our total protected coverage of 648 square kilometers ($647,972,452\text{ m}^2$), and our cryptographic ledger seal—derives from a single deterministic engine."
 * **What to Show:**
   1. Solid tactical KPI cards showing 38 validated alerts and exact severity counts.
   2. Severity Donut matching the 38 total.
-  3. Monitored area counter: $64,797,245\text{ m}^2$ computed geodesically via Turf.js.
+  3. Monitored area counter: $647,972,452\text{ m}^2$ computed geodesically via Turf.js.
   4. KPI Card 4: Green "Verified" link to the ledger chain.
 
 ---
@@ -37,28 +37,28 @@ Use the built-in **Demo Director** panel at the bottom right of the screen (or a
 ### Step 2: Live Protected Zone & Cadastral Boundaries
 * **Route:** `/map`
 * **Presenter Script (20 seconds):**
-  > "Moving to our Live Map, we overlay statutory OpenStreetMap cadastral boundary polygons (ODbL) over sub-meter Esri satellite imagery across zones Z-101 through Z-108.
+  > "Moving to our Live Map, we overlay indicative zone boundary polygons over sub-meter Esri satellite imagery across zones Z-101 through Z-108.
   > 
   > Unlike simple rectangular boxes, our zones feature realistic multi-vertex organic boundary contours. When we click on Zone Z-102: Mangar Bani Sacred Grove, we see incident clusters mapped with calculated overlap percentages—red for core violations exceeding 85% overlap, orange for mining, and yellow for peripheral clearings."
 * **What to Show:**
   1. Select Zone Z-102 in the sector dropdown or click on the map.
   2. Click an incident cluster to expand, then open the right-side dossier drawer.
-  3. Point out OpenStreetMap attribution and Section 63 BSA legal citations.
+  3. Point out indicative zone polygon attribution and Section 63 BSA legal citations.
 
 ---
 
-### Step 3: Real Sentinel-1/2 Telemetry Replay (Element 84 STAC)
-* **Route:** `/scan` ➔ Toggle **"Real Sentinel (replay)"** ➔ Select **Zone Z-102 (Mangar Bani)**
+### Step 3: Calibrated Telemetry Modeled on Real Sites
+* **Route:** `/scan` ➔ Toggle **"Calibrated scenes modeled on real sites (synthetic arrays)"** ➔ Select **Zone Z-102 (Mangar Bani)**
 * **Presenter Script (25 seconds):**
-  > "Now let's inspect our orbital telemetry ingestion. We toggle the data source to 'Real Sentinel (replay)'.
+  > "Now let's inspect our orbital telemetry ingestion. We toggle the data source to 'Calibrated scenes modeled on real sites (synthetic arrays)'.
   > 
-  > This loads genuine Copernicus Level-2A surface reflectance (`S2B_43RFM`) and Sentinel-1 C-SAR backscatter archived directly from the Element 84 AWS Earth Search STAC API. Notice the genuine acquisition dates and real scene IDs. The engine automatically processes the Level-2A Scene Classification Layer (SCL) to mask clouds and shadows directly from optical telemetry.
+  > This loads calibrated multi-band arrays modeled on real coordinates in Delhi NCR, aligned with Element 84 STAC Sentinel-2 acquisition dates and reference tile IDs. Notice the optical reference tile ID and UTC timestamp. The engine automatically processes the modeled Scene Classification Layer (SCL) to filter clouds and shadows.
   > 
   > We can also demonstrate clean negative control on Zone Z-107 (Bhindawas Wetland), which returns zero false alarms."
 * **What to Show:**
-  1. Toggle between **Calibration (synthetic)** and **Real Sentinel (replay)**.
-  2. Show real telemetry metadata badge with Sentinel-2 and Sentinel-1 scene IDs and UTC timestamps.
-  3. Click "Run scan": watch the 9-stage pipeline execute with real NDVI loss and SAR backscatter shifts.
+  1. Toggle between **Calibration (synthetic)** and **Calibrated scenes modeled on real sites (synthetic arrays)**.
+  2. Show telemetry metadata badge with optical reference tile IDs and UTC timestamps.
+  3. Click "Run scan": watch the 9-stage pipeline execute with modeled NDVI loss and SAR backscatter shifts.
 
 ---
 

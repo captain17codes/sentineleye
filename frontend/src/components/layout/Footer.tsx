@@ -11,7 +11,7 @@ export function Footer() {
         </span>
       </div>
       <p className="max-w-2xl text-[11px] text-[#b4c2bb] leading-relaxed">
-        Demo mode: client-side simulation. Accounts, workflow and ledger are stored in your browser. Telemetry combines real Element 84 Copernicus Sentinel-1/2 STAC replay with calibrated synthetic scenes. Boundaries: OpenStreetMap contributors (ODbL).
+        Demo mode: client-side simulation. Accounts, workflow and ledger are stored in your browser. Telemetry features calibrated scenes modeled on real sites (synthetic arrays) alongside controlled calibration seeds. Indicative zone polygons (generated).
       </p>
       <div className="text-[10px] font-mono text-[#8fa097] mt-1">
         WebCrypto ECDSA P-256 Ledger Active • Section 63 BSA 2023 Evidentiary Protocol

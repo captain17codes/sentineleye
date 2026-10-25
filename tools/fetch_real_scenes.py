@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """
-fetch_real_scenes.py — Automated Real Sentinel-1/2 Crop Generator for SentinelEye.
-Queries Element 84 Earth Search STAC API (Sentinel-2 L2A) and Planetary Computer / ASF (Sentinel-1 RTC).
-Extracts AOI crops for protected zones in Delhi NCR, computes SCL cloud masks,
-and generates compact replay JSON bundles for offline, zero-latency in-browser evaluation.
-
-Usage:
-    python tools/fetch_real_scenes.py [--output-dir frontend/public/real]
+fetch_real_scenes.py — Calibrated Scene Generator for SentinelEye.
+Queries Element 84 Earth Search STAC API for Sentinel-2 L2A tile IDs and acquisition dates
+corresponding to real protected sites in Delhi NCR, and generates calibrated synthetic telemetry
+arrays (red, nir, C-band SAR backscatter in dB, and SCL cloud masks) for offline, zero-latency
+in-browser evaluation.
 """
 
 import os
@@ -300,22 +298,16 @@ def main():
         t1_datetime = t1_stac["datetime"] if t1_stac else "2024-03-19T05:41:06.319000Z"
         t1_cloud = t1_stac["cloud_cover"] if t1_stac else 0.002
 
-        sar_t0_id = f"S1A_IW_GRDH_1SDV_{t0_datetime[:10].replace('-','') }T124230_042456_050F82"
-        sar_t1_id = f"S1C_IW_GRDH_1SDV_{t1_datetime[:10].replace('-','') }T124228_001245_001DE2"
+        print(f"  T0 Optical Reference: {t0_scene_id} ({t0_datetime})")
+        print(f"  T1 Optical Reference: {t1_scene_id} ({t1_datetime})")
 
-        print(f"  T0 Optical: {t0_scene_id} ({t0_datetime})")
-        print(f"  T1 Optical: {t1_scene_id} ({t1_datetime})")
-        print(f"  SAR Radar : {sar_t0_id} -> {sar_t1_id}")
-
-        # Generate arrays
+        # Generate calibrated synthetic arrays modeled on the real target site
         t0_bands = generate_band_arrays(t, is_t1=False, size=256)
         t1_bands = generate_band_arrays(t, is_t1=True, size=256)
 
         t0_bundle = {
             "scene_id": t0_scene_id,
             "datetime": t0_datetime,
-            "sar_scene_id": sar_t0_id,
-            "sar_datetime": t0_datetime[:10] + "T12:42:30.000Z",
             "cloud_cover": t0_cloud,
             "size": 256,
             "bbox": t["bbox"],
@@ -328,8 +320,6 @@ def main():
         t1_bundle = {
             "scene_id": t1_scene_id,
             "datetime": t1_datetime,
-            "sar_scene_id": sar_t1_id,
-            "sar_datetime": t1_datetime[:10] + "T12:42:28.000Z",
             "cloud_cover": t1_cloud,
             "size": 256,
             "bbox": t["bbox"],
@@ -360,18 +350,17 @@ def main():
                 "scene_id": t0_scene_id,
                 "datetime": t0_datetime,
                 "cloud_cover": t0_cloud,
-                "sar_scene_id": sar_t0_id,
             },
             "t1": {
                 "scene_id": t1_scene_id,
                 "datetime": t1_datetime,
                 "cloud_cover": t1_cloud,
-                "sar_scene_id": sar_t1_id,
             },
             "processing": {
-                "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
-                "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
-                "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+                "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
+                "array_type": "Synthetic 256x256 Float32 arrays calibrated to real site terrain and physical scattering",
+                "optical_reference_tile": t0_scene_id,
+                "scl_masking": "Modeled SCL classes [3, 8, 9, 10] masked as cloud/shadow",
                 "crs": "EPSG:4326 (WGS84)",
                 "pixel_size_m": 10.0,
             },
@@ -381,9 +370,10 @@ def main():
     manifest_path = os.path.join(out_dir, "manifest.json")
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump({
+            "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
             "stac_endpoint": STAC_SEARCH_URL,
             "collection": "sentinel-2-l2a",
-            "telemetry_specs": "Sentinel-2: 5-day nominal revisit; Sentinel-1: 6-day (C+D). Resolution: ~10 m pixel spacing.",
+            "telemetry_specs": "Modeled on Sentinel-2 (5-day nominal revisit) and Sentinel-1 C-band radar (~10 m pixel spacing).",
             "zones": manifest_entries,
         }, f, indent=2)
     print(f"\n[+] Wrote manifest -> {manifest_path}")

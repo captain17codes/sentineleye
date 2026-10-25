@@ -278,8 +278,8 @@ export async function createGenesisBlock(operator = 'system'): Promise<LedgerBlo
   const timestamp = '2024-01-01T00:00:00.000Z';
   const manifest = await createEvidenceManifest(101, [77.16, 28.58]);
   const payload = {
-    genesis: 'SentinelEye Copernicus Constellation Anchor',
-    sceneBands: ['Sentinel-1 SAR VV', 'Sentinel-2 MSI B4/B8'],
+    genesis: 'SentinelEye Constellation Anchor (Calibrated scenes modeled on real sites)',
+    sceneBands: ['Sentinel-1 SAR VV (Modeled)', 'Sentinel-2 MSI B4/B8 (Modeled)'],
     cadastralDatum: 'WGS84 EPSG:4326',
     merkleRoot: manifest.merkleRoot,
   };

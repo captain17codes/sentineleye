@@ -93,7 +93,7 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
     let sceneMetadata: RealSceneMetadata | undefined = undefined;
 
     if (isRealMode) {
-      postStageProgress('Stage 1/9: Replay: Fetching archived Sentinel-1/2 telemetry bundles', 10);
+      postStageProgress('Stage 1/9: Loading calibrated telemetry arrays modeled on real sites', 10);
       try {
         const [t0Resp, t1Resp] = await Promise.all([
           fetch(`/real/${zone_id}/t0.json`),
@@ -131,9 +131,7 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
             t1SceneId: t1Data.scene_id,
             t0Date: t0Data.datetime,
             t1Date: t1Data.datetime,
-            sarT0SceneId: t0Data.sar_scene_id,
-            sarT1SceneId: t1Data.sar_scene_id,
-            telemetrySource: 'Copernicus Sentinel-2 MSI (AWS Earth Search STAC) + Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)',
+            telemetrySource: 'Calibrated scenes modeled on real sites (synthetic arrays)',
             isControl: zone_id === 107,
           };
         }

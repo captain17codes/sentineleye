@@ -1,7 +1,7 @@
 /**
  * seededData.ts — Single Source of Truth for Protected Zones in Delhi NCR.
  * Realistic non-rectangular polygons calibrated with exact geodesic turf.area().
- * Attribution: Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records.
+ * Attribution: Indicative zone polygons (generated).
  */
 
 export interface MockZone {

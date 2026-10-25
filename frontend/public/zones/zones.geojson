@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "name": "SentinelEye Protected Ecological Zones",
-  "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records",
+  "attribution": "Indicative zone polygons (generated)",
   "features": [
     {
       "type": "Feature",
@@ -13,7 +13,7 @@
         "area_m2": 77134189,
         "state": "NCT of Delhi",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",
@@ -101,7 +101,7 @@
         "area_m2": 70880113,
         "state": "Haryana (NCR)",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",
@@ -189,7 +189,7 @@
         "area_m2": 84050367,
         "state": "NCT of Delhi",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",
@@ -285,7 +285,7 @@
         "area_m2": 87160790,
         "state": "NCT of Delhi",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",
@@ -381,7 +381,7 @@
         "area_m2": 83935943,
         "state": "Haryana / Rajasthan",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",
@@ -477,7 +477,7 @@
         "area_m2": 90338468,
         "state": "Rajasthan Border",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",
@@ -569,7 +569,7 @@
         "area_m2": 74292439,
         "state": "Haryana",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",
@@ -665,7 +665,7 @@
         "area_m2": 80180143,
         "state": "Haryana (NCR)",
         "created_at": "2026-10-18 15:10:29",
-        "attribution": "Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records"
+        "attribution": "Indicative zone polygons (generated)"
       },
       "geometry": {
         "type": "Polygon",

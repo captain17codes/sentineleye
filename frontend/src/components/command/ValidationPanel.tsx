@@ -83,7 +83,7 @@ export function ValidationPanel({
               Empirical Validation & Model Sensitivity
             </h3>
             <p className="text-xs text-[#b4c2bb]">
-              Ground-truth verification across 38 planted spatial scenarios & Element 84 real Sentinel telemetry
+              Ground-truth verification across 38 planted spatial scenarios & calibrated synthetic arrays modeled on real sites
             </p>
           </div>
         </div>

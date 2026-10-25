@@ -1,7 +1,8 @@
 {
+  "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
   "stac_endpoint": "https://earth-search.aws.element84.com/v1/search",
   "collection": "sentinel-2-l2a",
-  "telemetry_specs": "Sentinel-2: 5-day nominal revisit; Sentinel-1: 6-day (C+D). Resolution: ~10 m pixel spacing.",
+  "telemetry_specs": "Modeled on Sentinel-2 (5-day nominal revisit) and Sentinel-1 C-band radar (~10 m pixel spacing).",
   "zones": [
     {
       "zone_id": 102,
@@ -25,19 +26,18 @@
       "t0": {
         "scene_id": "S2B_43RGM_20220330_0_L2A",
         "datetime": "2022-03-30T05:41:00.266000Z",
-        "cloud_cover": 0,
-        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+        "cloud_cover": 0
       },
       "t1": {
         "scene_id": "S2B_43RGM_20240319_0_L2A",
         "datetime": "2024-03-19T05:41:03.049000Z",
-        "cloud_cover": 2.407766,
-        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+        "cloud_cover": 2.407766
       },
       "processing": {
-        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
-        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
-        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
+        "array_type": "Synthetic 256x256 Float32 arrays calibrated to real site terrain and physical scattering",
+        "optical_reference_tile": "S2B_43RGM_20220330_0_L2A",
+        "scl_masking": "Modeled SCL classes [3, 8, 9, 10] masked as cloud/shadow",
         "crs": "EPSG:4326 (WGS84)",
         "pixel_size_m": 10.0
       }
@@ -64,19 +64,18 @@
       "t0": {
         "scene_id": "S2B_43RGM_20220330_0_L2A",
         "datetime": "2022-03-30T05:41:00.266000Z",
-        "cloud_cover": 0,
-        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+        "cloud_cover": 0
       },
       "t1": {
         "scene_id": "S2B_43RGM_20240319_0_L2A",
         "datetime": "2024-03-19T05:41:03.049000Z",
-        "cloud_cover": 2.407766,
-        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+        "cloud_cover": 2.407766
       },
       "processing": {
-        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
-        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
-        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
+        "array_type": "Synthetic 256x256 Float32 arrays calibrated to real site terrain and physical scattering",
+        "optical_reference_tile": "S2B_43RGM_20220330_0_L2A",
+        "scl_masking": "Modeled SCL classes [3, 8, 9, 10] masked as cloud/shadow",
         "crs": "EPSG:4326 (WGS84)",
         "pixel_size_m": 10.0
       }
@@ -103,19 +102,18 @@
       "t0": {
         "scene_id": "S2B_43RFM_20220330_0_L2A",
         "datetime": "2022-03-30T05:41:03.536000Z",
-        "cloud_cover": 0.000723,
-        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+        "cloud_cover": 0.000723
       },
       "t1": {
         "scene_id": "S2B_43RFM_20240319_0_L2A",
         "datetime": "2024-03-19T05:41:06.319000Z",
-        "cloud_cover": 0.000362,
-        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+        "cloud_cover": 0.000362
       },
       "processing": {
-        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
-        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
-        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
+        "array_type": "Synthetic 256x256 Float32 arrays calibrated to real site terrain and physical scattering",
+        "optical_reference_tile": "S2B_43RFM_20220330_0_L2A",
+        "scl_masking": "Modeled SCL classes [3, 8, 9, 10] masked as cloud/shadow",
         "crs": "EPSG:4326 (WGS84)",
         "pixel_size_m": 10.0
       }
@@ -142,19 +140,18 @@
       "t0": {
         "scene_id": "S2B_43RFM_20220330_0_L2A",
         "datetime": "2022-03-30T05:41:03.536000Z",
-        "cloud_cover": 0.000723,
-        "sar_scene_id": "S1A_IW_GRDH_1SDV_20220330T124230_042456_050F82"
+        "cloud_cover": 0.000723
       },
       "t1": {
         "scene_id": "S2B_43RFM_20240319_0_L2A",
         "datetime": "2024-03-19T05:41:06.319000Z",
-        "cloud_cover": 0.000362,
-        "sar_scene_id": "S1C_IW_GRDH_1SDV_20240319T124228_001245_001DE2"
+        "cloud_cover": 0.000362
       },
       "processing": {
-        "optical_source": "Copernicus Sentinel-2 MSI L2A (AWS Earth Search STAC)",
-        "sar_source": "Copernicus Sentinel-1 C-SAR IW GRD (~10 m pixel spacing)",
-        "scl_masking": "SCL classes [3, 8, 9, 10] masked as cloud/shadow",
+        "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
+        "array_type": "Synthetic 256x256 Float32 arrays calibrated to real site terrain and physical scattering",
+        "optical_reference_tile": "S2B_43RFM_20220330_0_L2A",
+        "scl_masking": "Modeled SCL classes [3, 8, 9, 10] masked as cloud/shadow",
         "crs": "EPSG:4326 (WGS84)",
         "pixel_size_m": 10.0
       }

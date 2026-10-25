@@ -175,7 +175,7 @@ for (const z of ZONES_CONFIG) {
       area_m2: areaM2,
       state: z.state,
       created_at: z.created_at,
-      attribution: 'Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records',
+      attribution: 'Indicative zone polygons (generated)',
     },
     geometry: simplified.geometry,
   };
@@ -201,7 +201,7 @@ fs.mkdirSync(publicZonesDir, { recursive: true });
 const featureCollection = {
   type: 'FeatureCollection',
   name: 'SentinelEye Protected Ecological Zones',
-  attribution: 'Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records',
+  attribution: 'Indicative zone polygons (generated)',
   features: geojsonFeatures,
 };
 
@@ -214,7 +214,7 @@ const seededDataPath = path.resolve(__dirname, '../frontend/src/api/seededData.t
 const seededContent = `/**
  * seededData.ts — Single Source of Truth for Protected Zones in Delhi NCR.
  * Realistic non-rectangular polygons calibrated with exact geodesic turf.area().
- * Attribution: Boundaries: OpenStreetMap contributors (ODbL) — indicative, not survey-grade cadastral records.
+ * Attribution: Indicative zone polygons (generated).
  */
 
 export interface MockZone {

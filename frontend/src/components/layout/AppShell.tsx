@@ -185,9 +185,9 @@ export function AppShell({ children }: AppShellProps) {
             </span>
           </div>
           <div className="hidden md:flex items-center gap-3 text-[10px]">
-            <span>Boundaries: OpenStreetMap (ODbL)</span>
+            <span>Indicative zone polygons (generated)</span>
             <span>•</span>
-            <span>Real STAC Replay + Calibrated Seeds</span>
+            <span>Calibrated scenes modeled on real sites (synthetic arrays)</span>
             <span>•</span>
             <span>Section 63 BSA</span>
           </div>

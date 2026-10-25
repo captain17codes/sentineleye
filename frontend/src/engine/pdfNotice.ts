@@ -387,7 +387,7 @@ export async function generateNoticePdf({
   doc.text(`T1 Scene Hash SHA-256: ${hashT1Scene}`, 18, p2SealY + 29);
   doc.text(`Cadastral Hash SHA256: ${hashBoundary}`, 18, p2SealY + 33.5);
   doc.text(`Public Verify Anchor : ${verifyUrl}`, 18, p2SealY + 38);
-  doc.text(`Telemetry Source     : Copernicus Open Access Hub (Sentinel-1 C-SAR / Sentinel-2 MSI)`, 18, p2SealY + 42.5);
+  doc.text(`Telemetry Source     : Calibrated scenes modeled on real sites (synthetic arrays)`, 18, p2SealY + 42.5);
 
   // QR Code on right
   try {
