@@ -155,7 +155,7 @@ export function Scan() {
                     value={z.properties.id}
                     style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
                   >
-                    {z.properties.name} ({z.properties.risk_level})
+                    {z.properties.code || `Z-${z.properties.id}`}: {z.properties.name} ({z.properties.risk_level})
                   </option>
                 ))}
               </select>

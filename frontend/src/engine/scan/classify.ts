@@ -26,32 +26,33 @@ export function classifyDetection(overlay: OverlayResult): ClassifiedDetection {
   const { blob, overlapPct } = overlay;
   const dNDVI = blob.meanNdviDiff;
   const dSAR = blob.meanSarDiff;
+  const maxSAR = blob.maxSarDiff ?? dSAR;
 
   let assignedClass: DetectedClass = 'Land Encroachment';
   let act = 'Public Premises (Eviction of Unauthorised Occupants) Act, 1971';
   let section = 'Section 4 & Section 5';
 
-  if (dSAR >= 4.5) {
+  if (maxSAR >= 4.5 || dSAR >= 3.6) {
     assignedClass = 'Unauthorized Construction';
     act = 'Delhi Development Act, 1957 / Public Premises Act, 1971';
     section = 'Section 30 & Section 31A';
-  } else if (dSAR >= 2.5 && dNDVI <= -0.35) {
+  } else if ((maxSAR >= 3.2 || dSAR >= 2.4) && dNDVI <= -0.32) {
     assignedClass = 'Mining';
     act = 'Mines and Minerals (Development and Regulation) Act, 1957';
     section = 'Section 4(1) & Section 21';
-  } else if (dNDVI <= -0.30 && dSAR <= 1.5) {
+  } else if (dNDVI <= -0.35 && maxSAR <= 3.2) {
     assignedClass = 'Deforestation';
     act = 'Indian Forest Act, 1927 / Forest (Conservation) Act, 1980';
     section = 'Section 26 & Section 2';
   }
 
-  // Severity assignment
+  // Severity assignment based on statutory severity and calibrated physical footprint
   let severity: Severity = 'LOW';
-  if (overlapPct >= 85 || blob.areaM2 >= 12000) {
+  if (blob.areaM2 >= 10500) {
     severity = 'CRITICAL';
-  } else if (overlapPct >= 65 || assignedClass === 'Unauthorized Construction' || assignedClass === 'Mining') {
+  } else if (blob.areaM2 >= 5500 || assignedClass === 'Unauthorized Construction' || (assignedClass === 'Mining' && blob.areaM2 >= 4500)) {
     severity = 'HIGH';
-  } else if (overlapPct >= 45) {
+  } else if (blob.areaM2 >= 2800) {
     severity = 'MEDIUM';
   } else {
     severity = 'LOW';

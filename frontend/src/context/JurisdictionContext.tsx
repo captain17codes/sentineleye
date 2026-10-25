@@ -27,19 +27,19 @@ export const JURISDICTION_CONFIG: Record<
     label: 'NCT of Delhi',
     center: [28.6139, 77.2090],
     zoom: 11,
-    zoneIds: [1, 2, 5], // Aravalli, Yamuna, Delhi Ridge
+    zoneIds: [101, 103, 104], // Delhi Ridge, Yamuna Floodplain, Asola Bhatti
   },
   up: {
     label: 'Uttar Pradesh Peripheral',
     center: [27.34, 76.85],
     zoom: 9,
-    zoneIds: [2, 3], // Yamuna, Sariska buffer
+    zoneIds: [103, 106], // Yamuna Floodplain, Sariska Buffer
   },
   haryana: {
     label: 'Haryana Ecological Belt',
     center: [28.60, 76.80],
     zoom: 10,
-    zoneIds: [6, 7, 8], // Haryana reserve, Bhindawas, Mangar Bani
+    zoneIds: [102, 105, 107, 108], // Mangar Bani, Aravalli Forest, Bhindawas, Haryana Agri Reserve
   },
 };
 

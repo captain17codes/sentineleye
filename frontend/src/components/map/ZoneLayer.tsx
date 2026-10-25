@@ -26,7 +26,7 @@ export function ZoneLayer({ data, onZoneSelect }: ZoneLayerProps) {
   const onEachFeature = (feature: ZoneFeature, layer: any) => {
     const props = feature.properties;
     layer.bindTooltip(
-      `<strong>${props.name}</strong><br/>Risk Level: <span style="text-transform:uppercase">${props.risk_level}</span>`,
+      `<strong>${props.code || `Z-${props.id}`}: ${props.name}</strong><br/>Risk Level: <span style="text-transform:uppercase">${props.risk_level}</span>`,
       { sticky: true, className: 'leaflet-zone-tooltip' }
     );
 

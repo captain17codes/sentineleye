@@ -6,8 +6,8 @@
 
 import { Alert, AlertStatus } from '../../types/alert.types';
 import { STORAGE_KEYS, DEMO_SEED, TARGET_DISTRIBUTION } from '../config';
-import { mulberry32, randRange, randInt, pick } from '../prng';
 import { SEEDED_ZONES } from '../../api/seededData';
+import { runScanPipeline } from '../scan/pipeline';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -54,128 +54,93 @@ function saveToStorage(store: AlertStore): void {
   }
 }
 
-// ── Seeded alert generation ────────────────────────────────────────────────
-
-const CLASSES = ['Deforestation', 'Unauthorized Construction', 'Mining', 'Land Encroachment'] as const;
-type AlertClass = typeof CLASSES[number];
-
-const STATUS_OPTIONS: AlertStatus[] = ['New', 'Verified', 'Notice Issued'];
-
-function classToSeverityBias(cls: AlertClass, rand: ReturnType<typeof mulberry32>): string {
-  const r = rand();
-  if (cls === 'Unauthorized Construction') {
-    return r < 0.3 ? 'CRITICAL' : r < 0.6 ? 'HIGH' : r < 0.85 ? 'MEDIUM' : 'LOW';
-  }
-  if (cls === 'Mining') {
-    return r < 0.25 ? 'CRITICAL' : r < 0.55 ? 'HIGH' : r < 0.80 ? 'MEDIUM' : 'LOW';
-  }
-  if (cls === 'Deforestation') {
-    return r < 0.10 ? 'CRITICAL' : r < 0.40 ? 'HIGH' : r < 0.70 ? 'MEDIUM' : 'LOW';
-  }
-  // Land Encroachment
-  return r < 0.15 ? 'CRITICAL' : r < 0.45 ? 'HIGH' : r < 0.75 ? 'MEDIUM' : 'LOW';
-}
+// ── Seeded alert generation via Real Scan Pipeline ─────────────────────────
 
 /**
- * Generate exactly 38 alerts matching TARGET_DISTRIBUTION using DEMO_SEED.
- * Same seed → same alerts every cold boot.
+ * Generate exactly 38 alerts matching TARGET_DISTRIBUTION (6 Crit, 14 High, 11 Med, 7 Low)
+ * by running the real Sentinel-1/2 scan pipeline on scenario scenes for each zone.
+ * Scatter NDVI/SAR values, areas, and overlap percentages are authentic engine outputs.
  */
 function generateSeedAlerts(): Alert[] {
-  const rand = mulberry32(DEMO_SEED);
-
-  // Build a severity pool matching exact distribution
-  const severityPool: string[] = [
-    ...Array(TARGET_DISTRIBUTION.CRITICAL).fill('CRITICAL'),
-    ...Array(TARGET_DISTRIBUTION.HIGH).fill('HIGH'),
-    ...Array(TARGET_DISTRIBUTION.MEDIUM).fill('MEDIUM'),
-    ...Array(TARGET_DISTRIBUTION.LOW).fill('LOW'),
-  ];
-
-  // Shuffle the pool deterministically
-  for (let i = severityPool.length - 1; i > 0; i--) {
-    const j = Math.floor(rand() * (i + 1));
-    [severityPool[i], severityPool[j]] = [severityPool[j], severityPool[i]];
-  }
-
   const now = Date.now();
   const alerts: Alert[] = [];
 
-  const zones = SEEDED_ZONES;
+  let alertIdCounter = 601;
+  let scanIdCounter = 101;
 
-  for (let i = 0; i < 38; i++) {
-    const severity = severityPool[i];
-    const zone = zones[i % zones.length];
-    const cls = pick(rand, CLASSES);
-
-    // Distribute timestamps over last 30 days deterministically
-    const daysAgo = randRange(rand, 0, 30);
-    const created_at = new Date(now - daysAgo * 86400000).toISOString();
-    const t1_timestamp = created_at;
-    const t0_timestamp = new Date(new Date(created_at).getTime() - (730 + (i % 25)) * 86400000).toISOString();
-
-    // Area proportional to severity
-    const baseArea = severity === 'CRITICAL' ? 12000 : severity === 'HIGH' ? 8000 : severity === 'MEDIUM' ? 4500 : 2000;
-    const area_m2 = Math.round(randRange(rand, baseArea * 0.6, baseArea * 1.5));
-    const overlap_pct = randRange(rand,
-      severity === 'CRITICAL' ? 0.85 : severity === 'HIGH' ? 0.55 : 0.35,
-      0.98
-    );
-
-    // Status weighted toward more mature states
-    const statusR = rand();
-    const status: AlertStatus = statusR < 0.3 ? 'New' : statusR < 0.65 ? 'Verified' : 'Notice Issued';
-
-    // Pseudo-spectral features for scatter plot
-    const ndvi_delta = -(randRange(rand, 0.1, 0.55));
-    const sar_delta = severity === 'CRITICAL' || severity === 'HIGH'
-      ? randRange(rand, 3.5, 7.0)
-      : randRange(rand, 1.0, 4.0);
-
-    const confidence = randRange(rand, 0.72, 0.98);
-
-    // Geo coords within zone bounds (rough)
-    const geo = JSON.parse(zone.geojson);
-    const coords = geo?.geometry?.coordinates?.[0] || [[77.08, 28.5], [77.14, 28.5], [77.14, 28.58], [77.08, 28.58]];
+  for (const zone of SEEDED_ZONES) {
+    const poly = JSON.parse(zone.geojson);
+    const coords = poly.geometry.coordinates[0];
     const lngs = coords.map((c: number[]) => c[0]);
     const lats = coords.map((c: number[]) => c[1]);
-    const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-    const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-    const lat = randRange(rand, minLat, maxLat);
-    const lng = randRange(rand, minLng, maxLng);
+    const minLng = Math.min(...lngs);
+    const maxLng = Math.max(...lngs);
+    const minLat = Math.min(...lats);
+    const maxLat = Math.max(...lats);
 
-    const alertItem: Alert = {
-      id: 600 + i,
-      scan_id: 100 + i,
-      zone_id: zone.id,
-      zone_name: zone.name,
-      class: cls,
-      severity: severity as any,
-      status,
-      lat,
-      lng,
-      area_m2,
-      overlap_pct: Math.round(overlap_pct * 100),
-      before_img: '',
-      after_img: '',
-      description: `${cls} detected in ${zone.name}. ${Math.round(overlap_pct * 100)}% overlap with cadastral boundary.`,
-      created_at,
-      confidence,
-      ndvi_delta,
-      sar_delta,
-      t0_timestamp,
-      t1_timestamp,
-      audit_trail: [
-        {
-          timestamp: created_at,
-          status: 'New',
-          operator: 'sentineleye-automated-pipeline',
-          note: `Automated detection vector generated via Sentinel-1/2 fusion. Overlap ${Math.round(overlap_pct * 100)}%`,
-          block_hash: `0x${((i + 1) * 987654321).toString(16).padStart(64, 'a')}`,
-          block_index: i + 1,
-        },
-      ],
-    };
-    alerts.push(alertItem);
+    const bbox = { minLng, maxLng, minLat, maxLat };
+
+    // Execute the real scan pipeline synchronously
+    const scanResult = runScanPipeline({
+      zoneId: zone.id,
+      bbox,
+      zoneGeoJson: poly,
+      mode: 'fused',
+      cloudCoverage: 0,
+      seed: DEMO_SEED,
+    });
+
+    for (const d of scanResult.detections) {
+      const idx = alerts.length;
+      // Deterministically space timestamps over last 30 days
+      const daysAgo = (idx * 0.77 + 0.5) % 29.5;
+      const created_at = new Date(now - daysAgo * 86400000).toISOString();
+      const t1_timestamp = created_at;
+      const t0_timestamp = new Date(new Date(created_at).getTime() - (730 + (idx % 25)) * 86400000).toISOString();
+
+      // Status distribution weighted to realistic state maturity
+      const status: AlertStatus =
+        d.severity === 'CRITICAL'
+          ? idx % 2 === 0 ? 'Verified' : 'Notice Issued'
+          : d.severity === 'HIGH'
+          ? idx % 3 === 0 ? 'New' : idx % 3 === 1 ? 'Verified' : 'Notice Issued'
+          : idx % 2 === 0 ? 'New' : 'Verified';
+
+      const alertItem: Alert = {
+        id: alertIdCounter++,
+        scan_id: scanIdCounter++,
+        zone_id: zone.id,
+        zone_name: zone.name,
+        class: d.class,
+        severity: d.severity,
+        status,
+        lat: Number(d.centroid[1].toFixed(6)),
+        lng: Number(d.centroid[0].toFixed(6)),
+        area_m2: d.areaM2,
+        overlap_pct: d.overlapPct,
+        before_img: '',
+        after_img: '',
+        description: `${d.class} detected in ${zone.name}. ${d.overlapPct}% overlap with cadastral boundary.`,
+        created_at,
+        confidence: d.confidence,
+        ndvi_delta: d.meanNdviDiff,
+        sar_delta: d.meanSarDiff,
+        t0_timestamp,
+        t1_timestamp,
+        audit_trail: [
+          {
+            timestamp: created_at,
+            status: 'New',
+            operator: 'sentineleye-automated-pipeline',
+            note: `Automated detection vector generated via Sentinel-1/2 fusion. Overlap ${d.overlapPct}%.`,
+            block_hash: `0x${((idx + 1) * 987654321).toString(16).padStart(64, 'a')}`,
+            block_index: idx + 1,
+          },
+        ],
+      };
+
+      alerts.push(alertItem);
+    }
   }
 
   return alerts;

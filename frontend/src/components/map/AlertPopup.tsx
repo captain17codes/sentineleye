@@ -35,7 +35,9 @@ export function AlertPopup({ alert, onCaseCreated }: AlertPopupProps) {
       </div>
 
       <div className="font-bold text-sm text-neon">
-        {alert.zone_name || `Zone #${alert.zone_id}`}
+        {alert.zone_name
+          ? `${alert.zone_name.startsWith('Z-') ? '' : `Z-${alert.zone_id} • `}${alert.zone_name}`
+          : `Zone Z-${alert.zone_id}`}
       </div>
 
       <div className="text-[11px] text-muted flex flex-col gap-0.5">

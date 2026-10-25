@@ -248,7 +248,9 @@ export function Overview() {
                     </span>
                     <div className="flex flex-col min-w-0">
                       <span className="text-[#f1f5f3] font-medium text-[13px] truncate">
-                        {alert.zone_name || `Zone #${alert.zone_id}`}
+                        {alert.zone_name
+                          ? `${alert.zone_name.startsWith('Z-') ? '' : `Z-${alert.zone_id} `}${alert.zone_name}`
+                          : `Zone Z-${alert.zone_id}`}
                       </span>
                       <span className="text-[12px] text-[#b4c2bb] font-mono">
                         {(alert.area_m2 || 3850).toLocaleString()} m² • {(alert.confidence ? alert.confidence * 100 : 91).toFixed(0)}% conf

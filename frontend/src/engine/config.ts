@@ -34,7 +34,7 @@ export const SCENE = {
 } as const;
 
 // ── Alert Store ────────────────────────────────────────────────────────────
-export const STORE_VERSION = 'v3';
+export const STORE_VERSION = 'v4';
 export const STORAGE_KEYS = {
   ALERTS: `sentineleye_alerts_${STORE_VERSION}`,
   LEDGER: `sentineleye_ledger_${STORE_VERSION}`,

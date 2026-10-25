@@ -184,7 +184,11 @@ export function DossierDrawer({ alert, onClose, onAlertUpdated }: DossierDrawerP
         <div className="p-3.5 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col gap-1.5">
           <span className="text-[11px] text-[#b4c2bb] font-semibold">Location & Jurisdiction</span>
           <div className="flex items-center justify-between text-xs font-medium text-[#f1f5f3]">
-            <span>{alert.zone_name || `Protected Zone #${alert.zone_id}`}</span>
+            <span>
+              {alert.zone_name
+                ? `${alert.zone_name.startsWith('Z-') ? '' : `Z-${alert.zone_id} • `}${alert.zone_name}`
+                : `Protected Zone Z-${alert.zone_id}`}
+            </span>
             <span className="font-mono text-xs text-[#b4c2bb]">
               [{alert.lat.toFixed(4)}, {alert.lng.toFixed(4)}]
             </span>

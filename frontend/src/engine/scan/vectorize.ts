@@ -14,6 +14,7 @@ export interface VectorBlob {
   coordinates: [number, number][]; // GeoJSON polygon ring [[lng, lat], ...]
   meanNdviDiff: number;
   meanSarDiff: number;
+  maxSarDiff?: number;
   meanConfidence: number;
 }
 
@@ -43,6 +44,7 @@ export function vectorizeChangeMask(
         let sumNdvi = 0;
         let sumSar = 0;
         let sumConf = 0;
+        let maxSar = -999;
 
         let minX = x, maxX = x, minY = y, maxY = y;
 
@@ -54,6 +56,7 @@ export function vectorizeChangeMask(
           sumNdvi += dNDVI[idx];
           sumSar += dSAR[idx];
           sumConf += confidenceMap[idx];
+          if (dSAR[idx] > maxSar) maxSar = dSAR[idx];
 
           if (cx < minX) minX = cx;
           if (cx > maxX) maxX = cx;
@@ -132,6 +135,7 @@ export function vectorizeChangeMask(
             coordinates: ringCoords,
             meanNdviDiff: sumNdvi / pixelCount,
             meanSarDiff: sumSar / pixelCount,
+            maxSarDiff: maxSar,
             meanConfidence: sumConf / pixelCount,
           });
         }

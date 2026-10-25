@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -11,31 +11,29 @@ import {
 } from 'recharts';
 import { ZoneRiskStat } from '../../api/stats.api';
 import { riskLevelColor } from '../../utils/riskColors';
+import { alertsByZone } from '../../engine/selectors';
+import { getStore } from '../../engine/store/alertStore';
+import { SEEDED_ZONES } from '../../api/seededData';
 
 interface RiskBarChartProps {
-  data: ZoneRiskStat[];
+  data?: ZoneRiskStat[];
 }
 
 export function RiskBarChart({ data }: RiskBarChartProps) {
-  const chartData =
-    data && data.length > 0
-      ? data.slice(0, 8).map((z) => ({
-          name: z.name.length > 14 ? z.name.slice(0, 12) + '...' : z.name,
-          fullName: z.name,
-          risk_score: z.risk_score || z.alert_count * 2,
-          risk_level: z.risk_level,
-          alert_count: z.alert_count,
-        }))
-      : [
-          { name: 'Aravalli Alpha', fullName: 'Aravalli Biodiversity Park', risk_score: 24, risk_level: 'critical', alert_count: 8 },
-          { name: 'Yamuna Flood', fullName: 'Yamuna Floodplain Corridor', risk_score: 18, risk_level: 'high', alert_count: 6 },
-          { name: 'Delhi Ridge', fullName: 'Delhi Southern Ridge', risk_score: 15, risk_level: 'critical', alert_count: 5 },
-          { name: 'Mangar Bani', fullName: 'Mangar Bani Sacred Grove', risk_score: 12, risk_level: 'high', alert_count: 4 },
-          { name: 'Sariska B', fullName: 'Sariska Buffer North', risk_score: 9, risk_level: 'high', alert_count: 3 },
-          { name: 'Ranthambore', fullName: 'Ranthambore Ecological Belt', risk_score: 6, risk_level: 'medium', alert_count: 2 },
-          { name: 'Haryana Res', fullName: 'Haryana Reserve Forest', risk_score: 4, risk_level: 'medium', alert_count: 2 },
-          { name: 'Bhindawas', fullName: 'Bhindawas Wildlife Sanctuary', risk_score: 2, risk_level: 'low', alert_count: 1 },
-        ];
+  const chartData = useMemo(() => {
+    const rawList =
+      data && data.length > 0
+        ? data
+        : alertsByZone(getStore().alerts, SEEDED_ZONES);
+
+    return rawList.slice(0, 8).map((z) => ({
+      name: z.name.length > 14 ? z.name.slice(0, 12) + '...' : z.name,
+      fullName: z.name,
+      risk_score: z.risk_score || z.alert_count * 2,
+      risk_level: z.risk_level,
+      alert_count: z.alert_count,
+    }));
+  }, [data]);
 
   return (
     <div className="w-full h-64 select-none">

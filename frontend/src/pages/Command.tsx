@@ -162,7 +162,7 @@ export function Command() {
               >
                 {zones.map((z) => (
                   <option key={z.properties.id} value={z.properties.id}>
-                    {z.properties.name} ({z.properties.risk_level.toUpperCase()})
+                    {z.properties.code || `Z-${z.properties.id}`}: {z.properties.name} ({z.properties.risk_level.toUpperCase()})
                   </option>
                 ))}
               </select>

@@ -103,7 +103,15 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
   if (pathname === '/zones' && method === 'GET') {
     const features = SEEDED_ZONES.map((z) => ({
       ...JSON.parse(z.geojson),
-      properties: { id: z.id, name: z.name, risk_level: z.risk_level, created_at: z.created_at },
+      properties: {
+        id: z.id,
+        code: z.code,
+        name: z.name,
+        risk_level: z.risk_level,
+        area_m2: z.area_m2,
+        state: z.state,
+        created_at: z.created_at,
+      },
     }));
     return { type: 'FeatureCollection', features } as unknown as T;
   }
@@ -181,8 +189,8 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
     const newAlert: Alert = {
       id: newId,
       scan_id: Date.now(),
-      zone_id: body.zone_id || 1,
-      zone_name: SEEDED_ZONES.find((z) => z.id === body.zone_id)?.name || 'Aravalli Forest Reserve Alpha',
+      zone_id: body.zone_id || 101,
+      zone_name: SEEDED_ZONES.find((z) => z.id === body.zone_id)?.name || 'Delhi Ridge Forest Sector C',
       class: body.validated_classes?.[0]?.class || body.raw_classes?.[0]?.class || 'Land Encroachment',
       severity: (body.change_score >= 0.8 ? 'CRITICAL' : body.change_score >= 0.6 ? 'HIGH' : body.change_score >= 0.4 ? 'MEDIUM' : 'LOW') as any,
       status: 'New',

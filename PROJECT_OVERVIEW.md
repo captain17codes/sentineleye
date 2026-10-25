@@ -76,7 +76,7 @@ SentinelEye introduces an automated, closed-loop surveillance-to-enforcement arc
 ### 3. Mission-Control Operational Overview
 - **Real-Time KPI Telemetry:**
   - **Validated Alerts:** 38 active verified violations (6 critical threats).
-  - **Encroached Area:** 537,511 m² across protected sectors.
+  - **Encroached Area:** 233,600 m² across protected sectors.
   - **Monitored Sectors:** 8 critical ecological corridors in Delhi NCR.
   - **Ledger Chain:** Cryptographically verified SHA-256 tamper-evident integrity.
 - **Multi-Sensor Spectral Analysis:** Scatter plot correlating Normalized Difference Vegetation Index (NDVI) loss against SAR radar double-bounce backscatter to reliably distinguish temporary vegetation clearance from permanent concrete structures.

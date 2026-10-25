@@ -99,13 +99,14 @@ export function generateBitemporalScene(
   const scenarios = getZoneScenarios(zoneId);
 
   for (const sc of scenarios) {
+    const rInt = Math.ceil(sc.radius);
     const rSq = sc.radius * sc.radius;
-    for (let dy = -sc.radius; dy <= sc.radius; dy++) {
-      for (let dx = -sc.radius; dx <= sc.radius; dx++) {
+    for (let dy = -rInt; dy <= rInt; dy++) {
+      for (let dx = -rInt; dx <= rInt; dx++) {
         const distSq = dx * dx + dy * dy;
         if (distSq <= rSq) {
-          const px = sc.x + dx;
-          const py = sc.y + dy;
+          const px = Math.round(sc.x + dx);
+          const py = Math.round(sc.y + dy);
           if (px >= 0 && px < size && py >= 0 && py < size) {
             const idx = py * size + px;
             const weight = 1 - Math.sqrt(distSq) / sc.radius; // smooth feather at edges

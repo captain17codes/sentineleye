@@ -132,7 +132,9 @@ export function SurveillanceFeed({
 
                         {/* Line 2: zone name in #b4c2bb (13px) */}
                         <div className="text-[13px] text-[#b4c2bb] truncate mb-1">
-                          {alert.zone_name || `Zone #${alert.zone_id}`}
+                          {alert.zone_name
+                            ? `${alert.zone_name.startsWith('Z-') ? '' : `Z-${alert.zone_id} • `}${alert.zone_name}`
+                            : `Zone Z-${alert.zone_id}`}
                         </div>
 
                         {/* Line 3: mono 12px "1,200 m² · New · 46m ago" in #8fa097 */}

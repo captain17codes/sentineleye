@@ -230,8 +230,10 @@ export function Alerts() {
                       </td>
 
                       {/* Zone */}
-                      <td className="py-3 px-3.5 font-medium text-[#f1f5f3] text-[13px] max-w-[170px] truncate">
-                        {alert.zone_name || `Zone #${alert.zone_id}`}
+                      <td className="py-3 px-3.5 font-medium text-[#f1f5f3] text-[13px] max-w-[200px] truncate">
+                        {alert.zone_name
+                          ? `${alert.zone_name.startsWith('Z-') ? '' : `Z-${alert.zone_id} `}${alert.zone_name}`
+                          : `Zone Z-${alert.zone_id}`}
                       </td>
 
                       {/* Severity */}
