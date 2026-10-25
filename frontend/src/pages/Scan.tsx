@@ -99,7 +99,12 @@ export function Scan() {
       {/* Page Header with ONE Single Green Run Scan Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2a3832]">
         <div>
-          <h1 className="text-xl font-semibold text-[#f1f5f3]">Orbital scan & anomaly detection</h1>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h1 className="text-xl font-semibold text-[#f1f5f3]">Orbital scan & anomaly detection</h1>
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-[#16201c] border border-[#2a3832] text-[#b4c2bb]">
+              Data source: Archived Sentinel scenes — simulated ingest
+            </span>
+          </div>
           <p className="text-xs text-[#b4c2bb] mt-0.5">
             Bitemporal synthetic radar and optical fusion with automated false-alarm rejection
           </p>

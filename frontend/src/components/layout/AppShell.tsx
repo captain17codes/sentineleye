@@ -15,6 +15,7 @@ import {
   Shield,
   Layers,
   ChevronDown,
+  Lock,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -38,6 +39,7 @@ export function AppShell({ children }: AppShellProps) {
     { label: 'Alerts', to: '/alerts', icon: AlertTriangle },
     { label: 'Scan', to: '/scan', icon: Radar },
     { label: 'Risk', to: '/risk', icon: BarChart3 },
+    { label: 'Ledger', to: '/ledger', icon: Lock },
     { label: 'Policy', to: '/policy', icon: BookOpen },
     { label: 'FAQ', to: '/faq', icon: HelpCircle },
     { label: 'Settings', to: '/settings', icon: Settings },

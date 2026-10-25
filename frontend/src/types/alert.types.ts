@@ -2,6 +2,15 @@ export type EncroachmentClass = 'Deforestation' | 'Unauthorized Construction' | 
 export type AlertSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type AlertStatus = 'New' | 'Verified' | 'Notice Issued';
 
+export interface AuditEntry {
+  timestamp: string;
+  status: AlertStatus;
+  operator: string;
+  note: string;
+  block_hash: string;
+  block_index: number;
+}
+
 export interface Alert {
   id: number;
   scan_id: number | null;
@@ -23,6 +32,9 @@ export interface Alert {
   case_ref?: string;
   ledger_hash?: string;
   confidence?: number;
+  ndvi_delta?: number;
+  sar_delta?: number;
+  audit_trail?: AuditEntry[];
 }
 
 export interface AlertsResponse {

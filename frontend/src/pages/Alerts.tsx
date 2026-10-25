@@ -6,6 +6,8 @@ import { Alert, AlertStatus } from '../types/alert.types';
 import { getClassColor, severityColor } from '../utils/riskColors';
 import { formatTimeAgo } from '../utils/formatters';
 import { DossierDrawer } from '../components/map/DossierDrawer';
+import { downloadNoticePdf } from '../engine/pdfNotice';
+import { transitionAlert } from '../engine/clock';
 import {
   Search,
   Eye,
@@ -50,7 +52,7 @@ export function Alerts() {
     const nextStatus = STATUS_FLOW[currentIdx + 1];
     setAdvancingId(alert.id);
     try {
-      await alertsApi.patchStatus(alert.id, nextStatus);
+      await transitionAlert(alert.id, nextStatus);
       refreshAlerts();
     } catch (err: any) {
       console.error(`Status advance failed: ${err.message}`);
@@ -62,14 +64,7 @@ export function Alerts() {
   const handleDownloadPdf = async (alert: Alert) => {
     setDownloadingId(alert.id);
     try {
-      let caseId = alert.case_id;
-      if (!caseId) {
-        const caseRes: any = await casesApi.create({ alert_id: alert.id });
-        caseId = caseRes.case?.id;
-      }
-      if (caseId) {
-        await casesApi.getPdf(caseId);
-      }
+      await downloadNoticePdf(alert);
     } catch (err: any) {
       console.error(`PDF download failed: ${err.message}`);
     } finally {

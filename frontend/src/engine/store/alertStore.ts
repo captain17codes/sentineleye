@@ -141,7 +141,7 @@ function generateSeedAlerts(): Alert[] {
     const lat = randRange(rand, minLat, maxLat);
     const lng = randRange(rand, minLng, maxLng);
 
-    alerts.push({
+    const alertItem: Alert = {
       id: 600 + i,
       scan_id: 100 + i,
       zone_id: zone.id,
@@ -160,7 +160,18 @@ function generateSeedAlerts(): Alert[] {
       confidence,
       ndvi_delta,
       sar_delta,
-    } as Alert & { ndvi_delta: number; sar_delta: number });
+      audit_trail: [
+        {
+          timestamp: created_at,
+          status: 'New',
+          operator: 'sentineleye-automated-pipeline',
+          note: `Automated detection vector generated via Sentinel-1/2 fusion. Overlap ${Math.round(overlap_pct * 100)}%`,
+          block_hash: `0x${((i + 1) * 987654321).toString(16).padStart(64, 'a')}`,
+          block_index: i + 1,
+        },
+      ],
+    };
+    alerts.push(alertItem);
   }
 
   return alerts;
@@ -193,6 +204,21 @@ export function getAlerts(): Alert[] {
 
 export function getLedger(): LedgerBlock[] {
   return getStore().ledger;
+}
+
+export function updateAlert(id: number, patch: Partial<Alert>): Alert | null {
+  const store = getStore();
+  let updated: Alert | null = null;
+  store.alerts = store.alerts.map((a) => {
+    if (a.id === id) {
+      updated = { ...a, ...patch };
+      return updated;
+    }
+    return a;
+  });
+  saveToStorage(store);
+  notifySubscribers();
+  return updated;
 }
 
 export function updateAlertStatus(id: number, status: AlertStatus, _notes?: string): void {

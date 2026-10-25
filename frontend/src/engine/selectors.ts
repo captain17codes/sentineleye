@@ -58,12 +58,15 @@ export function trend30d(alerts: Alert[]): DayStat[] {
     const key = d.toISOString().split('T')[0];
     dayMap[key] = { count: 0, area: 0 };
   }
+  const keys = Object.keys(dayMap);
+  const oldestKey = keys[0];
+  const latestKey = keys[keys.length - 1];
+
   alerts.forEach((a) => {
     const day = (a.created_at || '').split('T')[0] || (a.created_at || '').split(' ')[0];
-    if (dayMap[day]) {
-      dayMap[day].count++;
-      dayMap[day].area += a.area_m2 || 0;
-    }
+    const targetKey = dayMap[day] ? day : day < oldestKey ? oldestKey : latestKey;
+    dayMap[targetKey].count++;
+    dayMap[targetKey].area += a.area_m2 || 0;
   });
   return Object.entries(dayMap).map(([day, v]) => ({ day, count: v.count, area_m2: v.area }));
 }

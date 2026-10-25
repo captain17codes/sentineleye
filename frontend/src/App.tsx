@@ -12,10 +12,13 @@ import { Scan } from './pages/Scan';
 import { MapView } from './pages/MapView';
 import { Alerts } from './pages/Alerts';
 import { Risk } from './pages/Risk';
+import { Ledger } from './pages/Ledger';
+import { PublicVerify } from './pages/PublicVerify';
 import { Policy } from './pages/Policy';
 import { FAQ } from './pages/FAQ';
 import { Settings } from './pages/Settings';
 import { NotFound } from './pages/NotFound';
+import { DemoDirector } from './components/demo/DemoDirector';
 
 function LandingRoute() {
   const { user, loading } = useAuth();
@@ -102,6 +105,16 @@ export default function App() {
                 }
               />
               <Route
+                path="/ledger"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Ledger />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
                 path="/policy"
                 element={
                   <RequireAuth>
@@ -132,9 +145,13 @@ export default function App() {
                 }
               />
 
+              {/* Public Section 65B Cryptographic Proof Page */}
+              <Route path="/verify/:hash" element={<PublicVerify />} />
+
               {/* 404 Fallback */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <DemoDirector />
           </JurisdictionProvider>
         </AlertProvider>
       </AuthProvider>

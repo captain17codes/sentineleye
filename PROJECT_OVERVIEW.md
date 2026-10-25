@@ -80,8 +80,8 @@ SentinelEye introduces an automated, closed-loop surveillance-to-enforcement arc
   - **Monitored Sectors:** 8 critical ecological corridors in Delhi NCR.
   - **Ledger Chain:** Cryptographically verified SHA-256 tamper-evident integrity.
 - **Multi-Sensor Spectral Analysis:** Scatter plot correlating Normalized Difference Vegetation Index (NDVI) loss against SAR radar double-bounce backscatter to reliably distinguish temporary vegetation clearance from permanent concrete structures.
-- **Severity Distribution:** Interactive donut chart categorizing threat vectors (Critical: 6, High: 18, Medium: 14, Low: 8).
-- **30-Day Multi-Temporal Trend:** Temporal incident progression tracking seasonal land clearing surges.
+- **Severity Distribution:** Interactive donut chart mathematically identical to KPI cards (Critical: 6, High: 14, Medium: 11, Low: 7 = 38 total).
+- **30-Day Multi-Temporal Trend:** Temporal incident progression derived directly from alert timestamps, with series sum strictly equal to 38.
 
 ### 4. Full-Viewport Tactical Live Map
 - **Esri World Imagery Basemap:** Sub-meter satellite imagery base layer with smooth pan/zoom GIS controls.
@@ -93,20 +93,30 @@ SentinelEye introduces an automated, closed-loop surveillance-to-enforcement arc
   - 🔵 **LOW:** Peripheral vegetation disturbance.
 - **Collapsible Live Feed:** Instant search, jurisdiction filtering, and rapid fly-to coordinates.
 
-### 5. Autonomous Orbital Scan Console
+### 5. Autonomous Orbital Scan Engine & Web Worker
+- **9-Stage Real-Time Pipeline in Dedicated Web Worker:**
+  $$\text{Scene Ingest} \rightarrow \text{Cloud Mask} \rightarrow \text{NDVI} \rightarrow \text{SAR Backscatter} \rightarrow \text{Fusion} \rightarrow \text{Vectorize} \rightarrow \text{Cadastral Overlap} \rightarrow \text{Classify} \rightarrow \text{Ledger Commit}$$
 - **Sensor Band Selection:** Equal-width tactical cards with check badges:
   - **Optical:** 10m true-color (RGB) Sentinel-2 imagery for surface color and vegetation index changes.
   - **SAR (Synthetic Aperture Radar):** C-band Sentinel-1 radar penetrating clouds and haze to detect dielectric and physical roughness shifts.
   - **Fused:** Fused dual-mode pipeline combining optical NDVI and SAR double-bounce for highest confidence.
-- **Custom Cloud Cover Filter:** Precision track slider (0% to 100%) with custom `#22c55e` active indicator.
-- **Simulated Scene Generation:** Immediate generation of bitemporal satellite scenes, raw vs. validated detection counters, and instant scan result ledger commitment.
+- **Interactive Multi-Layer Canvas Switcher:** Toggle between Composite, NDVI Difference Heatmap, SAR Radar Heatmap, and Detected Cadastral Change Mask.
+- **Real Computational Counters:** Live counts of Raw Detections, Rejected False Positives (seasonal farming), and Validated Encroachments.
 
-### 6. Alerts & Statutory Case Management
-- **Filtered Incident Ledger:** Filter by threat class, severity, status, or search query.
-- **3-Step Rapid Escalation Workflow:**
-  $$\text{New (T+00:00)} \xrightarrow{\text{Expert Review}} \text{Verified (T+00:15)} \xrightarrow{\text{Statutory Dispatch}} \text{Notice Issued (T+04:00)}$$
-- **Detailed Audit Trail:** Full chronological log tracking timestamps, operators, notes, and cryptographic payload hashes.
-- **Section 65B PDF Notice Generator:** Dynamic court-admissible legal notice generation complete with cadastral coordinates, area calculations, before/after satellite crops, statutory act mapping, and SHA-256 verification seal.
+### 6. Accelerated Statutory Escalation & Forensic Ledger
+- **Accelerated Operational Clock (960x speed):**
+  - Simulated operational clock where 4 statutory hours elapse in 15 seconds.
+  - State progression: $\text{New (T+00:00)} \rightarrow \text{Verified (T+00:15)} \rightarrow \text{Notice Issued (T+04:00)}$ with animated progress bar and countdown.
+- **SHA-256 Tamper-Evident Ledger (`/ledger`):**
+  - Canonical key-sorted JSON hashing with Genesis block anchor.
+  - Real-time tamper simulation and cryptographic self-healing verification.
+- **Section 65B Notice PDF Generator & Public Verifier (`/verify/:hash`):**
+  - Pure client-side PDF generation (`jspdf`) featuring bitemporal satellite crops, statutory mapping, and QR code seal.
+  - Public verification route requiring zero login to verify mathematical chain integrity.
+
+### 7. Interactive Executive Demo Director
+- Floating collapsible panel accessible across the platform (or via `?demo=1`).
+- Step-by-step 8-phase guide with presenter talking points, one-click view navigation, keyboard arrow bindings (`←` / `→`), and sub-2-second demo state reset.
 
 ---
 

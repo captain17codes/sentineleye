@@ -8,6 +8,7 @@ import { SeverityDonut } from '../components/charts/SeverityDonut';
 import { SpectralAnalysisChart } from '../components/charts/SpectralAnalysisChart';
 import { getClassColor, severityColor } from '../utils/riskColors';
 import { formatTimeAgo } from '../utils/formatters';
+import { getLedgerChain, verifyChain, VerificationResult } from '../engine/ledger';
 import {
   totalAlerts as selectTotalAlerts,
   criticalCount as selectCriticalCount,
@@ -30,9 +31,14 @@ export function Overview() {
   const { jurisdiction } = useJurisdiction();
   const [stats, setStats] = useState<RiskStatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [ledgerVerified, setLedgerVerified] = useState<boolean>(true);
 
   useEffect(() => {
     let mounted = true;
+    getLedgerChain().then(verifyChain).then((res) => {
+      if (mounted) setLedgerVerified(res.valid);
+    });
+
     statsApi
       .getRiskStats()
       .then((data) => {
@@ -135,20 +141,26 @@ export function Overview() {
         </div>
 
         {/* Card 4: Ledger Status */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between">
+        <NavLink
+          to="/ledger"
+          className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between hover:border-[#22c55e]/50 transition-colors group"
+        >
           <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
             <span className="text-xs font-medium">Ledger chain</span>
-            <Lock className="w-4 h-4 text-[#22c55e]" />
+            <Lock className={`w-4 h-4 ${ledgerVerified ? 'text-[#22c55e]' : 'text-red-400'}`} />
           </div>
           <div>
-            <span className="text-2xl font-bold font-mono text-[#22c55e]">
-              Verified
-            </span>
+            <div className="flex items-center justify-between">
+              <span className={`text-2xl font-bold font-mono ${ledgerVerified ? 'text-[#22c55e]' : 'text-red-400'}`}>
+                {ledgerVerified ? 'Verified' : 'Tampered'}
+              </span>
+              <ChevronRight className="w-4 h-4 text-[#b4c2bb] opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
             <div className="text-xs text-[#b4c2bb] mt-1 font-mono">
               SHA-256 tamper-evident chain
             </div>
           </div>
-        </div>
+        </NavLink>
       </div>
 
       {/* ── Mid Section: Spectral Analysis + Severity Donut ── */}

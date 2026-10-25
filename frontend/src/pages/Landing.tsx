@@ -72,11 +72,19 @@ export function Landing() {
     }
   };
 
-  const fillDemoAccount = () => {
+  const fillDemoAccount = async () => {
     setEmail('operator@sentineleye.com');
     setPassword('operator123');
     setFieldErrors({});
     setErrorMessage(null);
+    setLoading(true);
+    try {
+      await login('operator@sentineleye.com', 'operator123');
+      localStorage.setItem('sentineleye_demo_active', '1');
+      navigate('/overview?demo=1', { replace: true });
+    } catch {
+      setLoading(false);
+    }
   };
 
   const pipelineSteps = [
