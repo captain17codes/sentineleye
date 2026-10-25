@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {
   getLedgerChain,
   verifyChain,
-  simulateTamper,
+  simulateNaiveTamper,
+  simulateSmartTamper,
   restoreTamperedChain,
+  getChainAnchor,
+  anchorChainHead,
   LedgerBlock,
   VerificationResult,
+  ChainAnchor,
 } from '../engine/ledger';
 import {
   ShieldCheck,
@@ -17,20 +21,31 @@ import {
   CheckCircle2,
   FileText,
   Link as LinkIcon,
+  Anchor,
+  Copy,
+  ExternalLink,
+  KeyRound,
+  FileCode2,
 } from 'lucide-react';
 
 export function Ledger() {
   const [chain, setChain] = useState<LedgerBlock[]>([]);
+  const [anchor, setAnchor] = useState<ChainAnchor | null>(null);
   const [verification, setVerification] = useState<VerificationResult | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [tamperedType, setTamperedType] = useState<'naive' | 'smart' | null>(null);
   const [tamperedIdx, setTamperedIdx] = useState<number | null>(null);
+  const [copiedHead, setCopiedHead] = useState(false);
   const [filterType, setFilterType] = useState<string>('all');
 
   const loadAndVerify = async () => {
     setIsVerifying(true);
     const loadedChain = await getLedgerChain();
+    const loadedAnchor = getChainAnchor();
     setChain([...loadedChain]);
-    const res = await verifyChain(loadedChain);
+    setAnchor(loadedAnchor);
+
+    const res = await verifyChain(loadedChain, loadedAnchor);
     setVerification(res);
     setIsVerifying(false);
   };
@@ -41,25 +56,55 @@ export function Ledger() {
 
   const handleVerify = async () => {
     setIsVerifying(true);
-    const res = await verifyChain(chain);
+    const loadedAnchor = getChainAnchor();
+    setAnchor(loadedAnchor);
+    const res = await verifyChain(chain, loadedAnchor);
     setVerification(res);
     setIsVerifying(false);
   };
 
-  const handleTamper = async () => {
-    const { tamperedIndex } = await simulateTamper(14); // Tamper block #14
+  const handleNaiveTamper = async () => {
+    const { tamperedIndex } = await simulateNaiveTamper(14);
+    setTamperedType('naive');
     setTamperedIdx(tamperedIndex);
     const updated = await getLedgerChain();
     setChain([...updated]);
-    // Immediately run verify to demonstrate detection
-    const res = await verifyChain(updated);
+    const res = await verifyChain(updated, getChainAnchor());
+    setVerification(res);
+  };
+
+  const handleSmartTamper = async () => {
+    const { tamperedIndex } = await simulateSmartTamper(14);
+    setTamperedType('smart');
+    setTamperedIdx(tamperedIndex);
+    const updated = await getLedgerChain();
+    setChain([...updated]);
+    const res = await verifyChain(updated, getChainAnchor());
     setVerification(res);
   };
 
   const handleRestore = async () => {
     restoreTamperedChain();
+    setTamperedType(null);
     setTamperedIdx(null);
     await loadAndVerify();
+  };
+
+  const handleAnchorNow = () => {
+    if (chain.length === 0) return;
+    const head = chain[chain.length - 1].hash;
+    const newAnchor = anchorChainHead(head, chain.length - 1);
+    setAnchor(newAnchor);
+    handleVerify();
+  };
+
+  const currentHeadHash = chain.length > 0 ? chain[chain.length - 1].hash : '';
+
+  const handleCopyHead = () => {
+    if (!currentHeadHash) return;
+    navigator.clipboard.writeText(currentHeadHash);
+    setCopiedHead(true);
+    setTimeout(() => setCopiedHead(false), 2000);
   };
 
   const filteredChain = filterType === 'all'
@@ -81,35 +126,100 @@ export function Ledger() {
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={handleVerify}
             disabled={isVerifying}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] transition-colors shadow-sm disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] transition-colors shadow-sm disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
             <span>{isVerifying ? 'Verifying...' : 'Verify chain'}</span>
           </button>
 
-          {tamperedIdx === null ? (
-            <button
-              onClick={handleTamper}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16201c] border border-amber-500/40 text-amber-400 text-xs font-medium hover:bg-amber-500/10 transition-colors"
-              title="Demonstrates fraud detection by modifying block #14 data"
-            >
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-              <span>Simulate tampering</span>
-            </button>
+          {tamperedType === null ? (
+            <>
+              <button
+                onClick={handleNaiveTamper}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16201c] border border-amber-500/40 text-amber-400 text-xs font-medium hover:bg-amber-500/10 transition-colors"
+                title="Level 1: Mutates Block #14 payload without updating following hashes"
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+                <span>Level 1: Naive Tamper</span>
+              </button>
+
+              <button
+                onClick={handleSmartTamper}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16201c] border border-red-500/40 text-red-400 text-xs font-medium hover:bg-red-500/10 transition-colors"
+                title="Level 2: Mutates Block #14 payload AND recomputes all subsequent hashes to trick the chain"
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
+                <span>Level 2: Smart Tamper</span>
+              </button>
+            </>
           ) : (
             <button
               onClick={handleRestore}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#16201c] border border-[#22c55e] text-[#22c55e] text-xs font-medium hover:bg-[#22c55e]/10 transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5 text-[#22c55e]" />
-              <span>Restore chain</span>
+              <span>Restore chain ({tamperedType === 'smart' ? 'Smart Tamper' : 'Naive Tamper'})</span>
             </button>
           )}
         </div>
+      </div>
+
+      {/* Chain Head & External Anchoring Card */}
+      <div className="p-4 rounded-xl bg-[#111816] border border-[#2a3832] flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+        <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <Anchor className="w-4 h-4 text-[#22c55e]" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#f1f5f3]">
+              Active Chain Head & Public Anchor Seal
+            </span>
+            {anchor && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#22c55e]/15 border border-[#22c55e]/30 text-[#22c55e]">
+                LOCKED TO PUBLIC ANCHOR
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 text-xs font-mono text-[#b4c2bb]">
+            <span className="text-[#8fa097]">Current Head:</span>
+            <span className="text-[#22c55e] font-semibold truncate max-w-md" title={currentHeadHash}>
+              {currentHeadHash}
+            </span>
+            <button
+              onClick={handleCopyHead}
+              className="p-1 hover:text-[#f1f5f3] transition-colors"
+              title="Copy Chain Head Hash"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </button>
+            {copiedHead && <span className="text-[10px] text-[#22c55e]">Copied!</span>}
+          </div>
+          {anchor && (
+            <div className="text-[11px] text-[#8fa097] font-mono flex items-center gap-2 flex-wrap">
+              <span>Anchored at: {new Date(anchor.anchoredAt).toLocaleTimeString()}</span>
+              <span>•</span>
+              <a
+                href={anchor.publicAnchorUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#22c55e] hover:underline flex items-center gap-1"
+              >
+                <span>{anchor.anchorRef}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
+        </div>
+
+        <button
+          onClick={handleAnchorNow}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#16201c] hover:bg-[#111816] border border-[#22c55e] text-[#22c55e] font-medium text-xs transition-colors shrink-0"
+        >
+          <Anchor className="w-3.5 h-3.5" />
+          <span>Anchor chain head</span>
+        </button>
       </div>
 
       {/* Verification Status Banner */}
@@ -118,6 +228,8 @@ export function Ledger() {
           className={`p-4 rounded-lg border flex items-center justify-between gap-4 ${
             verification.valid
               ? 'bg-[#16201c] border-[#22c55e] text-[#22c55e]'
+              : verification.smartRewriteDetected
+              ? 'bg-red-950/40 border-red-500 text-red-400'
               : 'bg-[#16201c] border-critical text-critical'
           }`}
         >
@@ -130,19 +242,25 @@ export function Ledger() {
             <div>
               <div className="font-semibold text-sm">
                 {verification.valid
-                  ? `Cryptographic Integrity Intact • ${verification.blocksVerified} Blocks Verified`
+                  ? `Cryptographic Integrity Intact • ${verification.blocksVerified} Blocks & ECDSA P-256 Signatures Verified`
+                  : verification.smartRewriteDetected
+                  ? `🚨 SMART REWRITE DETECTED: Chain Internally Valid but Anchored Head Mismatch!`
                   : `Tampering Detected at Block #${verification.firstInvalidIndex}`}
               </div>
-              <div className="text-xs text-[#b4c2bb] mt-0.5">
+              <div className="text-xs text-[#b4c2bb] mt-0.5 leading-relaxed">
                 {verification.valid
-                  ? 'All sequential SHA-256 block hashes and previous-hash pointers match root anchor.'
+                  ? 'All sequential SHA-256 block hashes, ECDSA operator signatures, and external anchor match root provenance.'
                   : verification.reason}
               </div>
             </div>
           </div>
 
           <div className="font-mono text-xs px-2.5 py-1 rounded bg-[#111816] border border-[#2a3832] shrink-0 text-[#f1f5f3]">
-            {verification.valid ? 'VALID SEAL' : 'INVALID CHAIN'}
+            {verification.valid
+              ? 'VALID SEAL'
+              : verification.smartRewriteDetected
+              ? 'ANCHOR MISMATCH'
+              : 'INVALID CHAIN'}
           </div>
         </div>
       )}
@@ -161,6 +279,7 @@ export function Ledger() {
             <option value="DETECTION">DETECTION</option>
             <option value="VERIFIED">VERIFIED</option>
             <option value="NOTICE_ISSUED">NOTICE_ISSUED</option>
+            <option value="SIGNED_AND_SERVED">SIGNED_AND_SERVED</option>
           </select>
         </div>
 
@@ -176,6 +295,7 @@ export function Ledger() {
             verification &&
             !verification.valid &&
             verification.firstInvalidIndex !== null &&
+            !verification.smartRewriteDetected &&
             block.index >= verification.firstInvalidIndex;
 
           return (
@@ -212,7 +332,7 @@ export function Ledger() {
                 </div>
               </div>
 
-              {/* Hash Links */}
+              {/* Hash Links & Cryptographic Signature */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono pt-2 border-t border-[#2a3832]/60">
                 <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis">
                   <LinkIcon className="w-3.5 h-3.5 text-[#b4c2bb] shrink-0" />
@@ -233,6 +353,26 @@ export function Ledger() {
                     {block.hash}
                   </span>
                 </div>
+              </div>
+
+              {/* ECDSA P-256 Signature & Merkle Root */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] font-mono text-[#b4c2bb] pt-1">
+                <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis">
+                  <KeyRound className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
+                  <span className="shrink-0 text-[#8fa097]">ECDSA Sig:</span>
+                  <span className="truncate" title={block.signature || 'Unsigned'}>
+                    {block.signature ? `${block.signature.slice(0, 24)}... (P-256)` : 'System Genesis'}
+                  </span>
+                </div>
+                {block.manifest && (
+                  <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis">
+                    <FileCode2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
+                    <span className="shrink-0 text-[#8fa097]">Merkle Root:</span>
+                    <span className="truncate text-[#f1f5f3]" title={block.manifest.merkleRoot}>
+                      {block.manifest.merkleRoot.slice(0, 24)}...
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Payload Preview */}

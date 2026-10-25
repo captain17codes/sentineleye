@@ -38,6 +38,8 @@ export const STORE_VERSION = 'v4';
 export const STORAGE_KEYS = {
   ALERTS: `sentineleye_alerts_${STORE_VERSION}`,
   LEDGER: `sentineleye_ledger_${STORE_VERSION}`,
+  ANCHOR: `sentineleye_chain_anchor_${STORE_VERSION}`,
+  OPERATOR_KEY: `sentineleye_operator_key_${STORE_VERSION}`,
   USER: 'sentineleye_active_user',
   REGISTERED: 'sentineleye_registered_users',
 } as const;
