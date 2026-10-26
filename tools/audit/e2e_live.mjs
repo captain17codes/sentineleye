@@ -82,7 +82,9 @@ if (await cmp.count()) {
   await cmp.first().click();
   await page.waitForTimeout(4000);
 }
-const cmpText = await page.locator('text=/match|mismatch|stored|missing/i').first().textContent().catch(() => '(no result text)');
+const cmpText = await page.locator('text=/^(Match|Mismatch|Different|Not )/').first().textContent().catch(() => '(no result text)');
+const body = await page.locator('body').innerText();
+log(`ledger page shows tamper alarm: ${/DETECTED|Tampered|MISMATCH/.test(body)}; console 404s so far: ${errors.filter((e) => e.includes('404')).length}`);
 log(`ledger compare in UI: ${cmpText?.trim().slice(0, 200)}`);
 await page.screenshot({ path: 'shots/4_ledger.png', fullPage: true });
 
