@@ -20,8 +20,28 @@ import {
 
 const HeroGlobe = React.lazy(() => import('../components/landing/HeroGlobe'));
 
+// Lite mode: skip the WebGL globe on slow machines or projector laptops.
+// ?lite=1 turns it on (remembered), ?lite=0 turns it off.
+function useLiteMode(): boolean {
+  const [lite] = useState<boolean>(() => {
+    try {
+      const q = new URLSearchParams(window.location.search).get('lite');
+      if (q === '1' || q === '0') localStorage.setItem('sentineleye.lite', q);
+      const saved = localStorage.getItem('sentineleye.lite');
+      if (saved === '1') return true;
+      if (saved === '0') return false;
+    } catch {
+      /* storage unavailable: fall through to auto-detect */
+    }
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    return (nav.deviceMemory !== undefined && nav.deviceMemory <= 4) || (nav.hardwareConcurrency || 8) <= 4;
+  });
+  return lite;
+}
+
 export function Landing() {
   const { user, login, register, logout } = useAuth();
+  const lite = useLiteMode();
   const navigate = useNavigate();
 
   // Auth Card State
@@ -157,9 +177,13 @@ export function Landing() {
       <section className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden px-6 sm:px-10 lg:px-14 py-6 border-b border-[#1f2a26]">
         {/* Globe Background Layer */}
         <div className="absolute inset-0 flex items-center justify-center md:justify-start md:left-[-15%] lg:left-[-5%] pointer-events-none z-0 overflow-hidden">
-          <Suspense fallback={<GlobeFallback size={880} />}>
-            <HeroGlobe size={960} />
-          </Suspense>
+          {lite ? (
+            <GlobeFallback size={880} />
+          ) : (
+            <Suspense fallback={<GlobeFallback size={880} />}>
+              <HeroGlobe size={960} />
+            </Suspense>
+          )}
         </div>
 
         {/* Top Bar: Logo Top-Left only (No top nav pill) */}
