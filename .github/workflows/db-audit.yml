@@ -28,7 +28,8 @@ jobs:
         working-directory: tools/audit
         run: |
           : > $OUT
-          node e2e_live.mjs || echo "E2E FAILED (exit $?)" >> $OUT
+          node e2e_live.mjs > /tmp/e2e.log 2>&1 || echo "E2E FAILED (exit $?)" >> $OUT
+          echo "----- raw log -----" >> $OUT; tail -c 6000 /tmp/e2e.log >> $OUT
           mkdir -p ../../database/audit_shots && cp shots/*.png ../../database/audit_shots/ 2>/dev/null || true
       - name: Commit result
         run: |
