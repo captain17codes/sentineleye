@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Database } from 'lucide-react';
-import { isDbConfigured, getDbStatus, subscribeDbStatus, pingDb, syncZones, DbStatus } from '../../lib/db';
+import { isDbConfigured, getDbStatus, subscribeDbStatus, pingDb, syncZones, queueAlertsSync, queueLedgerSync, DbStatus } from '../../lib/db';
+import { getAlerts } from '../../engine/store/alertStore';
+import { getLedgerChain } from '../../engine/ledger';
 import { SEEDED_ZONES } from '../../api/seededData';
 
 let started = false;
@@ -11,13 +13,22 @@ export function useDbStatus(): DbStatus {
   return s;
 }
 
-/** Small top-bar indicator; also pushes zones and pings the database once per session. */
+/** Small top-bar indicator; also pings the database and pushes zones, alerts and the chain once per load. */
 export function DbStatusChip() {
   const s = useDbStatus();
   useEffect(() => {
     if (!isDbConfigured() || started) return;
     started = true;
-    void pingDb().then(() => syncZones(SEEDED_ZONES));
+    // On every load: push zones, then the current alerts and evidence chain, so changes made just before
+    // a tab was closed (or while offline) still reach the database.
+    void pingDb()
+      .then(() => syncZones(SEEDED_ZONES))
+      .then(() => {
+        queueAlertsSync(getAlerts());
+        return getLedgerChain();
+      })
+      .then((chain) => queueLedgerSync(chain))
+      .catch(() => undefined);
   }, []);
 
   const map: Record<DbStatus['state'], { text: string; cls: string }> = {

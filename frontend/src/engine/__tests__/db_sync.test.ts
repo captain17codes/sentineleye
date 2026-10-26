@@ -75,10 +75,35 @@ describe('Supabase sync', () => {
     const tampered = [chain[0], block(1, 'FORGED'), block(2, 'FORGED2')];
     m.queueLedgerSync(tampered);
     await vi.advanceTimersByTimeAsync(1000);
-    expect(db.blocks.get('genesis:1').hash).toBe('h1');
+    expect(db.blocks.get(`${m.chainIdOf(chain)}:1`).hash).toBe('h1');
     const cmp = await m.compareChainWithDb(tampered);
     expect(cmp.firstMismatch).toBe(1);
     expect(cmp.storedBlocks).toBe(3);
+  });
+
+  it('keeps chains from two browsers apart even though their genesis block is identical', async () => {
+    const m = await import('../../lib/db');
+    m.configureDb('https://demo.supabase.co', 'anon-key');
+    const g = (key: string) => ({ ...block(0, 'same-genesis'), publicKey: key });
+    const a = [g('KEY-A'), block(1, 'a1')];
+    const b = [g('KEY-B'), block(1, 'b1')];
+    expect(m.chainIdOf(a)).not.toBe(m.chainIdOf(b));
+    m.queueLedgerSync(a);
+    await vi.advanceTimersByTimeAsync(1000);
+    m.queueLedgerSync(b);
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(db.blocks.size).toBe(4);
+    expect((await m.compareChainWithDb(a)).firstMismatch).toBeNull();
+    expect((await m.compareChainWithDb(b)).firstMismatch).toBeNull();
+  });
+
+  it('flushes pending changes immediately when the tab is hidden', async () => {
+    const m = await import('../../lib/db');
+    m.configureDb('https://demo.supabase.co', 'anon-key');
+    m.queueAlertsSync([{ id: 9, status: 'Verified' } as any]);
+    m.flushDbSync();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(db.alerts.get(9)?.status).toBe('Verified');
   });
 
   it('is a no-op when no database is configured', async () => {

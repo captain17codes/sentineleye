@@ -49,13 +49,15 @@ export function subscribeDbStatus(fn: (s: DbStatus) => void): () => void {
 }
 
 async function rest(path: string, init: RequestInit & { prefer?: string } = {}): Promise<Response> {
+  if (init.keepalive && typeof init.body === 'string' && init.body.length > 60000) init = { ...init, keepalive: false };
   const headers: Record<string, string> = {
     apikey: KEY,
     Authorization: `Bearer ${KEY}`,
     'Content-Type': 'application/json',
   };
   if (init.prefer) headers.Prefer = init.prefer;
-  const res = await fetch(`${URL_}/rest/v1/${path}`, { ...init, headers: { ...headers, ...(init.headers as any) } });
+  const { prefer: _p, ...rest_ } = init;
+  const res = await fetch(`${URL_}/rest/v1/${path}`, { ...rest_, headers: { ...headers, ...(init.headers as any) } });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(`${res.status} ${body.slice(0, 200)}`);
@@ -96,24 +98,29 @@ function alertRow(a: Alert) {
   };
 }
 
+async function sendAlerts(batch: Alert[], keepalive = false): Promise<void> {
+  try {
+    await rest('alerts?on_conflict=id', {
+      method: 'POST',
+      prefer: 'resolution=merge-duplicates,return=minimal',
+      body: JSON.stringify(batch.map(alertRow)),
+      keepalive,
+    });
+    ok();
+  } catch (e) {
+    fail(e);
+  }
+}
+
 export function queueAlertsSync(alerts: Alert[]): void {
   if (!isDbConfigured()) return;
   pendingAlerts = alerts;
   if (alertTimer) clearTimeout(alertTimer);
-  alertTimer = setTimeout(async () => {
+  alertTimer = setTimeout(() => {
+    alertTimer = null;
     const batch = pendingAlerts;
     pendingAlerts = null;
-    if (!batch) return;
-    try {
-      await rest('alerts?on_conflict=id', {
-        method: 'POST',
-        prefer: 'resolution=merge-duplicates,return=minimal',
-        body: JSON.stringify(batch.map(alertRow)),
-      });
-      ok();
-    } catch (e) {
-      fail(e);
-    }
+    if (batch) void sendAlerts(batch);
   }, 800);
 }
 
@@ -122,7 +129,40 @@ const sentBlocks = new Set<string>();
 let ledgerTimer: ReturnType<typeof setTimeout> | null = null;
 let pendingChain: LedgerBlock[] | null = null;
 
-export const chainIdOf = (chain: LedgerBlock[]) => (chain.length ? chain[0].hash : '');
+function fnv1a(str: string, seed = 0x811c9dc5): string {
+  let h = seed >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(16).padStart(8, '0');
+}
+
+/** A per-install id, used only when the genesis block carries no public key. */
+function deviceId(): string {
+  try {
+    let id = localStorage.getItem('se_device_id');
+    if (!id) {
+      id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('se_device_id', id);
+    }
+    return id;
+  } catch {
+    return 'no-storage';
+  }
+}
+
+/**
+ * Identifies one browser's chain. The genesis block content is the same everywhere, so its hash
+ * alone would make every browser share one chain id and their later blocks would collide.
+ * The genesis signing key is created per browser, so it is mixed in.
+ */
+export const chainIdOf = (chain: LedgerBlock[]) => {
+  if (!chain.length) return '';
+  const g = chain[0];
+  const key = g.publicKey || deviceId();
+  return `${g.hash.slice(0, 16)}-${fnv1a(key)}${fnv1a(key, 0x01000193)}`;
+};
 
 function blockRow(chainId: string, b: LedgerBlock) {
   return {
@@ -144,29 +184,60 @@ function blockRow(chainId: string, b: LedgerBlock) {
  * Appends blocks the database has not seen. Existing (chain_id, idx) rows are never overwritten
  * ("ignore duplicates"), so a block altered later in the browser cannot replace the stored copy.
  */
+async function sendLedger(c: LedgerBlock[], keepalive = false): Promise<void> {
+  const chainId = chainIdOf(c);
+  const fresh = c.filter((b) => !sentBlocks.has(`${chainId}:${b.index}`));
+  if (!fresh.length) return;
+  try {
+    await rest('ledger_blocks?on_conflict=chain_id,idx', {
+      method: 'POST',
+      prefer: 'resolution=ignore-duplicates,return=minimal',
+      body: JSON.stringify(fresh.map((b) => blockRow(chainId, b))),
+      keepalive,
+    });
+    fresh.forEach((b) => sentBlocks.add(`${chainId}:${b.index}`));
+    ok();
+  } catch (e) {
+    fail(e);
+  }
+}
+
 export function queueLedgerSync(chain: LedgerBlock[]): void {
   if (!isDbConfigured() || !chain.length) return;
   pendingChain = chain;
   if (ledgerTimer) clearTimeout(ledgerTimer);
-  ledgerTimer = setTimeout(async () => {
+  ledgerTimer = setTimeout(() => {
+    ledgerTimer = null;
     const c = pendingChain;
     pendingChain = null;
-    if (!c) return;
-    const chainId = chainIdOf(c);
-    const fresh = c.filter((b) => !sentBlocks.has(`${chainId}:${b.index}`));
-    if (!fresh.length) return;
-    try {
-      await rest('ledger_blocks?on_conflict=chain_id,idx', {
-        method: 'POST',
-        prefer: 'resolution=ignore-duplicates,return=minimal',
-        body: JSON.stringify(fresh.map((b) => blockRow(chainId, b))),
-      });
-      fresh.forEach((b) => sentBlocks.add(`${chainId}:${b.index}`));
-      ok();
-    } catch (e) {
-      fail(e);
-    }
+    if (c) void sendLedger(c);
   }, 600);
+}
+
+/** Sends anything still waiting in the debounce timers right away (used when the tab is hidden or closed). */
+export function flushDbSync(): void {
+  if (!isDbConfigured()) return;
+  if (alertTimer) {
+    clearTimeout(alertTimer);
+    alertTimer = null;
+  }
+  if (ledgerTimer) {
+    clearTimeout(ledgerTimer);
+    ledgerTimer = null;
+  }
+  const a = pendingAlerts;
+  const c = pendingChain;
+  pendingAlerts = null;
+  pendingChain = null;
+  if (a) void sendAlerts(a, true);
+  if (c) void sendLedger(c, true);
+}
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  window.addEventListener('pagehide', flushDbSync);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') flushDbSync();
+  });
 }
 
 export async function saveAnchor(chainId: string, headHash: string, blockIndex: number): Promise<void> {
