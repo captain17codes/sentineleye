@@ -3,6 +3,11 @@ import Globe from 'react-globe.gl';
 import * as THREE from 'three';
 import { GlobeFallback } from './GlobeFallback';
 import { SEEDED_ZONES } from '../../api/seededData';
+import { addGlobeLook, buildSentinel2, satelliteEnvironment, setFanSize, type GlobeLook } from './globeLook';
+
+// Sentinel-2 orbits about 786 km up: 786 / 6371 km Earth radius.
+const SAT_ALT = 786 / 6371;
+const SAT_SCALE = 2.6;
 
 /**
  * Scroll-driven landing story.
@@ -18,7 +23,7 @@ type Pov = { lat: number; lng: number; altitude: number };
 
 // Camera keyframes along scroll progress (0..1).
 const KEYS: { p: number; pov: Pov }[] = [
-  { p: 0.0, pov: { lat: 48, lng: 40, altitude: 1.55 } },
+  { p: 0.0, pov: { lat: 46, lng: 42, altitude: 0.95 } },
   { p: 0.18, pov: { lat: 22, lng: 78, altitude: 2.3 } },
   { p: 0.36, pov: { lat: 24, lng: 77.5, altitude: 1.5 } },
   { p: 0.52, pov: { lat: 27.5, lng: 77.3, altitude: 0.9 } },
@@ -105,30 +110,6 @@ const SAT_FROM = 0.3;
 const SAT_TO = 0.56;
 const satLatAt = (p: number) => -8 + 56 * clamp((p - SAT_FROM) / (SAT_TO - SAT_FROM));
 
-function buildSatellite(): THREE.Object3D {
-  const g = new THREE.Group();
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(1.6, 1.6, 3.2),
-    new THREE.MeshLambertMaterial({ color: 0xd8d2c0, emissive: 0x333022 })
-  );
-  g.add(body);
-  const panelMat = new THREE.MeshLambertMaterial({ color: 0x1e3a8a, emissive: 0x0b1a40, side: THREE.DoubleSide });
-  for (const s of [-1, 1]) {
-    const panel = new THREE.Mesh(new THREE.BoxGeometry(6.5, 0.12, 1.9), panelMat);
-    panel.position.set(s * 4.4, 0, 0);
-    g.add(panel);
-  }
-  const lens = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.45, 0.45, 0.6, 16),
-    new THREE.MeshLambertMaterial({ color: 0x111111 })
-  );
-  lens.rotation.x = Math.PI / 2;
-  lens.position.set(0, 0, -1.9);
-  g.add(lens);
-  g.scale.setScalar(1.6);
-  return g;
-}
-
 export function canUseGlobe(): boolean {
   if (typeof window === 'undefined') return false;
   if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false;
@@ -161,6 +142,8 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const globeRef = useRef<any>(null);
   const satRef = useRef<THREE.Object3D | null>(null);
+  const lookRef = useRef<GlobeLook | null>(null);
+  const sunLightRef = useRef<THREE.DirectionalLight | null>(null);
   const progressRef = useRef(0);
   const [progress, setProgress] = useState(0);
   const [size, setSize] = useState({ w: typeof window !== 'undefined' ? window.innerWidth : 1280, h: typeof window !== 'undefined' ? window.innerHeight : 800 });
@@ -212,15 +195,35 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
         const drift = ((now - start) / 1000) * 2.5 * (1 - smooth(clamp(p / 0.12)));
         g.pointOfView({ lat: pov.lat, lng: pov.lng - drift, altitude: pov.altitude }, 0);
 
+        lookRef.current?.update(g.camera(), pov.altitude, (now - start) / 1000);
+        // Earth rises from the bottom edge: shift the projection (no clipping, unlike a CSS transform)
+        const cam = g.camera() as THREE.PerspectiveCamera;
+        const rise = smooth(clamp(p / 0.14));
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        cam.setViewOffset(w, h, 0, -(1 - rise) * 0.55 * h, w, h);
+
         const sat = satRef.current;
         if (sat) {
           const visible = p > SAT_FROM - 0.02 && p < SAT_TO + 0.06;
           sat.visible = visible;
+          const light = sunLightRef.current;
+          if (light) light.visible = visible;
           if (visible) {
             const lat = satLatAt(p);
-            const c = g.getCoords(lat, trackLng(lat), 0.16);
+            const c = g.getCoords(lat, trackLng(lat), SAT_ALT);
+            const ahead = g.getCoords(lat + 0.5, trackLng(lat + 0.5), SAT_ALT);
             sat.position.set(c.x, c.y, c.z);
-            sat.lookAt(0, 0, 0);
+            sat.up.set(ahead.x - c.x, ahead.y - c.y, ahead.z - c.z).normalize();
+            sat.lookAt(0, 0, 0); // +z (instrument) points at the ground, +y along the track
+            sat.rotateY(0.6); // bank towards the viewer so the body and wing read in 3D
+            sat.rotateX(-0.35);
+            if (light) {
+              const cam = g.camera() as THREE.Camera;
+              light.position.copy(sat.position).add(cam.position.clone().sub(sat.position).normalize().multiplyScalar(40)).add(new THREE.Vector3(0, 30, 0));
+              light.target.position.copy(sat.position);
+              light.target.updateMatrixWorld();
+            }
           }
         }
       }
@@ -254,11 +257,20 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
       const controls = g.controls();
       controls.enabled = false; // scroll drives the camera
       controls.autoRotate = false;
-      g.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
-      const sat = buildSatellite();
+      g.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      lookRef.current = addGlobeLook(g.scene());
+      const sat = buildSentinel2();
+      sat.scale.setScalar(SAT_SCALE);
+      // fan from the instrument down to the ground, 290 km wide (145 km each side, 1 unit = 63.71 km)
+      setFanSize(sat, (SAT_ALT * 100) / SAT_SCALE - 2.2, 145 / 63.71 / SAT_SCALE);
+      satelliteEnvironment(g.renderer(), sat);
       sat.visible = false;
       g.scene().add(sat);
       satRef.current = sat;
+      const light = new THREE.DirectionalLight(0xfff4e0, 2.4);
+      light.visible = false;
+      g.scene().add(light, light.target);
+      sunLightRef.current = light;
     } catch (e) {
       console.warn('Globe setup warning', e);
     }
@@ -268,6 +280,7 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
     return () => {
       try {
         const r = globeRef.current?.renderer?.();
+        lookRef.current?.dispose();
         r?.dispose();
         r?.forceContextLoss?.();
       } catch {
@@ -362,8 +375,6 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
   }
 
   const heroOpacity = 1 - smooth(clamp((progress - 0.04) / 0.08));
-  // 0 at the top of the page (Earth rises from the bottom edge), 1 once the story starts
-  const rise = smooth(clamp(progress / 0.14));
 
   return (
     <section ref={sectionRef} className="relative w-full border-b border-[#242424]" style={{ height: '520vh' }}>
@@ -382,7 +393,7 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
         <div
           className="absolute inset-0"
           style={{
-            transform: `translateY(${(1 - rise) * 58}vh) scale(${1 + (1 - rise) * 0.55})`,
+            transform: 'none',
             transformOrigin: '50% 50%',
           }}
         >
@@ -399,8 +410,8 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
             }
             globeImageUrl={tilesOk ? undefined : '/textures/earth-blue-marble.jpg'}
             showAtmosphere
-            atmosphereColor="#9cc9ff"
-            atmosphereAltitude={0.14}
+            atmosphereColor="#7fb2ff"
+            atmosphereAltitude={0.17}
             enablePointerInteraction={false}
             polygonsData={polygons}
             polygonCapColor={(d: any) =>
@@ -447,6 +458,10 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
         <div
           className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#050505] via-[#050505]/40 to-transparent"
           style={{ opacity: heroOpacity * 0.9 }}
+        />
+        <div
+          className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none bg-gradient-to-t from-[#050505]/75 via-[#050505]/35 to-transparent"
+          style={{ opacity: heroOpacity }}
         />
         <div
           className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050505]/85 via-[#050505]/30 to-transparent"
