@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
+import { GlobeFallback } from '../components/landing/GlobeFallback';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { resetDemo as resetWorkspace } from '../engine/store/alertStore';
@@ -17,6 +18,30 @@ import {
   Scale,
   Layers,
 } from 'lucide-react';
+
+const ScrollGlobeStory = React.lazy(() => import('../components/landing/ScrollGlobeStory'));
+
+// Static hero shown while the 3D story loads (and on phones / no WebGL inside the story itself).
+function StaticHero({ children }: { children: React.ReactNode }) {
+  return (
+    <section className="relative w-full min-h-screen overflow-hidden border-b border-[#1f2a26] bg-[#05080a]">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-50">
+        <GlobeFallback size={720} />
+      </div>
+      <div className="relative z-10 w-full min-h-screen flex flex-col justify-between px-6 sm:px-10 lg:px-14 py-6">
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function HeroShell({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<StaticHero>{children}</StaticHero>}>
+      <ScrollGlobeStory>{children}</ScrollGlobeStory>
+    </Suspense>
+  );
+}
 
 export function Landing() {
   const { user, login, register, logout } = useAuth();
@@ -135,7 +160,7 @@ export function Landing() {
   return (
     <div className="min-h-screen bg-[#0b0f0e] text-[#f1f5f3] flex flex-col selection:bg-[#22c55e]/20 selection:text-white">
       {/* ── 1. Full-Viewport Entry Screen (Hero + Globe + Auth Card) ── */}
-      <section className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden px-6 sm:px-10 lg:px-14 py-6 border-b border-[#1f2a26]">
+      <HeroShell>
         {/* Top Bar: Logo Top-Left only (No top nav pill) */}
         <header className="relative z-20 flex items-center justify-between w-full">
           <div className="flex items-center gap-2.5">
@@ -389,10 +414,10 @@ export function Landing() {
 
         {/* Bottom indicator for scrolling */}
         <div className="relative z-20 flex items-center justify-between pt-4 border-t border-[#1f2a26] text-xs text-[#b4c2bb]">
-          <span>Protected ecological zones • NCT of Delhi</span>
-          <span className="text-[#8fa097]">Scroll down to inspect validation pipeline ↓</span>
+          <span>8 protected zones · Delhi NCR</span>
+          <span className="text-[#8fa097]">Scroll to follow a satellite ↓</span>
         </div>
-      </section>
+      </HeroShell>
 
       {/* ── 2. A real example ── */}
       <section className="w-full max-w-6xl mx-auto px-6 sm:px-10 py-16 flex flex-col gap-16">
