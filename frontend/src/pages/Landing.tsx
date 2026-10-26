@@ -155,10 +155,10 @@ export function Landing() {
     { name: 'Evidence ledger (SHA-256 chain, ECDSA signatures, tamper detection)', pct: 100, note: 'Working, tested' },
     { name: 'Draft notice PDF with Section 63 BSA certificate and verify page', pct: 100, note: 'Working' },
     { name: 'Web application (dashboard, map, scan, alerts, ledger)', pct: 95, note: 'Deployed' },
-    { name: 'Real Sentinel-2 imagery', pct: 60, note: '2 sites: Z-102, Z-104' },
+    { name: 'Real Sentinel-2 imagery', pct: 65, note: '2 sites + 3 court-documented cases' },
     { name: 'Automatic periodic image fetching', pct: 40, note: 'Script + workflow, not scheduled yet' },
     { name: 'Official zone boundaries', pct: 30, note: 'Indicative polygons for now' },
-    { name: 'Validation on labelled real sites', pct: 30, note: 'Calibration metrics only' },
+    { name: 'Validation on documented real cases', pct: 45, note: 'Khori Gaon matched; 2 failure modes found' },
     { name: 'Real Sentinel-1 radar for real sites', pct: 20, note: 'Calibration scenes only' },
   ];
 

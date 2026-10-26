@@ -18,6 +18,7 @@ import {
   ChevronDown,
   Lock,
   Tv,
+  Gavel,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -41,6 +42,7 @@ export function AppShell({ children }: AppShellProps) {
     { label: 'Live Map', to: '/map', icon: MapPin },
     { label: 'Alerts', to: '/alerts', icon: AlertTriangle },
     { label: 'Scan', to: '/scan', icon: Radar },
+    { label: 'Case studies', to: '/cases', icon: Gavel },
     { label: 'Risk', to: '/risk', icon: BarChart3 },
     { label: 'Ledger', to: '/ledger', icon: Lock },
     { label: 'Policy', to: '/policy', icon: BookOpen },
@@ -216,7 +218,7 @@ export function AppShell({ children }: AppShellProps) {
             </span>
           </div>
           <div className="hidden md:flex items-center gap-3 text-[10px] presentation-hidden">
-            <span>Real Sentinel-2 L2A: Z-102, Z-104</span>
+            <span>Real Sentinel-2 L2A: Z-102, Z-104, 3 cases</span>
             <span>•</span>
             <span>Calibration dataset elsewhere</span>
             <span>•</span>

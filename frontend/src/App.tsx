@@ -14,6 +14,7 @@ import { MapView } from './pages/MapView';
 import { Alerts } from './pages/Alerts';
 import { Risk } from './pages/Risk';
 import { Ledger } from './pages/Ledger';
+import { Cases } from './pages/Cases';
 import { PublicVerify } from './pages/PublicVerify';
 import { Policy } from './pages/Policy';
 import { FAQ } from './pages/FAQ';
@@ -100,6 +101,16 @@ export default function App() {
                   <RequireAuth>
                     <AppShell>
                       <Risk />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/cases"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <Cases />
                     </AppShell>
                   </RequireAuth>
                 }
