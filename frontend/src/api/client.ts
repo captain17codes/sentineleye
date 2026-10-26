@@ -5,7 +5,12 @@ const BASE = rawBase
   ? (rawBase.endsWith('/api') ? rawBase : `${rawBase.replace(/\/$/, '')}/api`)
   : '/api';
 
+// The Vercel deployment has no API server: everything runs in the browser engine (plus the optional
+// Supabase mirror). Skip the network there instead of logging a 404 for every call.
+let noBackend = Boolean(import.meta.env.PROD && !rawBase);
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  if (noBackend) return handleMockRequest<T>(path, options);
   try {
     const res = await fetch(`${BASE}${path}`, {
       credentials: 'include',
@@ -15,6 +20,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
     // If static host returns 404 or 405 (e.g. Vercel static rewrite without backend):
     if (res.status === 404 || res.status === 405) {
+      noBackend = true;
       console.warn(`[SentinelEye] Host returned HTTP ${res.status} for ${path}. Using internal data provider.`);
       return await handleMockRequest<T>(path, options);
     }

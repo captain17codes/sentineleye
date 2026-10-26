@@ -410,10 +410,12 @@ export async function verifyChain(
     }
   }
 
-  // 5. Verify against external public anchor
+  // 5. Verify against the anchor: the block that was the head when anchored must still be there,
+  //    unchanged, at the same position. Blocks appended after the anchor are normal and allowed.
   const currentHeadHash = chain[chain.length - 1].hash;
   if (anchor && anchor.anchoredHeadHash) {
-    if (currentHeadHash !== anchor.anchoredHeadHash) {
+    const anchoredBlock = chain[anchor.blockIndex];
+    if (!anchoredBlock || anchoredBlock.hash !== anchor.anchoredHeadHash) {
       return {
         valid: false,
         blocksVerified: chain.length,
@@ -421,8 +423,10 @@ export async function verifyChain(
         firstInvalidIndex: anchor.blockIndex,
         smartRewriteDetected: true,
         anchoredHeadHash: anchor.anchoredHeadHash,
-        currentHeadHash,
-        reason: `Smart rewrite detected! Internal chain hashes are valid, but current Chain Head (${currentHeadHash.slice(0, 10)}...) differs from external anchored head (${anchor.anchoredHeadHash.slice(0, 10)}...).`,
+        currentHeadHash: anchoredBlock ? anchoredBlock.hash : currentHeadHash,
+        reason: anchoredBlock
+          ? `Smart rewrite detected! Every hash in the chain is consistent, but block #${anchor.blockIndex} (${anchoredBlock.hash.slice(0, 10)}...) no longer matches the anchored hash (${anchor.anchoredHeadHash.slice(0, 10)}...), so earlier history was rewritten.`
+          : `Chain truncated: the anchored block #${anchor.blockIndex} no longer exists.`,
       };
     }
   }

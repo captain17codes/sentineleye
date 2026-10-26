@@ -117,6 +117,25 @@ describe('SentinelEye Cryptographic Ledger Unit Tests', () => {
     expect(result.reason).toContain('Broken chain link');
   });
 
+  it('accepts blocks appended after the anchor, but catches a rewrite of anchored history', async () => {
+    const chain: LedgerBlock[] = [await createGenesisBlock()];
+    chain.push(await appendBlock(chain, 'DETECTION', { alertId: 1 }));
+    const anchor = { anchoredHeadHash: chain[1].hash, blockIndex: 1, anchoredAt: '', anchorRef: '', publicAnchorUrl: '' };
+    chain.push(await appendBlock(chain, 'VERIFIED', { alertId: 1 }));
+    expect((await verifyChain(chain, anchor)).valid).toBe(true);
+
+    // rewrite block 1 and re-hash everything after it: internally consistent, but not the anchored history
+    const forged: LedgerBlock[] = [chain[0]];
+    forged.push(await appendBlock(forged, 'DETECTION', { alertId: 999 }));
+    forged.push(await appendBlock(forged, 'VERIFIED', { alertId: 999 }));
+    const r = await verifyChain(forged, anchor);
+    expect(r.valid).toBe(false);
+    expect(r.smartRewriteDetected).toBe(true);
+
+    // truncating below the anchor is caught too
+    expect((await verifyChain(chain.slice(0, 1), anchor)).valid).toBe(false);
+  });
+
   it('detects Level 2 Smart Tampering via External Anchor mismatch', async () => {
     // Initialize ledger chain and anchor
     const chain = await getLedgerChain();
