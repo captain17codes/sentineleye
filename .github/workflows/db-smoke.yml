@@ -1,0 +1,32 @@
+name: Supabase smoke test
+on:
+  push:
+    branches: [db-smoke]
+permissions:
+  contents: write
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe Supabase REST API
+        env:
+          U: https://cwhubxdspsadszdtwhpz.supabase.co
+          K: sb_publishable_aT8Ph7IAz8mPRNKrg3PBBg_ngZViQyt
+        run: |
+          set +e
+          out=database/smoke_result.txt; : > $out
+          r() { echo "## $1" >> $out; shift; curl -s -o /tmp/b -w "HTTP %{http_code}\n" "$@" >> $out; head -c 400 /tmp/b >> $out; echo >> $out; }
+          for t in alerts ledger_blocks chain_anchors zones alert_zone_check; do
+            r "GET $t (apikey only)" "$U/rest/v1/$t?select=*&limit=1" -H "apikey: $K"
+          done
+          r "GET alerts (apikey + bearer)" "$U/rest/v1/alerts?select=id&limit=1" -H "apikey: $K" -H "Authorization: Bearer $K"
+          r "POST ledger_blocks smoke" -X POST "$U/rest/v1/ledger_blocks?on_conflict=chain_id,idx" -H "apikey: $K" -H "Content-Type: application/json" -H "Prefer: resolution=ignore-duplicates,return=minimal" -d '[{"chain_id":"smoke-test","idx":0,"type":"SMOKE","prev_hash":"0","hash":"smoke","payload":{}}]'
+          r "PATCH ledger_blocks smoke (must fail)" -X PATCH "$U/rest/v1/ledger_blocks?chain_id=eq.smoke-test" -H "apikey: $K" -H "Content-Type: application/json" -d '{"hash":"forged"}'
+          r "DELETE ledger_blocks smoke (must fail)" -X DELETE "$U/rest/v1/ledger_blocks?chain_id=eq.smoke-test" -H "apikey: $K"
+          r "GET ledger smoke after" "$U/rest/v1/ledger_blocks?chain_id=eq.smoke-test&select=idx,hash" -H "apikey: $K"
+          r "POST zones Z-102" -X POST "$U/rest/v1/zones?on_conflict=id" -H "apikey: $K" -H "Content-Type: application/json" -H "Prefer: resolution=merge-duplicates,return=representation" -d '[{"id":102,"code":"Z-102","name":"Mangar Bani Sacred Grove","geojson":{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[77.12,28.32],[77.22,28.32],[77.22,28.41],[77.12,28.41],[77.12,28.32]]]}}}]'
+          cat $out
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $out; git commit -m "db smoke result" && git push
