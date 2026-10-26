@@ -1,0 +1,33 @@
+## GET alerts (apikey only)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.alerts' in the schema cache"}
+## GET ledger_blocks (apikey only)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+## GET chain_anchors (apikey only)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.chain_anchors' in the schema cache"}
+## GET zones (apikey only)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.zones' in the schema cache"}
+## GET alert_zone_check (apikey only)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.alert_zone_check' in the schema cache"}
+## GET alerts (apikey + bearer)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.alerts' in the schema cache"}
+## POST ledger_blocks smoke
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+## PATCH ledger_blocks smoke (must fail)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+## DELETE ledger_blocks smoke (must fail)
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+## GET ledger smoke after
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+## POST zones Z-102
+HTTP 404
+{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.zones' in the schema cache"}
