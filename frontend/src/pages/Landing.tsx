@@ -150,6 +150,18 @@ export function Landing() {
     'Detect if any stored record was changed afterwards',
   ];
 
+  const projectStatus = [
+    { name: 'Detection engine (NDVI, fusion, polygons, boundary overlap, classification)', pct: 100, note: 'Working, tested' },
+    { name: 'Evidence ledger (SHA-256 chain, ECDSA signatures, tamper detection)', pct: 100, note: 'Working, tested' },
+    { name: 'Draft notice PDF with Section 63 BSA certificate and verify page', pct: 100, note: 'Working' },
+    { name: 'Web application (dashboard, map, scan, alerts, ledger)', pct: 95, note: 'Deployed' },
+    { name: 'Real Sentinel-2 imagery', pct: 60, note: '2 sites: Z-102, Z-104' },
+    { name: 'Automatic periodic image fetching', pct: 40, note: 'Script + workflow, not scheduled yet' },
+    { name: 'Official zone boundaries', pct: 30, note: 'Indicative polygons for now' },
+    { name: 'Validation on labelled real sites', pct: 30, note: 'Calibration metrics only' },
+    { name: 'Real Sentinel-1 radar for real sites', pct: 20, note: 'Calibration scenes only' },
+  ];
+
   const cannotDo = [
     'See structures smaller than a few 10 m pixels',
     'See under dense tree canopy',
@@ -519,6 +531,32 @@ export function Landing() {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* ── Project status ── */}
+        <div className="flex flex-col gap-5">
+          <div className="flex items-baseline justify-between flex-wrap gap-2">
+            <h2 className="text-xl font-semibold text-[#f5f5f0]">Project status</h2>
+            <span className="text-sm text-[#b5b5ad]">
+              Prototype about <span className="text-[#facc15] font-semibold">85%</span> complete · 37 automated tests passing
+            </span>
+          </div>
+          <ul className="flex flex-col gap-3">
+            {projectStatus.map((m) => (
+              <li key={m.name} className="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 items-center">
+                <span className="sm:col-span-6 text-sm text-[#f5f5f0]">{m.name}</span>
+                <div className="sm:col-span-4 h-2 rounded-full bg-[#2e2e2e] overflow-hidden">
+                  <div className="h-full rounded-full bg-[#facc15]" style={{ width: `${m.pct}%` }} />
+                </div>
+                <span className="sm:col-span-2 text-xs text-[#b5b5ad]">
+                  <span className="text-[#f5f5f0] font-medium">{m.pct}%</span> · {m.note}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-[#8f8f86]">
+            Source code and the data-fetch workflow are public on GitHub: github.com/captain17codes/sentineleye
+          </p>
         </div>
 
         {/* ── 6. Footer ── */}
