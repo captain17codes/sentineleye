@@ -8,38 +8,29 @@
       "zone_id": 102,
       "code": "Z-102",
       "name": "Mangar Bani Sacred Grove",
-      "category": "Aravalli Forest & Sacred Grove",
       "bbox": [
-        77.161542,
-        28.361442,
-        77.178458,
-        28.378558
+        77.1592218,
+        28.3610016,
+        77.1853582,
+        28.3839984
       ],
       "center": [
-        77.17,
-        28.37
+        77.17229,
+        28.3725
       ],
       "is_control": false,
-      "ground_truth_class": "Mining",
-      "expected_area_m2": 18400,
-      "phenomenon": "Quarry Expansion & Canopy Clearcutting",
+      "verified_by_human": true,
+      "notes": "Candidate #7 from find (NDVI-loss ~192,600 m2). Verify visually.",
+      "sar_available": false,
       "t0": {
         "scene_id": "S2B_43RGM_20220330_0_L2A",
         "datetime": "2022-03-30T05:41:00.266000Z",
-        "cloud_cover": 0
+        "aoi_cloud_pct": 0.0
       },
       "t1": {
-        "scene_id": "S2B_43RGM_20240319_0_L2A",
-        "datetime": "2024-03-19T05:41:03.049000Z",
-        "cloud_cover": 2.407766
-      },
-      "processing": {
-        "mode": "Calibrated scenes modeled on real sites (synthetic arrays)",
-        "array_type": "Synthetic 256x256 Float32 arrays calibrated to real site terrain and physical scattering",
-        "optical_reference_tile": "S2B_43RGM_20220330_0_L2A",
-        "scl_masking": "Modeled SCL classes [3, 8, 9, 10] masked as cloud/shadow",
-        "crs": "EPSG:4326 (WGS84)",
-        "pixel_size_m": 10.0
+        "scene_id": "S2A_43RGM_20260306_2_L2A",
+        "datetime": "2026-03-06T05:41:22.395000Z",
+        "aoi_cloud_pct": 0.0
       }
     },
     {
@@ -78,6 +69,35 @@
         "scl_masking": "Modeled SCL classes [3, 8, 9, 10] masked as cloud/shadow",
         "crs": "EPSG:4326 (WGS84)",
         "pixel_size_m": 10.0
+      }
+    },
+    {
+      "zone_id": 104,
+      "code": "Z-104",
+      "name": "Asola Bhatti Wildlife Sanctuary (CONTROL)",
+      "bbox": [
+        77.2371185,
+        28.4686016,
+        77.2632815,
+        28.4915984
+      ],
+      "center": [
+        77.2502,
+        28.4801
+      ],
+      "is_control": true,
+      "verified_by_human": true,
+      "notes": "Control site: should show little or no change. Verify visually.",
+      "sar_available": false,
+      "t0": {
+        "scene_id": "S2B_43RGM_20220330_0_L2A",
+        "datetime": "2022-03-30T05:41:00.266000Z",
+        "aoi_cloud_pct": 0.0
+      },
+      "t1": {
+        "scene_id": "S2A_43RGM_20260306_2_L2A",
+        "datetime": "2026-03-06T05:41:22.395000Z",
+        "aoi_cloud_pct": 0.0
       }
     },
     {
@@ -156,5 +176,6 @@
         "pixel_size_m": 10.0
       }
     }
-  ]
+  ],
+  "data_source": "REAL Sentinel-2 L2A (Earth Search STAC); Sentinel-1 RTC where available"
 }
