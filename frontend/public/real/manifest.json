@@ -28,8 +28,8 @@
         "aoi_cloud_pct": 0.0
       },
       "t1": {
-        "scene_id": "S2A_43RGM_20260306_2_L2A",
-        "datetime": "2026-03-06T05:41:22.395000Z",
+        "scene_id": "S2A_43RGM_20260405_1_L2A",
+        "datetime": "2026-04-05T05:41:23.603000Z",
         "aoi_cloud_pct": 0.0
       }
     },
@@ -95,8 +95,8 @@
         "aoi_cloud_pct": 0.0
       },
       "t1": {
-        "scene_id": "S2A_43RGM_20260306_2_L2A",
-        "datetime": "2026-03-06T05:41:22.395000Z",
+        "scene_id": "S2A_43RGM_20260405_1_L2A",
+        "datetime": "2026-04-05T05:41:23.603000Z",
         "aoi_cloud_pct": 0.0
       }
     },
