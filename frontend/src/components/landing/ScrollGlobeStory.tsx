@@ -495,6 +495,17 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
           );
         })}
 
+        {/* skip the story */}
+        {progress > 0.02 && progress < 0.97 && (
+          <button
+            type="button"
+            onClick={() => document.getElementById('example')?.scrollIntoView({ behavior: 'smooth' })}
+            className="absolute z-30 bottom-6 right-6 flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-black/60 backdrop-blur text-xs font-semibold text-[#f5f5f0] hover:border-[#facc15]/60 hover:text-[#facc15] transition-colors"
+          >
+            Skip intro ↓
+          </button>
+        )}
+
         {/* progress rail */}
         <div className="absolute z-20 right-6 top-1/2 -translate-y-1/2 flex flex-col gap-2 pointer-events-none">
           {[0, ...CHAPTERS.map((c) => c.from)].map((f, i) => (
@@ -506,7 +517,7 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
           ))}
         </div>
 
-        <div className="absolute z-20 bottom-2 right-3 text-[10px] text-[#8f8f86] pointer-events-none">
+        <div className="absolute z-20 bottom-2 left-3 text-[10px] text-[#8f8f86] pointer-events-none">
           {tilesOk ? 'Imagery: Esri World Imagery' : 'Imagery: NASA Blue Marble'}
         </div>
       </div>

@@ -49,9 +49,9 @@ export function Risk() {
       {/* Page Header with Filter */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2e2e]">
         <div>
-          <h1 className="text-xl font-semibold text-[#f5f5f0]">Risk analytics & threat indices</h1>
+          <h1 className="text-xl font-semibold text-[#f5f5f0]">Risk by zone</h1>
           <p className="text-xs text-[#b5b5ad] mt-0.5">
-            Aggregated spatial encroachment metrics, incident velocity, and sector exposure
+            Which protected zones have the most alerts, and how fast new ones are appearing
           </p>
         </div>
 
@@ -90,7 +90,7 @@ export function Risk() {
             {/* Card 1: Total Intercepts */}
             <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
               <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
-                <span className="text-xs font-semibold text-[#f5f5f0]">Total intercepts</span>
+                <span className="text-xs font-semibold text-[#f5f5f0]">All alerts</span>
                 <AlertOctagon className="w-4 h-4 text-[#facc15]" />
               </div>
               <div>
@@ -99,7 +99,7 @@ export function Risk() {
                 </span>
                 <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Cumulative records</div>
                 <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-                  Total intercepts: Cumulative spatial anomalies identified by orbital change algorithms
+                  Every change found so far across all zones
                 </p>
               </div>
             </div>
@@ -121,7 +121,7 @@ export function Risk() {
                 </div>
                 <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Immediate action required</div>
                 <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-                  Critical threats: High-confidence violations exceeding critical scale or reserve thresholds
+                  Large or very sensitive changes to check first
                 </p>
               </div>
             </div>
@@ -138,7 +138,7 @@ export function Risk() {
                 </span>
                 <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Confirmed spectral violations</div>
                 <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-                  Verified cases: Multi-temporal detections confirmed by automated radar-optical cross validation
+                  Checked by an officer and confirmed
                 </p>
               </div>
             </div>
@@ -155,7 +155,7 @@ export function Risk() {
                 </span>
                 <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Enforcement actions</div>
                 <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-                  Notices issued: Statutory Section 63 BSA legal notices generated and drafted for enforcement
+                  Alerts with a legal notice drafted or served
                 </p>
               </div>
             </div>
@@ -169,7 +169,7 @@ export function Risk() {
                 <div>
                   <h3 className="text-sm font-semibold text-[#f5f5f0]">30-day incident velocity</h3>
                   <p className="text-xs text-[#b5b5ad] kpi-subtitle">
-                    Incident velocity: Daily anomaly detection rate across all monitored conservation corridors
+                    New alerts found each day
                   </p>
                 </div>
               </div>
@@ -182,7 +182,7 @@ export function Risk() {
                 <div>
                   <h3 className="text-sm font-semibold text-[#f5f5f0]">Severity distribution</h3>
                   <p className="text-xs text-[#b5b5ad] kpi-subtitle">
-                    Severity distribution: Proportion of active alerts categorized by environmental impact tier
+                    How serious the alerts are
                   </p>
                 </div>
               </div>
@@ -196,7 +196,7 @@ export function Risk() {
               <div>
                 <h3 className="text-sm font-semibold text-[#f5f5f0]">Vulnerability index by ecological sector</h3>
                 <p className="text-xs text-[#b5b5ad] kpi-subtitle">
-                  Vulnerability index: Comparative threat exposure based on weighted severity scores per protected zone
+                  Which zones have the most serious alerts (critical counts more than low)
                 </p>
               </div>
             </div>

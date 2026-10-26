@@ -14,19 +14,19 @@ export function ScenePanel({ value, onChange, disabled }: ScenePanelProps) {
       type: 'optical',
       label: 'Optical',
       icon: Sun,
-      desc: 'Visible spectrum bands (Sentinel-2)',
+      desc: 'Normal photo bands (Sentinel-2)',
     },
     {
       type: 'sar',
       label: 'SAR',
       icon: Radio,
-      desc: 'C-band radar backscatter (Sentinel-1)',
+      desc: 'Radar, sees through cloud (Sentinel-1)',
     },
     {
       type: 'fused',
       label: 'Fused',
       icon: Layers,
-      desc: 'Synchronized multi-spectral tensor',
+      desc: 'Both together, fewest false alarms',
     },
   ];
 

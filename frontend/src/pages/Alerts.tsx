@@ -88,16 +88,16 @@ export function Alerts() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2e2e2e]">
         <div>
-          <h1 className="text-xl font-semibold text-[#f5f5f0]">Alerts management</h1>
+          <h1 className="text-xl font-semibold text-[#f5f5f0]">Alerts</h1>
           <p className="text-xs text-[#b5b5ad] mt-0.5">
-            Cadastral boundary violations and verified threat vectors across protected zones
+            Every change the satellites found inside a protected zone. Click a row to see the before/after images.
           </p>
         </div>
 
         <div className="flex items-center gap-2 text-xs font-mono text-[#b5b5ad]">
-          <span>Total: {alerts.length}</span>
+          <span>All: {alerts.length}</span>
           <span>•</span>
-          <span className="text-[#facc15] font-semibold">Filtered: {filteredAlerts.length}</span>
+          <span className="text-[#facc15] font-semibold">Showing: {filteredAlerts.length}</span>
         </div>
       </div>
 
@@ -105,53 +105,53 @@ export function Alerts() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
-            <span className="text-xs font-semibold text-[#f5f5f0]">Total intercepts</span>
+            <span className="text-xs font-semibold text-[#f5f5f0]">All alerts</span>
             <AlertOctagon className="w-4 h-4 text-[#facc15]" />
           </div>
           <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f5f5f0] kpi-number">
             {totalCount}
           </span>
           <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-            Total intercepts: All candidate spatial change detections recorded
+            Every change found so far, at any stage of review
           </p>
         </div>
 
         <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
-            <span className="text-xs font-semibold text-[#f5f5f0]">Critical violations</span>
+            <span className="text-xs font-semibold text-[#f5f5f0]">Critical</span>
             <ShieldAlert className="w-4 h-4 text-critical" />
           </div>
           <span className="text-2xl sm:text-3xl font-bold font-mono text-critical kpi-number">
             {criticalCount}
           </span>
           <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-            Critical violations: Incidents requiring immediate emergency enforcement
+            Large or very sensitive changes that should be checked first
           </p>
         </div>
 
         <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
-            <span className="text-xs font-semibold text-[#f5f5f0]">Verified cases</span>
+            <span className="text-xs font-semibold text-[#f5f5f0]">Verified</span>
             <CheckCircle className="w-4 h-4 text-[#facc15]" />
           </div>
           <span className="text-2xl sm:text-3xl font-bold font-mono text-[#facc15] kpi-number">
             {verifiedCount}
           </span>
           <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-            Verified cases: Detections confirmed by automated radar-optical cross validation
+            Checked by an officer and confirmed
           </p>
         </div>
 
         <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
-            <span className="text-xs font-semibold text-[#f5f5f0]">Statutory notices</span>
+            <span className="text-xs font-semibold text-[#f5f5f0]">Notices</span>
             <TrendingUp className="w-4 h-4 text-[#facc15]" />
           </div>
           <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f5f5f0] kpi-number">
             {noticesCount}
           </span>
           <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
-            Statutory notices: Formal evidentiary packages prepared or served under Sec 63 BSA
+            Alerts with a legal notice drafted or served (evidence certificate under Sec 63 BSA)
           </p>
         </div>
       </div>
@@ -163,7 +163,7 @@ export function Alerts() {
           <Search className="w-3.5 h-3.5 text-[#b5b5ad] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search by zone, class, ID or description..."
+            placeholder="Search: zone name, type (e.g. Mining) or alert ID"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-[#0a0a0a] border border-[#2e2e2e] rounded-md pl-8 pr-3 py-2 text-xs text-[#f5f5f0] placeholder-[#b5b5ad] focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15]"
@@ -233,17 +233,23 @@ export function Alerts() {
         </div>
       </div>
 
+      <p className="text-[12px] text-[#8f8f86] -mt-1">
+        Review steps: <span className="text-[#f5f5f0]">New</span> → <span className="text-[#f5f5f0]">Verified</span> →{' '}
+        <span className="text-[#f5f5f0]">Notice Issued</span> → <span className="text-[#f5f5f0]">Signed &amp; Served</span>. Use the yellow
+        button to move an alert one step forward; each step is saved in the evidence record.
+      </p>
+
       {/* ── Compact Alerts Table (Sentence case headers, #b5b5ad 12px, cells >= 13px) ── */}
       {loading ? (
         <LoadingState
-          title="SYNCHRONIZING TELEMETRY ALERTS..."
-          message="Retrieving bitemporal anomaly vectors, cadastral intersections, and ledger provenance..."
+          title="Loading alerts..."
+          message="Reading saved alerts."
         />
       ) : filteredAlerts.length === 0 ? (
         <EmptyState
-          title="No alerts match active filters"
-          message="No encroachment detections correspond to your search query or chosen filter criteria. Reset the filters to view all records."
-          actionLabel="Reset all filters"
+          title="No alerts match your search"
+          message="Try a different word, or clear the filters to see every alert."
+          actionLabel="Clear filters"
           onAction={() => {
             setSearch('');
             setSelectedClass('all');
@@ -258,14 +264,14 @@ export function Alerts() {
               <thead>
                 <tr className="bg-[#1a1a1a] border-b border-[#2e2e2e] text-[#b5b5ad] text-[12px] font-medium normal-case">
                   <th className="py-3 px-3.5">ID</th>
-                  <th className="py-3 px-3.5">Source</th>
-                  <th className="py-3 px-3.5">Class</th>
+                  <th className="py-3 px-3.5" title="Real Sentinel-2 image, or the calibration set with known answers">Data</th>
+                  <th className="py-3 px-3.5">Type of change</th>
                   <th className="py-3 px-3.5">Zone</th>
                   <th className="py-3 px-3.5">Severity</th>
                   <th className="py-3 px-3.5">Area (m²)</th>
-                  <th className="py-3 px-3.5">Overlap</th>
-                  <th className="py-3 px-3.5">Status workflow</th>
-                  <th className="py-3 px-3.5">Detected</th>
+                  <th className="py-3 px-3.5" title="Share of the change that lies inside the zone boundary">Inside zone</th>
+                  <th className="py-3 px-3.5" title="New → Verified → Notice Issued → Signed & Served">Review step</th>
+                  <th className="py-3 px-3.5">Found</th>
                   <th className="py-3 px-3.5 text-right">Actions</th>
                 </tr>
               </thead>
@@ -340,8 +346,8 @@ export function Alerts() {
 
                       {/* Status Workflow Advance */}
                       <td className="py-3 px-3.5" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-[13px] text-[#f5f5f0]">
+                        <div className="flex flex-col items-start gap-1">
+                          <span className="font-mono text-[12px] text-[#b5b5ad] whitespace-nowrap">
                             {alert.status}
                           </span>
                           {canAdvance && (
@@ -349,10 +355,10 @@ export function Alerts() {
                               type="button"
                               onClick={() => handleAdvanceStatus(alert)}
                               disabled={advancingId === alert.id}
-                              className="px-3 py-1.5 rounded-md text-xs font-semibold bg-[#1a1a1a] hover:bg-[#facc15]/25 border border-[#facc15] text-[#f5f5f0] transition-colors disabled:opacity-50 min-h-[34px] shadow-sm"
-                              title={`Advance to ${nextStatus}`}
+                              className="px-3 py-1.5 rounded-md text-xs font-semibold bg-[#1a1a1a] hover:bg-[#facc15]/25 border border-[#facc15] text-[#f5f5f0] transition-colors disabled:opacity-50 min-h-[34px] shadow-sm whitespace-nowrap"
+                              title={`Move this alert to the next step: ${nextStatus}`}
                             >
-                              {advancingId === alert.id ? '...' : `→ ${nextStatus}`}
+                              {advancingId === alert.id ? 'Saving…' : `Mark ${nextStatus}`}
                             </button>
                           )}
                         </div>
