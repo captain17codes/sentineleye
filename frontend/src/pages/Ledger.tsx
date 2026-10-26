@@ -175,16 +175,16 @@ export function Ledger() {
           <div className="flex items-center gap-2">
             <Anchor className="w-4 h-4 text-[#22c55e]" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#f1f5f3]">
-              Active Chain Head & Public Anchor Seal
+              Chain head & anchor
             </span>
             {anchor && (
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#22c55e]/15 border border-[#22c55e]/30 text-[#22c55e]">
-                LOCKED TO PUBLIC ANCHOR
+                ANCHORED
               </span>
             )}
           </div>
           <p className="text-[11px] text-[#b4c2bb] kpi-subtitle">
-            Chain provenance seal: Current tip of the immutable chain anchored to external public timestamp
+            The latest block hash is saved in a separate anchor record. In this prototype the anchor is stored locally; in production it would be published to a public timestamping service.
           </p>
           <div className="flex items-center gap-2 text-xs font-mono text-[#b4c2bb] mt-0.5">
             <span className="text-[#8fa097]">Current Head:</span>
@@ -205,15 +205,9 @@ export function Ledger() {
             <div className="text-[11px] text-[#8fa097] font-mono flex items-center gap-2 flex-wrap">
               <span>Anchored at: {new Date(anchor.anchoredAt).toLocaleTimeString()}</span>
               <span>•</span>
-              <a
-                href={anchor.publicAnchorUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[#22c55e] hover:underline flex items-center gap-1"
-              >
+              <span className="text-[#22c55e] flex items-center gap-1">
                 <span>{anchor.anchorRef}</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
+              </span>
             </div>
           )}
         </div>

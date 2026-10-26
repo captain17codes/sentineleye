@@ -526,8 +526,8 @@ export function anchorChainHead(headHash: string, blockIndex?: number): ChainAnc
     anchoredHeadHash: headHash,
     blockIndex: index,
     anchoredAt: new Date().toISOString(),
-    anchorRef: `GNCTD-ORBITAL-ANCHOR-${headHash.slice(0, 10).toUpperCase()}`,
-    publicAnchorUrl: `https://github.com/captain17codes/sentineleye/commit/${headHash.slice(0, 7)}`,
+    anchorRef: `ANCHOR-${headHash.slice(0, 10).toUpperCase()}`,
+    publicAnchorUrl: '',
   };
   try {
     if (typeof localStorage !== 'undefined') {

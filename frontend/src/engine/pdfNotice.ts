@@ -423,7 +423,7 @@ export async function generateNoticePdf({
   doc.setFontSize(7.2);
   doc.setTextColor(60, 60, 60);
   const partAText =
-    `I, Authorized Technical Custodian of SentinelEye Platform, GNCTD, hereby certify pursuant to Section 63(4) of the Bharatiya Sakshya Adhiniyam, 2023 that:\n` +
+    `I, the person in charge of the SentinelEye system named below, hereby certify pursuant to Section 63(4) of the Bharatiya Sakshya Adhiniyam, 2023 that:\n` +
     `1. The electronic record consisting of satellite rasters, bitemporal difference tensors, and cadastral vectors was produced by the SentinelEye Automated Orbital System during a period over which the system was used regularly to record and process surveillance data for lawful governance.\n` +
     `2. During the said period, information of the kind contained in the electronic record was regularly fed into the system in the ordinary course of orbital passes.\n` +
     `3. Throughout the material part of the said period, the computer system was operating properly and there was no malfunction affecting the production or accuracy of the electronic record.\n` +
@@ -434,9 +434,9 @@ export async function generateNoticePdf({
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   doc.text('Custodian / Operator Name: _______________________', 18, partAY + 38);
-  doc.text('Designation : Technical System Administrator, GNCTD', 18, partAY + 43);
+  doc.text('Designation & office: _______________________________', 18, partAY + 43);
   doc.text('Signature   : _______________________________________', 18, partAY + 48);
-  doc.text(`Date & Place: ${dateStr}, New Delhi`, 18, partAY + 53);
+  doc.text(`Date & Place: ${dateStr}, ____________`, 18, partAY + 53);
 
   // ── PART B: CERTIFICATE BY TECHNICAL EXPERT (Section 63(4)) ──
   const partBY = partAY + 58;
