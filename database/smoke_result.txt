@@ -1,33 +1,33 @@
 ## GET alerts (apikey only)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.alerts' in the schema cache"}
+HTTP 200
+[]
 ## GET ledger_blocks (apikey only)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+HTTP 200
+[]
 ## GET chain_anchors (apikey only)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.chain_anchors' in the schema cache"}
+HTTP 200
+[]
 ## GET zones (apikey only)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.zones' in the schema cache"}
+HTTP 200
+[]
 ## GET alert_zone_check (apikey only)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.alert_zone_check' in the schema cache"}
+HTTP 200
+[]
 ## GET alerts (apikey + bearer)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.alerts' in the schema cache"}
+HTTP 200
+[]
 ## POST ledger_blocks smoke
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+HTTP 201
+
 ## PATCH ledger_blocks smoke (must fail)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+HTTP 204
+
 ## DELETE ledger_blocks smoke (must fail)
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+HTTP 204
+
 ## GET ledger smoke after
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.ledger_blocks' in the schema cache"}
+HTTP 200
+[{"idx":0,"hash":"smoke"}]
 ## POST zones Z-102
-HTTP 404
-{"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.zones' in the schema cache"}
+HTTP 201
+[{"id":102,"code":"Z-102","name":"Mangar Bani Sacred Grove","risk_level":null,"geojson":{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[77.12, 28.32], [77.22, 28.32], [77.22, 28.41], [77.12, 28.41], [77.12, 28.32]]]}},"geom":{"type":"Polygon","crs":{"type":"name","properties":{"name":"EPSG:4326"}},"coordinates":[[[77.12,28.32],[77.22,28.32],[77.22,28.41],[77.12,28.41],[77.12,
