@@ -1,0 +1,41 @@
+{
+  "_readme": "Court-documented land-change events used as ground-truth validation cases. Each AOI is a 2.56 km square at 10 m. T0 and T1 use the same weeks of the year to limit seasonal change. Coordinates come from public sources and are approximate; the change is checked in the data itself before any claim is made.",
+  "aois": [
+    {
+      "zone_id": "khori-gaon", "code": "CASE-1", "name": "Khori Gaon, Faridabad",
+      "kind": "case",
+      "event": "Supreme Court-ordered demolition of informal structures on Aravalli land protected under the Punjab Land Preservation Act, mid-2021.",
+      "expected_change": "Built-up structures removed (demolition), surface turns to rubble and bare earth",
+      "citation": "Supreme Court of India, Municipal Corporation of Faridabad v. Khori Gaon Residents Welfare Association, SLP (C) 7220-7221/2017, orders of 2021",
+      "source_url": "https://khorigaon.in/tag/demolition/",
+      "center": [77.2804, 28.4906],
+      "t0_range": "2021-03-01T00:00:00Z/2021-05-15T23:59:59Z",
+      "t1_range": "2022-03-01T00:00:00Z/2022-05-15T23:59:59Z",
+      "is_control": false, "verified": true
+    },
+    {
+      "zone_id": "kot-dhauj-mining", "code": "CASE-2", "name": "Kot / Dhauj, Faridabad Aravallis",
+      "kind": "case",
+      "event": "Reported illegal stone quarrying in the Aravalli hills despite the mining ban, 2021-2024.",
+      "expected_change": "Vegetation loss and new bare rock / soil (mining)",
+      "citation": "NGT OA 362/2022 (Aravalli Bachao Citizens Movement v. Union of India), as reported; unverified",
+      "source_url": "https://aravallibachao.org/",
+      "center": [77.1741, 28.3249],
+      "t0_range": "2021-03-01T00:00:00Z/2021-05-15T23:59:59Z",
+      "t1_range": "2024-03-01T00:00:00Z/2024-05-15T23:59:59Z",
+      "is_control": false, "verified": true
+    },
+    {
+      "zone_id": "yamuna-zone-o", "code": "CASE-3", "name": "Yamuna floodplain (Zone O), Delhi",
+      "kind": "case",
+      "event": "DDA clearance of encroachments (nurseries, structures, farms) on about 401 ha of Yamuna floodplain, 2023-2024.",
+      "expected_change": "Encroachments cleared: nurseries / farms / structures removed",
+      "citation": "Times of India, '401.4 hectares of floodplain freed from squatters on Yamuna riverbed', July 2024; NGT proceedings",
+      "source_url": "https://timesofindia.indiatimes.com/city/delhi/4014-hectares-of-floodplain-freed-from-squatters-on-yamuna-riverbed/articleshow/111765333.cms",
+      "center": [77.265, 28.621],
+      "t0_range": "2023-02-15T00:00:00Z/2023-05-15T23:59:59Z",
+      "t1_range": "2025-02-15T00:00:00Z/2025-05-15T23:59:59Z",
+      "is_control": false, "verified": true
+    }
+  ]
+}

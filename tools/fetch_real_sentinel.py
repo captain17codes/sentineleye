@@ -140,10 +140,14 @@ def check_reflectance(name, red, nir):
         )
 
 
-def read_optical(item, bbox, out_shape):
+EXTRA_BANDS = ("blue", "green", "swir16")  # B2, B3, B11 (B11 is 20 m, resampled to the 10 m grid)
+
+
+def read_optical(item, bbox, out_shape, extras=None):
+    keys = ["red", "nir"] + [k for k in EXTRA_BANDS if k in item["assets"]]
     dns = {
         key: read_window(item["assets"][key]["href"], bbox, out_shape, Resampling.bilinear).astype("float32")
-        for key in ("red", "nir")
+        for key in keys
     }
     # Decide once per scene from the red band (it always has dark pixels), apply to both bands.
     sc, off = scale_offset(item, "red", dns["red"])
@@ -154,7 +158,28 @@ def read_optical(item, bbox, out_shape):
         refl[dn == 0] = 0.0  # nodata
         bands[key] = np.clip(refl, 0.0, 1.0)
     scl = read_window(item["assets"]["scl"]["href"], bbox, out_shape, Resampling.nearest).astype("uint8")
+    if extras is not None:
+        extras.update({k: v for k, v in bands.items() if k in EXTRA_BANDS})
     return bands["red"], bands["nir"], scl
+
+
+def write_previews(zdir, tag, red, nir, extras):
+    """True-colour and NDVI PNG previews next to the JSON (needs Pillow; skipped if missing)."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+    if "blue" in extras and "green" in extras:
+        rgb = np.stack([red, extras["green"], extras["blue"]], -1)
+        rgb = np.clip((rgb / 0.25) ** (1 / 1.6), 0, 1)  # simple stretch + gamma for display
+        Image.fromarray((rgb * 255).astype("uint8")).resize((512, 512), Image.BILINEAR).save(
+            os.path.join(zdir, f"{tag}_rgb.png"), optimize=True)
+    v = ndvi(red, nir)
+    xs = np.array([0.0, 0.25, 0.45, 0.6, 0.8], "f4")
+    cs = np.array([[120, 84, 52], [170, 140, 95], [190, 190, 120], [110, 160, 70], [40, 110, 45]], "f4")
+    vv = np.clip(v, 0, 0.8)
+    img = np.stack([np.interp(vv, xs, cs[:, c]) for c in range(3)], -1).astype("uint8")
+    Image.fromarray(img).resize((512, 512), Image.NEAREST).save(os.path.join(zdir, f"{tag}_ndvi.png"), optimize=True)
 
 
 def ndvi(red, nir):
@@ -324,7 +349,7 @@ def cmd_find(args):
 
 
 # ───────────────────────── fetch: write app-ready crops ─────────────────────────
-def write_scene(path, item, aoi_cloud, bbox, red, nir, scl, sar_db, sar_item, source_note, is_control=False):
+def write_scene(path, item, aoi_cloud, bbox, red, nir, scl, sar_db, sar_item, source_note, is_control=False, extras=None):
     n = SIZE * SIZE
     payload = {
         "scene_id": item["id"],
@@ -336,6 +361,7 @@ def write_scene(path, item, aoi_cloud, bbox, red, nir, scl, sar_db, sar_item, so
         "nir": np.round(nir, 4).ravel().tolist(),
         "sar": (np.round(sar_db, 2).ravel().tolist() if sar_db is not None else [0.0] * n),
         "scl": scl.astype(int).ravel().tolist(),
+        **{k: np.round(v, 4).ravel().tolist() for k, v in (extras or {}).items()},
         "sar_available": sar_db is not None,
         "is_control": bool(is_control),
         "source": {
@@ -376,8 +402,9 @@ def cmd_fetch(args):
         if not i0 or not i1:
             print("  [fail] no cloud-free scene pair; widen the date ranges")
             continue
-        r0, n0, s0 = read_optical(i0, bbox, shape)
-        r1, n1, s1 = read_optical(i1, bbox, shape)
+        x0, x1 = {}, {}
+        r0, n0, s0 = read_optical(i0, bbox, shape, x0)
+        r1, n1, s1 = read_optical(i1, bbox, shape, x1)
         check_reflectance(f"{z['code']} T0", r0, n0)
         check_reflectance(f"{z['code']} T1", r1, n1)
 
@@ -399,19 +426,22 @@ def cmd_fetch(args):
         sar_ok = sar0 is not None and sar1 is not None
         note = "Optical + SAR" if sar_ok else "Optical only (no usable Sentinel-1 RTC pair); SAR channel is zero-filled and flagged sar_available=false"
         zdir = os.path.join(args.out_dir, str(z["zone_id"]))
-        write_scene(os.path.join(zdir, "t0.json"), i0, c0, bbox, r0, n0, s0, sar0 if sar_ok else None, sar_i0, note, z.get("is_control"))
-        write_scene(os.path.join(zdir, "t1.json"), i1, c1, bbox, r1, n1, s1, sar1 if sar_ok else None, sar_i1, note, z.get("is_control"))
+        write_scene(os.path.join(zdir, "t0.json"), i0, c0, bbox, r0, n0, s0, sar0 if sar_ok else None, sar_i0, note, z.get("is_control"), x0)
+        write_scene(os.path.join(zdir, "t1.json"), i1, c1, bbox, r1, n1, s1, sar1 if sar_ok else None, sar_i1, note, z.get("is_control"), x1)
+        write_previews(zdir, "t0", r0, n0, x0)
+        write_previews(zdir, "t1", r1, n1, x1)
 
         entry = {
             "zone_id": z["zone_id"], "code": z["code"], "name": z["name"], "bbox": [round(v, 7) for v in bbox],
             "center": z["center"], "is_control": bool(z.get("is_control")), "verified_by_human": bool(z.get("verified")),
             "notes": z.get("notes", ""), "sar_available": sar_ok,
+            **{k: z[k] for k in ("kind", "event", "expected_change", "citation", "source_url") if k in z},
             "t0": {"scene_id": i0["id"], "datetime": i0["properties"]["datetime"], "aoi_cloud_pct": round(c0 * 100, 2)},
             "t1": {"scene_id": i1["id"], "datetime": i1["properties"]["datetime"], "aoi_cloud_pct": round(c1 * 100, 2)},
         }
         manifest["zones"] = [m for m in manifest.get("zones", []) if m.get("zone_id") != z["zone_id"]] + [entry]
         done += 1
-    manifest["zones"].sort(key=lambda m: m["zone_id"])
+    manifest["zones"].sort(key=lambda m: str(m["zone_id"]))
     json.dump(manifest, open(manifest_path, "w"), indent=2)
     print(f"\nDone: {done} AOI(s). Manifest: {manifest_path}")
     print("REMINDER: update frontend/public/real/ground_truth.geojson with polygons YOU drew by hand "
