@@ -49,6 +49,7 @@ export function Landing() {
 
   // Auth Card State
   const [tab, setTab] = useState<'signin' | 'register'>('signin');
+  const [showAuth, setShowAuth] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -155,6 +156,7 @@ export function Landing() {
     { name: 'Evidence ledger (SHA-256 chain, ECDSA signatures, tamper detection)', pct: 100, note: 'Working, tested' },
     { name: 'Draft notice PDF with Section 63 BSA certificate and verify page', pct: 100, note: 'Working' },
     { name: 'Web application (dashboard, map, scan, alerts, ledger)', pct: 95, note: 'Deployed' },
+    { name: 'Database (Supabase: PostgreSQL + PostGIS)', pct: 85, note: 'Live: alerts, append-only ledger, zones' },
     { name: 'Real Sentinel-2 imagery', pct: 65, note: '2 sites + 3 court-documented cases' },
     { name: 'Automatic periodic image fetching', pct: 40, note: 'Script + workflow, not scheduled yet' },
     { name: 'Official zone boundaries', pct: 30, note: 'Indicative polygons for now' },
@@ -173,64 +175,243 @@ export function Landing() {
     <div className="min-h-screen bg-[#0a0a0a] text-[#f5f5f0] flex flex-col selection:bg-[#facc15]/20 selection:text-white">
       {/* ── 1. Full-Viewport Entry Screen (Hero + Globe + Auth Card) ── */}
       <HeroShell>
-        {/* Top Bar: Logo Top-Left only (No top nav pill) */}
-        <header className="relative z-20 flex items-center justify-between w-full">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#facc15] flex items-center justify-center text-[#0a0a0a] font-bold shadow-sm">
-              <Shield className="w-4 h-4 text-[#0a0a0a]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-sm tracking-tight text-[#f5f5f0] font-sans">
-                SENTINELEYE
+        {/* Pill navigation */}
+        <header className="relative z-20 flex justify-center w-full pt-2">
+          <nav className="flex items-center gap-1 p-1.5 rounded-full border border-white/10 bg-[#0d0d0d]/70 backdrop-blur-md shadow-[0_0_40px_rgba(250,204,21,0.06)]">
+            <span className="flex items-center gap-2 pl-1.5 pr-3">
+              <span className="w-7 h-7 rounded-full bg-[#facc15] flex items-center justify-center">
+                <Shield className="w-3.5 h-3.5 text-[#0a0a0a]" />
               </span>
-              <span className="text-[10px] text-[#b5b5ad] font-sans">
-                Land encroachment monitoring
-              </span>
-            </div>
-          </div>
-
+              <span className="font-display text-sm tracking-wide text-[#f5f5f0]">SentinelEye</span>
+            </span>
+            {[
+              { href: '#example', label: 'Real example' },
+              { href: '#how', label: 'How it works' },
+              { href: '#status', label: 'Status' },
+            ].map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="hidden md:inline-flex px-3.5 py-1.5 rounded-full text-[11px] font-medium uppercase tracking-[0.14em] text-[#b5b5ad] hover:text-[#f5f5f0] hover:bg-white/5 transition-colors"
+              >
+                {l.label}
+              </a>
+            ))}
+            <button
+              type="button"
+              onClick={() => (user ? navigate('/overview') : setShowAuth(true))}
+              className="ml-1 inline-flex px-4 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.14em] text-[#facc15] border border-[#facc15]/40 hover:bg-[#facc15]/10 transition-colors"
+            >
+              {user ? 'Open dashboard' : 'Sign in'}
+            </button>
+          </nav>
         </header>
 
-        {/* Viewport Center Content: Left Headline & Right Solid Login Card */}
-        <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto py-8">
-          {/* Left Column: plain statement of what the tool does */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
-            <p className="text-xs font-medium uppercase tracking-wider text-[#facc15] mb-4">
-              Protected land around Delhi NCR
-            </p>
-
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#f5f5f0] leading-[1.15] max-w-2xl">
-              Spot illegal construction and clearing in protected land, from satellite images.
+        {/* Hero: light two-tone headline, short copy, stats */}
+        <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mt-[14vh]">
+          <div className="lg:col-span-5">
+            <h1 className="font-display font-light text-5xl sm:text-6xl lg:text-[4.4rem] leading-[1.04] tracking-tight text-[#f5f5f0]">
+              Watch protected land
+              <span className="block text-[#a8a8a0]">from orbit</span>
             </h1>
-
-            <p className="mt-5 text-base text-[#b5b5ad] max-w-xl leading-relaxed">
-              SentinelEye compares Sentinel-2 images of protected zones taken years apart, flags vegetation loss
-              and new construction inside the boundary, and keeps a tamper-evident record that an officer can
-              take forward as evidence.
-            </p>
-
-            <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-4 text-sm">
-              <div>
-                <dt className="text-[#8f8f86] text-xs">Protected zones</dt>
-                <dd className="text-[#f5f5f0] font-semibold mt-0.5">8</dd>
-              </div>
-              <div>
-                <dt className="text-[#8f8f86] text-xs">Pixel size</dt>
-                <dd className="text-[#f5f5f0] font-semibold mt-0.5">10 m</dd>
-              </div>
-              <div>
-                <dt className="text-[#8f8f86] text-xs">New image every</dt>
-                <dd className="text-[#f5f5f0] font-semibold mt-0.5">5 days</dd>
-              </div>
-              <div>
-                <dt className="text-[#8f8f86] text-xs">Data</dt>
-                <dd className="text-[#f5f5f0] font-semibold mt-0.5">Copernicus, free</dd>
-              </div>
-            </dl>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => (user ? navigate('/overview') : fillDemoAccount())}
+                disabled={loading}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#facc15] text-[#0a0a0a] text-sm font-semibold shadow-[0_0_30px_rgba(250,204,21,0.35)] hover:bg-[#fde047] transition-colors disabled:opacity-60"
+              >
+                {user ? 'Open dashboard' : loading ? 'Signing in…' : 'Sign in as field operator'}
+                <span className="w-1.5 h-1.5 rounded-full border border-[#0a0a0a]" />
+              </button>
+              <a
+                href="#example"
+                className="inline-flex items-center px-6 py-3 rounded-full border border-white/15 text-sm font-medium text-[#f5f5f0] hover:bg-white/5 transition-colors"
+              >
+                See a real case
+              </a>
+            </div>
           </div>
 
-          {/* Right Column: 400px Solid Login Card (NO blur, solid #121212) */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end w-full">
+          <p className="lg:col-span-3 lg:pt-3 text-[15px] leading-relaxed text-[#b5b5ad] max-w-sm">
+            SentinelEye compares free Sentinel-2 images of protected zones taken years apart, flags clearing and
+            construction inside the boundary, and seals every finding in a tamper-evident record.
+          </p>
+
+          <ul className="lg:col-span-4 flex flex-col gap-7 lg:items-end lg:pt-2">
+            {[
+              { icon: Radar, label: 'Pixel detail', value: '10 m, every 5 days' },
+              { icon: Scale, label: 'Validated on a court case', value: 'Khori Gaon, within 177 m' },
+              { icon: Lock, label: 'Evidence', value: 'Append-only, Section 63 BSA' },
+            ].map((st, i) => (
+              <li key={st.label} className="flex items-center gap-3 min-w-[230px]" style={{ marginRight: `${(2 - i) * 1.5}rem` }}>
+                <span className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center">
+                  <st.icon className="w-3.5 h-3.5 text-[#d6d6cf]" />
+                </span>
+                <span className="flex flex-col">
+                  <span className="text-xs text-[#a8a8a0]">{st.label}</span>
+                  <span className="text-sm font-semibold text-[#f5f5f0]">{st.value}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Vertical scroll cue */}
+        <div className="absolute z-20 left-1/2 -translate-x-1/2 bottom-6 hidden md:flex flex-col items-center gap-3 pointer-events-none">
+          <span className="text-[10px] tracking-[0.35em] text-[#8f8f86] [writing-mode:vertical-rl]">SCROLL</span>
+          <span className="w-px h-14 bg-gradient-to-b from-[#8f8f86] to-transparent" />
+        </div>
+      </HeroShell>
+
+      {/* ── 2. A real example ── */}
+      <section className="w-full max-w-6xl mx-auto px-6 sm:px-10 py-24 flex flex-col gap-28">
+        <div id="example" className="flex flex-col gap-8 scroll-mt-10">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#facc15]">Real Sentinel-2 data</p>
+            <h2 className="font-display font-light text-3xl sm:text-[2.6rem] leading-[1.1] text-[#f5f5f0] mt-4">Mangar Bani sacred grove<span className="block text-[#a8a8a0]">2022 vs 2026</span></h2>
+            <p className="text-[15px] text-[#b5b5ad] mt-5 leading-relaxed">
+              Two Sentinel-2 images of the same 2.6 × 2.6 km area, taken in the same season four years apart.
+              Colours show vegetation (NDVI): green is dense vegetation, brown is bare ground. On the right, red
+              marks pixels where vegetation dropped sharply.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { src: '/evidence/real/z102_t0_ndvi.png', label: '30 March 2022', sub: 'S2B_43RGM_20220330' },
+              { src: '/evidence/real/z102_t1_ndvi.png', label: '5 April 2026', sub: 'S2A_43RGM_20260405' },
+              { src: '/evidence/real/z102_change.png', label: 'Vegetation loss', sub: 'NDVI drop greater than 0.25' },
+            ].map((img) => (
+              <figure key={img.src} className="flex flex-col gap-2">
+                <img
+                  src={img.src}
+                  alt={`${img.label}, Mangar Bani`}
+                  className="w-full aspect-square object-cover rounded-md border border-[#2e2e2e]"
+                  style={{ imageRendering: 'pixelated' }}
+                  loading="lazy"
+                />
+                <figcaption className="flex items-baseline justify-between gap-2">
+                  <span className="text-sm font-medium text-[#f5f5f0]">{img.label}</span>
+                  <span className="text-[11px] font-mono text-[#8f8f86]">{img.sub}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <p className="text-sm text-[#b5b5ad] max-w-3xl leading-relaxed">
+            About 3.7 hectares of pixels lost vegetation, mostly around the existing settlement in the middle of
+            the image. The system reports these as candidates for an officer to check, not as confirmed violations.
+          </p>
+        </div>
+
+        {/* ── 3. How it works ── */}
+        <div id="how" className="flex flex-col gap-10 scroll-mt-10">
+          <div className="text-center max-w-2xl mx-auto">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#facc15]">Everything in one pipeline</p>
+            <h2 className="font-display font-light text-3xl sm:text-[2.6rem] leading-[1.1] text-[#f5f5f0] mt-4">From orbit<span className="block text-[#a8a8a0]">to evidence</span></h2>
+          </div>
+          <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {pipelineSteps.map((step, idx) => (
+              <li key={step.name} className="flex gap-3 p-5 rounded-2xl border border-white/10 bg-white/[0.02]">
+                <span className="w-8 h-8 flex-shrink-0 rounded-lg border border-white/10 bg-white/[0.03] flex items-center justify-center font-mono text-xs text-[#facc15]">{idx + 1}</span>
+                <div>
+                  <p className="text-sm font-medium text-[#f5f5f0]">{step.name}</p>
+                  <p className="text-xs text-[#b5b5ad] mt-0.5 leading-relaxed">{step.sub}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* ── 4. From alert to notice ── */}
+        <div className="flex flex-col gap-10">
+          <div className="text-center max-w-2xl mx-auto">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#facc15]">Workflow</p>
+            <h2 className="font-display font-light text-3xl sm:text-[2.6rem] leading-[1.1] text-[#f5f5f0] mt-4">From alert to notice</h2>
+            <p className="text-[15px] text-[#b5b5ad] mt-4">The software prepares the case. People make the decisions.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {escalationTimeline.map((item) => (
+              <div key={item.time} className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-[#8f8f86]">{item.time}</span>
+                  <span className="text-[11px] text-[#b5b5ad]">{item.badge}</span>
+                </div>
+                <h3 className="text-base font-semibold text-[#f5f5f0]">{item.title}</h3>
+                <p className="text-sm text-[#b5b5ad] leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 5. Honest scope ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-base font-semibold text-[#f5f5f0] mb-3">What it can do</h2>
+            <ul className="flex flex-col gap-2 text-sm text-[#b5b5ad]">
+              {canDo.map((t) => (
+                <li key={t} className="flex gap-2">
+                  <span className="text-[#facc15]">✓</span>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-[#f5f5f0] mb-3">What it can't do</h2>
+            <ul className="flex flex-col gap-2 text-sm text-[#b5b5ad]">
+              {cannotDo.map((t) => (
+                <li key={t} className="flex gap-2">
+                  <span className="text-[#8f8f86]">–</span>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* ── Project status ── */}
+        <div id="status" className="flex flex-col gap-8 scroll-mt-10">
+          <div className="flex items-end justify-between flex-wrap gap-4">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#facc15]">Where it stands</p>
+              <h2 className="font-display font-light text-3xl sm:text-[2.6rem] leading-[1.1] text-[#f5f5f0] mt-4">Project status</h2>
+            </div>
+            <span className="text-sm text-[#b5b5ad]">
+              Prototype about <span className="text-[#facc15] font-semibold">88%</span> complete · 47 automated tests passing
+            </span>
+          </div>
+          <ul className="flex flex-col gap-3">
+            {projectStatus.map((m) => (
+              <li key={m.name} className="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 items-center">
+                <span className="sm:col-span-6 text-sm text-[#f5f5f0]">{m.name}</span>
+                <div className="sm:col-span-4 h-2 rounded-full bg-[#2e2e2e] overflow-hidden">
+                  <div className="h-full rounded-full bg-[#facc15]" style={{ width: `${m.pct}%` }} />
+                </div>
+                <span className="sm:col-span-2 text-xs text-[#b5b5ad]">
+                  <span className="text-[#f5f5f0] font-medium">{m.pct}%</span> · {m.note}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-[#8f8f86]">
+            Source code and the data-fetch workflow are public on GitHub: github.com/captain17codes/sentineleye
+          </p>
+        </div>
+
+        {/* ── 6. Footer ── */}
+        <footer className="pt-8 border-t border-[#2e2e2e] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#8f8f86]">
+          <span>SentinelEye · land encroachment monitoring prototype</span>
+          <span>Contains modified Copernicus Sentinel data (2022, 2026). Zone boundaries are indicative.</span>
+        </footer>
+      </section>
+      {showAuth && !user && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+          onClick={() => setShowAuth(false)}
+        >
+          <div onClick={(e) => e.stopPropagation()} className="w-full flex justify-center">
             <div className="w-full max-w-[400px] rounded-xl bg-[#121212] border border-[#2e2e2e] p-6 sm:p-7 shadow-2xl flex flex-col">
               {user ? (
                 /* Active Session State: Instant 1-Click Access to Console */
@@ -423,148 +604,7 @@ export function Landing() {
             </div>
           </div>
         </div>
-
-        {/* Bottom indicator for scrolling */}
-        <div className="relative z-20 flex items-center justify-between pt-4 border-t border-[#242424] text-xs text-[#b5b5ad]">
-          <span>8 protected zones · Delhi NCR</span>
-          <span className="text-[#8f8f86]">Scroll to follow a satellite ↓</span>
-        </div>
-      </HeroShell>
-
-      {/* ── 2. A real example ── */}
-      <section className="w-full max-w-6xl mx-auto px-6 sm:px-10 py-16 flex flex-col gap-16">
-        <div className="flex flex-col gap-5">
-          <div className="max-w-3xl">
-            <h2 className="text-xl font-semibold text-[#f5f5f0]">A real example: Mangar Bani sacred grove</h2>
-            <p className="text-sm text-[#b5b5ad] mt-2 leading-relaxed">
-              Two Sentinel-2 images of the same 2.6 × 2.6 km area, taken in the same season four years apart.
-              Colours show vegetation (NDVI): green is dense vegetation, brown is bare ground. On the right, red
-              marks pixels where vegetation dropped sharply.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { src: '/evidence/real/z102_t0_ndvi.png', label: '30 March 2022', sub: 'S2B_43RGM_20220330' },
-              { src: '/evidence/real/z102_t1_ndvi.png', label: '5 April 2026', sub: 'S2A_43RGM_20260405' },
-              { src: '/evidence/real/z102_change.png', label: 'Vegetation loss', sub: 'NDVI drop greater than 0.25' },
-            ].map((img) => (
-              <figure key={img.src} className="flex flex-col gap-2">
-                <img
-                  src={img.src}
-                  alt={`${img.label}, Mangar Bani`}
-                  className="w-full aspect-square object-cover rounded-md border border-[#2e2e2e]"
-                  style={{ imageRendering: 'pixelated' }}
-                  loading="lazy"
-                />
-                <figcaption className="flex items-baseline justify-between gap-2">
-                  <span className="text-sm font-medium text-[#f5f5f0]">{img.label}</span>
-                  <span className="text-[11px] font-mono text-[#8f8f86]">{img.sub}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-
-          <p className="text-sm text-[#b5b5ad] max-w-3xl leading-relaxed">
-            About 3.7 hectares of pixels lost vegetation, mostly around the existing settlement in the middle of
-            the image. The system reports these as candidates for an officer to check, not as confirmed violations.
-          </p>
-        </div>
-
-        {/* ── 3. How it works ── */}
-        <div className="flex flex-col gap-5">
-          <h2 className="text-xl font-semibold text-[#f5f5f0]">How it works</h2>
-          <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
-            {pipelineSteps.map((step, idx) => (
-              <li key={step.name} className="flex gap-3">
-                <span className="font-mono text-sm text-[#facc15] pt-0.5">{idx + 1}</span>
-                <div>
-                  <p className="text-sm font-medium text-[#f5f5f0]">{step.name}</p>
-                  <p className="text-xs text-[#b5b5ad] mt-0.5 leading-relaxed">{step.sub}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        {/* ── 4. From alert to notice ── */}
-        <div className="flex flex-col gap-5">
-          <div>
-            <h2 className="text-xl font-semibold text-[#f5f5f0]">From alert to notice</h2>
-            <p className="text-sm text-[#b5b5ad] mt-1">The software prepares the case. People make the decisions.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {escalationTimeline.map((item) => (
-              <div key={item.time} className="p-5 rounded-md bg-[#121212] border border-[#2e2e2e] flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8f8f86]">{item.time}</span>
-                  <span className="text-[11px] text-[#b5b5ad]">{item.badge}</span>
-                </div>
-                <h3 className="text-base font-semibold text-[#f5f5f0]">{item.title}</h3>
-                <p className="text-sm text-[#b5b5ad] leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── 5. Honest scope ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-base font-semibold text-[#f5f5f0] mb-3">What it can do</h2>
-            <ul className="flex flex-col gap-2 text-sm text-[#b5b5ad]">
-              {canDo.map((t) => (
-                <li key={t} className="flex gap-2">
-                  <span className="text-[#facc15]">✓</span>
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-[#f5f5f0] mb-3">What it can't do</h2>
-            <ul className="flex flex-col gap-2 text-sm text-[#b5b5ad]">
-              {cannotDo.map((t) => (
-                <li key={t} className="flex gap-2">
-                  <span className="text-[#8f8f86]">–</span>
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* ── Project status ── */}
-        <div className="flex flex-col gap-5">
-          <div className="flex items-baseline justify-between flex-wrap gap-2">
-            <h2 className="text-xl font-semibold text-[#f5f5f0]">Project status</h2>
-            <span className="text-sm text-[#b5b5ad]">
-              Prototype about <span className="text-[#facc15] font-semibold">85%</span> complete · 37 automated tests passing
-            </span>
-          </div>
-          <ul className="flex flex-col gap-3">
-            {projectStatus.map((m) => (
-              <li key={m.name} className="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 items-center">
-                <span className="sm:col-span-6 text-sm text-[#f5f5f0]">{m.name}</span>
-                <div className="sm:col-span-4 h-2 rounded-full bg-[#2e2e2e] overflow-hidden">
-                  <div className="h-full rounded-full bg-[#facc15]" style={{ width: `${m.pct}%` }} />
-                </div>
-                <span className="sm:col-span-2 text-xs text-[#b5b5ad]">
-                  <span className="text-[#f5f5f0] font-medium">{m.pct}%</span> · {m.note}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="text-xs text-[#8f8f86]">
-            Source code and the data-fetch workflow are public on GitHub: github.com/captain17codes/sentineleye
-          </p>
-        </div>
-
-        {/* ── 6. Footer ── */}
-        <footer className="pt-8 border-t border-[#2e2e2e] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#8f8f86]">
-          <span>SentinelEye · land encroachment monitoring prototype</span>
-          <span>Contains modified Copernicus Sentinel data (2022, 2026). Zone boundaries are indicative.</span>
-        </footer>
-      </section>
+      )}
     </div>
   );
 }

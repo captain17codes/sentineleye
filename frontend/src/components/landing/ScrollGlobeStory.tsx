@@ -18,7 +18,7 @@ type Pov = { lat: number; lng: number; altitude: number };
 
 // Camera keyframes along scroll progress (0..1).
 const KEYS: { p: number; pov: Pov }[] = [
-  { p: 0.0, pov: { lat: 18, lng: 30, altitude: 2.6 } },
+  { p: 0.0, pov: { lat: 48, lng: 40, altitude: 1.55 } },
   { p: 0.18, pov: { lat: 22, lng: 78, altitude: 2.3 } },
   { p: 0.36, pov: { lat: 24, lng: 77.5, altitude: 1.5 } },
   { p: 0.52, pov: { lat: 27.5, lng: 77.3, altitude: 0.9 } },
@@ -31,30 +31,49 @@ const CHAPTERS = [
   {
     from: 0.1,
     to: 0.33,
+    kicker: 'The data',
     title: 'Free images of all land, every five days',
     body: "The European Space Agency's Sentinel-2 satellites photograph every piece of land on Earth at 10-metre detail. Anyone can download the images.",
   },
   {
     from: 0.33,
     to: 0.55,
+    kicker: 'The satellite',
     title: 'A Sentinel-2 pass over Delhi',
     body: 'About 786 km up, the satellite records a 290 km wide strip as it moves. Sentinel-1 radar works the same way and can see through cloud.',
   },
   {
     from: 0.55,
     to: 0.78,
+    kicker: 'The boundaries',
     title: '8 protected zones in Delhi NCR',
     body: 'The Ridge forest, Yamuna floodplain, Asola Bhatti, Mangar Bani and others. SentinelEye checks every change against these boundaries.',
   },
   {
     from: 0.78,
     to: 1.01,
+    kicker: 'The site',
     title: 'Mangar Bani sacred grove',
     body: 'We compare the same 2.6 km square in March 2022 and April 2026. Scroll down to see the real images.',
   },
 ];
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+
+// Deterministic starfield as layered radial gradients (no images, no runtime cost).
+const STARS = (() => {
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const out: string[] = [];
+  for (let i = 0; i < 140; i++) {
+    const x = (rnd() * 100).toFixed(2);
+    const y = (rnd() * 100).toFixed(2);
+    const r = rnd() < 0.85 ? 0.6 : 1.1;
+    const a = (0.35 + rnd() * 0.6).toFixed(2);
+    out.push(`radial-gradient(${r}px ${r}px at ${x}% ${y}%, rgba(255,255,255,${a}), transparent 100%)`);
+  }
+  return out.join(',');
+})();
 
 // The globe treats clockwise rings as the inside of a polygon; a counter-clockwise ring
 // would fill the rest of the planet instead. Normalise every outer ring to clockwise.
@@ -343,11 +362,30 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
   }
 
   const heroOpacity = 1 - smooth(clamp((progress - 0.04) / 0.08));
+  // 0 at the top of the page (Earth rises from the bottom edge), 1 once the story starts
+  const rise = smooth(clamp(progress / 0.14));
 
   return (
     <section ref={sectionRef} className="relative w-full border-b border-[#242424]" style={{ height: '520vh' }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#050505]">
-        <div className="absolute inset-0">
+        {/* starfield */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-70"
+          style={{ backgroundImage: STARS, backgroundSize: '100% 100%' }}
+        />
+        {/* faint vertical guides */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[0.29, 0.5, 0.71].map((x) => (
+            <span key={x} className="absolute top-0 bottom-0 w-px bg-white/[0.04]" style={{ left: `${x * 100}%` }} />
+          ))}
+        </div>
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: `translateY(${(1 - rise) * 58}vh) scale(${1 + (1 - rise) * 0.55})`,
+            transformOrigin: '50% 50%',
+          }}
+        >
           <Globe
             ref={globeRef}
             width={size.w}
@@ -405,8 +443,15 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
           />
         </div>
 
-        {/* legibility gradient on the left */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050505]/85 via-[#050505]/30 to-transparent" />
+        {/* legibility: soft top fade for the hero, left fade for chapters */}
+        <div
+          className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#050505] via-[#050505]/40 to-transparent"
+          style={{ opacity: heroOpacity * 0.9 }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050505]/85 via-[#050505]/30 to-transparent"
+          style={{ opacity: 1 - heroOpacity }}
+        />
 
         {/* Chapter 0: hero (headline + sign in) */}
         <div
@@ -428,8 +473,9 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
               className="absolute z-20 left-6 sm:left-10 lg:left-14 bottom-[18vh] max-w-md pointer-events-none"
               style={{ opacity: o, transform: `translateY(${(1 - o) * 16}px)` }}
             >
-              <h2 className="text-2xl sm:text-3xl font-semibold text-[#f5f5f0] leading-tight">{c.title}</h2>
-              <p className="mt-3 text-base text-[#d6d6cf] leading-relaxed">{c.body}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#facc15] mb-3">{c.kicker}</p>
+              <h2 className="font-display font-light text-3xl sm:text-[2.6rem] text-[#f5f5f0] leading-[1.1]">{c.title}</h2>
+              <p className="mt-4 text-[15px] text-[#cfcfc8] leading-relaxed">{c.body}</p>
             </div>
           );
         })}

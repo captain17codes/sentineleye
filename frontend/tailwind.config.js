@@ -28,6 +28,7 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
+        display: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         'DEFAULT': '8px',
