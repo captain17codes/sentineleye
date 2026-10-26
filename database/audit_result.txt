@@ -1,8 +1,8 @@
 
-===== DB AUDIT BEFORE @ 2026-10-26T19:15:38.617Z =====
+===== DB AUDIT BEFORE @ 2026-10-26T19:17:28.775Z =====
 rows alerts: 38
-rows ledger_blocks: 40
-rows chain_anchors: 1
+rows ledger_blocks: 80
+rows chain_anchors: 2
 rows zones: 8
   zone Z-101 Delhi Ridge Forest Sector C: 7702.5 ha
   zone Z-102 Mangar Bani Sacred Grove: 7077.7 ha
@@ -12,28 +12,70 @@ rows zones: 8
   zone Z-106 Sariska Buffer Zone B: 9018.9 ha
   zone Z-107 Bhindawas Wetland Zone: 7418.7 ha
   zone Z-108 Haryana Agricultural Reserve: 8007.2 ha
-alerts by status: {"Verified":17,"New":14,"Notice Issued":7}
+alerts by status: {"Notice Issued":8,"Verified":16,"New":14}
 alerts missing lat/lng: 0
 alerts from real scenes: 0
-latest alert update: 2026-10-26T19:14:47.735974+00:00
+latest alert update: 2026-10-26T19:16:25.391841+00:00
 PostGIS alert_zone_check: 38 rows, inside=38, outside=0
-ledger chains: 2
+ledger chains: 3
+  chain aed850e87c7e1289-9ff549b0aa723e46: 40 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 40/40 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
   chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
   chain smoke-test: 1 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 0/1 (raw ts 0), unsigned 1, types SMOKE
-anchors: 1, pointing at a stored block: 1
+anchors: 2, pointing at a stored block: 2
 live bundle: assets/index-ZS3ViKBC.js
 after login: url=https://sentineleye-ebon.vercel.app/overview chip="DB: Supabase synced"
+scan page after run: Alerts created
 alert #601: clicked "Mark Notice Issued", row now shows "Notice IssuedMark Signed & Served"
 ledger compare in UI: The latest block hash is saved in a separate anchor record. In this prototype the anchor is stored locally; in production it would be published to a public timestamping service.
-browser chain: 40 blocks, chain_id aed850e87c7e1289-9ff549b0aa723e46
+browser chain: 40 blocks, chain_id aed850e87c7e1289-44ee6715de40a2b3
 DB copy of this chain: 40 blocks; missing in DB: []; hash differs: []
-E2E FAILED (exit 1)
+alert #601: browser status "Notice Issued", DB status "Notice Issued" (updated 2026-10-26T19:18:13.171723+00:00)
+browser alerts: 38; not in DB: []; status differs: []
+supabase requests (39):
+  7x POST alerts -> 200
+  7x FAILED POST alerts net::ERR_ABORTED
+  4x GET alerts -> 200
+  1x POST chain_anchors -> 201
+  1x FAILED POST chain_anchors net::ERR_ABORTED
+  4x POST zones -> 200
+  4x FAILED POST zones net::ERR_ABORTED
+  5x POST ledger_blocks -> 201
+  5x FAILED POST ledger_blocks net::ERR_ABORTED
+  1x GET ledger_blocks -> 200
+console errors (7):
+  Failed to load resource: the server responded with a status of 404 ()
+
+===== DB AUDIT AFTER @ 2026-10-26T19:18:23.169Z =====
+rows alerts: 38
+rows ledger_blocks: 120
+rows chain_anchors: 3
+rows zones: 8
+  zone Z-101 Delhi Ridge Forest Sector C: 7702.5 ha
+  zone Z-102 Mangar Bani Sacred Grove: 7077.7 ha
+  zone Z-103 Yamuna Floodplain Sector 7: 8393.3 ha
+  zone Z-104 Asola Bhatti Wildlife Sanctuary: 8703.6 ha
+  zone Z-105 Aravalli Forest Reserve: 8381.5 ha
+  zone Z-106 Sariska Buffer Zone B: 9018.9 ha
+  zone Z-107 Bhindawas Wetland Zone: 7418.7 ha
+  zone Z-108 Haryana Agricultural Reserve: 8007.2 ha
+alerts by status: {"Notice Issued":8,"Verified":16,"New":14}
+alerts missing lat/lng: 0
+alerts from real scenes: 0
+latest alert update: 2026-10-26T19:18:13.171723+00:00
+PostGIS alert_zone_check: 38 rows, inside=38, outside=0
+ledger chains: 4
+  chain aed850e87c7e1289-44ee6715de40a2b3: 40 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 40/40 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain aed850e87c7e1289-9ff549b0aa723e46: 40 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 40/40 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain smoke-test: 1 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 0/1 (raw ts 0), unsigned 1, types SMOKE
+anchors: 3, pointing at a stored block: 3
+append-only probe on aed850e87c7e1289-44ee671#39: PATCH -> 200 [] | DELETE -> 200 [] | hash unchanged: true
 ----- raw log -----
 
-===== DB AUDIT BEFORE @ 2026-10-26T19:15:38.617Z =====
+===== DB AUDIT BEFORE @ 2026-10-26T19:17:28.775Z =====
 rows alerts: 38
-rows ledger_blocks: 40
-rows chain_anchors: 1
+rows ledger_blocks: 80
+rows chain_anchors: 2
 rows zones: 8
   zone Z-101 Delhi Ridge Forest Sector C: 7702.5 ha
   zone Z-102 Mangar Bani Sacred Grove: 7077.7 ha
@@ -43,29 +85,61 @@ rows zones: 8
   zone Z-106 Sariska Buffer Zone B: 9018.9 ha
   zone Z-107 Bhindawas Wetland Zone: 7418.7 ha
   zone Z-108 Haryana Agricultural Reserve: 8007.2 ha
-alerts by status: {"Verified":17,"New":14,"Notice Issued":7}
+alerts by status: {"Notice Issued":8,"Verified":16,"New":14}
 alerts missing lat/lng: 0
 alerts from real scenes: 0
-latest alert update: 2026-10-26T19:14:47.735974+00:00
+latest alert update: 2026-10-26T19:16:25.391841+00:00
 PostGIS alert_zone_check: 38 rows, inside=38, outside=0
-ledger chains: 2
+ledger chains: 3
+  chain aed850e87c7e1289-9ff549b0aa723e46: 40 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 40/40 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
   chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
   chain smoke-test: 1 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 0/1 (raw ts 0), unsigned 1, types SMOKE
-anchors: 1, pointing at a stored block: 1
+anchors: 2, pointing at a stored block: 2
 live bundle: assets/index-ZS3ViKBC.js
 after login: url=https://sentineleye-ebon.vercel.app/overview chip="DB: Supabase synced"
+scan page after run: Alerts created
 alert #601: clicked "Mark Notice Issued", row now shows "Notice IssuedMark Signed & Served"
 ledger compare in UI: The latest block hash is saved in a separate anchor record. In this prototype the anchor is stored locally; in production it would be published to a public timestamping service.
-browser chain: 40 blocks, chain_id aed850e87c7e1289-9ff549b0aa723e46
+browser chain: 40 blocks, chain_id aed850e87c7e1289-44ee6715de40a2b3
 DB copy of this chain: 40 blocks; missing in DB: []; hash differs: []
-file:///home/runner/work/sentineleye/sentineleye/tools/audit/e2e_live.mjs:110
-const localAlert = local.alerts.find((a) => a.id === alertId);
-                                                     ^
+alert #601: browser status "Notice Issued", DB status "Notice Issued" (updated 2026-10-26T19:18:13.171723+00:00)
+browser alerts: 38; not in DB: []; status differs: []
+supabase requests (39):
+  7x POST alerts -> 200
+  7x FAILED POST alerts net::ERR_ABORTED
+  4x GET alerts -> 200
+  1x POST chain_anchors -> 201
+  1x FAILED POST chain_anchors net::ERR_ABORTED
+  4x POST zones -> 200
+  4x FAILED POST zones net::ERR_ABORTED
+  5x POST ledger_blocks -> 201
+  5x FAILED POST ledger_blocks net::ERR_ABORTED
+  1x GET ledger_blocks -> 200
+console errors (7):
+  Failed to load resource: the server responded with a status of 404 ()
 
-ReferenceError: alertId is not defined
-    at file:///home/runner/work/sentineleye/sentineleye/tools/audit/e2e_live.mjs:110:54
-    at Array.find (<anonymous>)
-    at file:///home/runner/work/sentineleye/sentineleye/tools/audit/e2e_live.mjs:110:33
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-
-Node.js v20.20.2
+===== DB AUDIT AFTER @ 2026-10-26T19:18:23.169Z =====
+rows alerts: 38
+rows ledger_blocks: 120
+rows chain_anchors: 3
+rows zones: 8
+  zone Z-101 Delhi Ridge Forest Sector C: 7702.5 ha
+  zone Z-102 Mangar Bani Sacred Grove: 7077.7 ha
+  zone Z-103 Yamuna Floodplain Sector 7: 8393.3 ha
+  zone Z-104 Asola Bhatti Wildlife Sanctuary: 8703.6 ha
+  zone Z-105 Aravalli Forest Reserve: 8381.5 ha
+  zone Z-106 Sariska Buffer Zone B: 9018.9 ha
+  zone Z-107 Bhindawas Wetland Zone: 7418.7 ha
+  zone Z-108 Haryana Agricultural Reserve: 8007.2 ha
+alerts by status: {"Notice Issued":8,"Verified":16,"New":14}
+alerts missing lat/lng: 0
+alerts from real scenes: 0
+latest alert update: 2026-10-26T19:18:13.171723+00:00
+PostGIS alert_zone_check: 38 rows, inside=38, outside=0
+ledger chains: 4
+  chain aed850e87c7e1289-44ee6715de40a2b3: 40 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 40/40 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain aed850e87c7e1289-9ff549b0aa723e46: 40 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 40/40 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain smoke-test: 1 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 0/1 (raw ts 0), unsigned 1, types SMOKE
+anchors: 3, pointing at a stored block: 3
+append-only probe on aed850e87c7e1289-44ee671#39: PATCH -> 200 [] | DELETE -> 200 [] | hash unchanged: true
