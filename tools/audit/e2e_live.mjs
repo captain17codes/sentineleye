@@ -34,7 +34,7 @@ page.on('response', (r) => {
   const u = r.url();
   if (u.includes('supabase.co')) reqs.push(`${r.request().method()} ${new URL(u).pathname.replace('/rest/v1/', '')} -> ${r.status()}`);
 });
-page.on('requestfailed', (r) => r.url().includes('supabase.co') && reqs.push(`FAILED ${r.request().method()} ${r.url().slice(0, 90)} ${r.failure()?.errorText}`));
+page.on('requestfailed', (r) => r.url().includes('supabase.co') && reqs.push(`FAILED ${r.method()} ${new URL(r.url()).pathname.replace("/rest/v1/", "")} ${r.failure()?.errorText}`));
 
 const bundle = await (await fetch(SITE)).text();
 log(`live bundle: ${(bundle.match(/assets\/index-[^"]+\.js/) || ['?'])[0]}`);
