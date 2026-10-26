@@ -6,7 +6,7 @@ const U = process.env.SUPABASE_URL;
 const K = process.env.SUPABASE_KEY;
 const H = { apikey: K, Authorization: `Bearer ${K}` };
 const out = [];
-const log = (...a) => { const l = a.join(' '); out.push(l); console.log(l); };
+const log = (...a) => { const l = a.join(' '); console.log(l); if (process.env.OUT) import('node:fs').then((fs) => fs.appendFileSync(process.env.OUT, l + '\n')); };
 
 async function get(path, extra = {}) {
   const r = await fetch(`${U}/rest/v1/${path}`, { headers: { ...H, ...extra } });
@@ -97,9 +97,7 @@ export async function appendOnlyProbe() {
   log(`append-only probe on ${b.chain_id.slice(0, 24)}#${b.idx}: PATCH -> ${p.status} ${pt.slice(0, 90)} | DELETE -> ${d.status} ${dt.slice(0, 90)} | hash unchanged: ${after === b.hash}`);
 }
 
-export function dump(file) {
-  return import('node:fs').then((fs) => fs.appendFileSync(file, out.join('\n') + '\n'));
-}
+export async function dump() {}
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   await audit(process.argv[2] || '');

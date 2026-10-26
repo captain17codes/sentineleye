@@ -8,7 +8,7 @@ const U = process.env.SUPABASE_URL;
 const K = process.env.SUPABASE_KEY;
 const OUT = process.env.OUT || 'audit_result.txt';
 const lines = [];
-const log = (...a) => { const l = a.join(' '); lines.push(l); console.log(l); };
+const log = (...a) => { const l = a.join(' '); console.log(l); fs.appendFileSync(OUT, l + '\n'); };
 fs.mkdirSync('shots', { recursive: true });
 
 function fnv1a(str, seed = 0x811c9dc5) {
@@ -17,9 +17,12 @@ function fnv1a(str, seed = 0x811c9dc5) {
   return h.toString(16).padStart(8, '0');
 }
 
-const before = await audit('BEFORE');
+process.on('unhandledRejection', (e) => { fs.appendFileSync(OUT, 'UNHANDLED: ' + String(e && e.stack || e).slice(0, 900) + '\n'); process.exit(1); });
+const before = await audit('BEFORE').catch((e) => { log('AUDIT BEFORE FAILED: ' + String(e && e.stack || e).slice(0, 600)); return null; });
 
 const browser = await chromium.launch();
+let local = { chain: [], alerts: [] };
+try {
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await ctx.newPage();
 const reqs = [];
@@ -35,7 +38,8 @@ page.on('requestfailed', (r) => r.url().includes('supabase.co') && reqs.push(`FA
 const bundle = await (await fetch(SITE)).text();
 log(`live bundle: ${(bundle.match(/assets\/index-[^"]+\.js/) || ['?'])[0]}`);
 
-await page.goto(SITE, { waitUntil: 'networkidle' });
+await page.goto(SITE, { waitUntil: 'domcontentloaded' });
+await page.waitForTimeout(5000);
 await page.getByRole('button', { name: /Sign in as field operator/ }).first().click();
 await page.waitForTimeout(800);
 const signIn = page.getByRole('button', { name: 'Sign in', exact: true });
@@ -80,11 +84,16 @@ log(`ledger compare in UI: ${cmpText?.trim().slice(0, 200)}`);
 await page.screenshot({ path: 'shots/4_ledger.png', fullPage: true });
 
 // read the browser's own copy
-const local = await page.evaluate(() => ({
+local = await page.evaluate(() => ({
   chain: JSON.parse(localStorage.getItem('sentineleye_ledger_v4') || '[]'),
   alerts: JSON.parse(localStorage.getItem('sentineleye_alerts_v4') || '{"alerts":[]}').alerts,
 }));
 await page.waitForTimeout(2000);
+} catch (e) {
+  log('E2E STEP FAILED: ' + String(e && e.stack || e).slice(0, 900));
+  await page.screenshot({ path: 'shots/error.png' }).catch(() => {});
+  local = await page.evaluate(() => ({ chain: JSON.parse(localStorage.getItem('sentineleye_ledger_v4') || '[]'), alerts: JSON.parse(localStorage.getItem('sentineleye_alerts_v4') || '{"alerts":[]}').alerts })).catch(() => local);
+}
 await browser.close();
 
 const g = local.chain[0];
@@ -114,7 +123,6 @@ Object.entries(tally).forEach(([k, v]) => log(`  ${v}x ${k}`));
 log(`console errors (${errors.length}):`);
 [...new Set(errors)].slice(0, 15).forEach((e) => log('  ' + e));
 
-fs.appendFileSync(OUT, lines.join('\n') + '\n');
 await audit('AFTER');
 await appendOnlyProbe();
 await dump(OUT);
