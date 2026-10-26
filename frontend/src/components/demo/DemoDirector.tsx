@@ -184,26 +184,26 @@ export function DemoDirector() {
   return (
     <div className="fixed bottom-4 right-4 z-50 select-none presentation-hidden">
       {collapsed ? (
-        <div className="bg-[#121212] border border-[#facc15]/60 rounded-lg p-2.5 shadow-2xl flex items-center gap-3">
+        <div className="bg-[#111826] border border-[#facc15]/60 rounded-lg p-2.5 shadow-2xl flex items-center gap-3">
           <div className="flex items-center gap-1.5 text-xs font-mono text-[#facc15]">
             <Sparkles className="w-3.5 h-3.5" />
             <span className="font-bold">Demo Step {step.id}/8</span>
           </div>
           <button
             onClick={() => setCollapsed(false)}
-            className="p-1 text-[#b5b5ad] hover:text-[#f5f5f0] transition-colors"
+            className="p-1 text-[#98a2b3] hover:text-[#e6eaf0] transition-colors"
             title="Expand Director"
           >
             <Maximize2 className="w-4 h-4" />
           </button>
         </div>
       ) : (
-        <div className="w-80 sm:w-96 bg-[#121212] border border-[#facc15]/60 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.8)] p-4 flex flex-col gap-3 backdrop-blur-md">
+        <div className="w-80 sm:w-96 bg-[#111826] border border-[#facc15]/60 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.8)] p-4 flex flex-col gap-3 backdrop-blur-md">
           {/* Header */}
-          <div className="flex items-center justify-between pb-2.5 border-b border-[#2e2e2e]">
+          <div className="flex items-center justify-between pb-2.5 border-b border-[#222c3d]">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#facc15] animate-pulse" />
-              <span className="font-mono text-xs font-bold text-[#f5f5f0]">Executive Demo Director</span>
+              <span className="font-mono text-xs font-bold text-[#e6eaf0]">Executive Demo Director</span>
               <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-[#facc15]/20 text-[#facc15] border border-[#facc15]/30">
                 LIVE
               </span>
@@ -213,14 +213,14 @@ export function DemoDirector() {
               <button
                 onClick={handleResetDemo}
                 disabled={resetting}
-                className="p-1 rounded text-[#b5b5ad] hover:text-amber-400 hover:bg-[#1a1a1a] transition-colors"
+                className="p-1 rounded text-[#98a2b3] hover:text-amber-400 hover:bg-[#172031] transition-colors"
                 title="Reset demo in <2s (clears and reseeds)"
               >
                 <RotateCcw className={`w-3.5 h-3.5 ${resetting ? 'animate-spin' : ''}`} />
               </button>
               <button
                 onClick={() => setCollapsed(true)}
-                className="p-1 rounded text-[#b5b5ad] hover:text-[#f5f5f0] hover:bg-[#1a1a1a] transition-colors"
+                className="p-1 rounded text-[#98a2b3] hover:text-[#e6eaf0] hover:bg-[#172031] transition-colors"
                 title="Collapse panel"
               >
                 <Minimize2 className="w-3.5 h-3.5" />
@@ -229,17 +229,17 @@ export function DemoDirector() {
           </div>
 
           {/* Current Step Banner */}
-          <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] flex flex-col gap-1.5">
+          <div className="p-3 rounded-lg bg-[#172031] border border-[#222c3d] flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <span className="font-mono text-[10px] text-[#facc15] font-semibold">
                 STEP {step.id} OF 8
               </span>
-              <span className="font-mono text-[10px] text-[#b5b5ad]">
+              <span className="font-mono text-[10px] text-[#98a2b3]">
                 Use [→] to advance
               </span>
             </div>
-            <h4 className="text-xs font-bold text-[#f5f5f0]">{step.title}</h4>
-            <p className="text-[11px] text-[#b5b5ad] leading-relaxed">
+            <h4 className="text-xs font-bold text-[#e6eaf0]">{step.title}</h4>
+            <p className="text-[11px] text-[#98a2b3] leading-relaxed">
               <span className="text-[#facc15] font-semibold">Say: </span>
               {step.presenterNote}
             </p>
@@ -247,7 +247,7 @@ export function DemoDirector() {
 
           {/* Clock Speed & Controls */}
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[#b5b5ad] text-[11px] flex items-center gap-1 font-mono">
+            <span className="text-[#98a2b3] text-[11px] flex items-center gap-1 font-mono">
               <FastForward className="w-3 h-3 text-[#facc15]" />
               <span>Escalation clock:</span>
             </span>
@@ -258,8 +258,8 @@ export function DemoDirector() {
                   onClick={() => handleSpeedChange(spd)}
                   className={`px-2 py-0.5 rounded text-[10px] font-mono transition-colors ${
                     clockSpeed === spd
-                      ? 'bg-[#facc15] text-[#0a0a0a] font-bold'
-                      : 'bg-[#1a1a1a] text-[#b5b5ad] hover:text-[#f5f5f0] border border-[#2e2e2e]'
+                      ? 'bg-[#facc15] text-[#0b1018] font-bold'
+                      : 'bg-[#172031] text-[#98a2b3] hover:text-[#e6eaf0] border border-[#222c3d]'
                   }`}
                 >
                   {spd}x
@@ -273,7 +273,7 @@ export function DemoDirector() {
             <button
               onClick={handlePrevStep}
               disabled={currentStepIdx === 0}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#1a1a1a] hover:bg-[#121212] border border-[#2e2e2e] text-xs text-[#b5b5ad] hover:text-[#f5f5f0] disabled:opacity-40 transition-colors"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#172031] hover:bg-[#111826] border border-[#222c3d] text-xs text-[#98a2b3] hover:text-[#e6eaf0] disabled:opacity-40 transition-colors"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -281,7 +281,7 @@ export function DemoDirector() {
 
             <button
               onClick={() => navigate(step.route)}
-              className="px-2.5 py-1.5 rounded-lg bg-[#1a1a1a] hover:bg-[#121212] border border-[#facc15]/40 text-xs font-mono text-[#facc15] transition-colors"
+              className="px-2.5 py-1.5 rounded-lg bg-[#172031] hover:bg-[#111826] border border-[#facc15]/40 text-xs font-mono text-[#facc15] transition-colors"
             >
               {step.actionLabel}
             </button>
@@ -289,7 +289,7 @@ export function DemoDirector() {
             <button
               onClick={handleNextStep}
               disabled={currentStepIdx === DEMO_STEPS.length - 1}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#facc15] text-[#0a0a0a] font-bold text-xs hover:bg-[#eab308] disabled:opacity-40 transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#facc15] text-[#0b1018] font-bold text-xs hover:bg-[#eab308] disabled:opacity-40 transition-colors"
             >
               <span>Next</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -297,7 +297,7 @@ export function DemoDirector() {
           </div>
 
           {/* Archived Ingest Badge */}
-          <div className="pt-2 border-t border-[#2e2e2e] flex items-center justify-between text-[10px] text-[#b5b5ad] font-mono">
+          <div className="pt-2 border-t border-[#222c3d] flex items-center justify-between text-[10px] text-[#98a2b3] font-mono">
             <span>Archived Sentinel scenes — simulated ingest</span>
             <button
               onClick={handleResetDemo}

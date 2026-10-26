@@ -32,7 +32,7 @@ export function AlertClusterGroup({
       iconCreateFunction: (cluster) => {
         const count = cluster.getChildCount();
         return L.divIcon({
-          html: `<div style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#121212;border:2px solid #facc15;color:#f5f5f0;font-family:Inter,sans-serif;font-weight:600;font-size:12px;box-shadow:0 4px 12px rgba(0,0,0,0.6);">${count}</div>`,
+          html: `<div style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#111826;border:2px solid #facc15;color:#e6eaf0;font-family:Inter,sans-serif;font-weight:600;font-size:12px;box-shadow:0 4px 12px rgba(0,0,0,0.6);">${count}</div>`,
           className: 'custom-cluster-icon',
           iconSize: L.point(34, 34),
           iconAnchor: L.point(17, 17),
@@ -48,7 +48,7 @@ export function AlertClusterGroup({
         className: 'custom-flat-marker',
         html: `
           <div style="position: relative; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-            <div style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 2px solid ${isSelected ? '#facc15' : '#0a0a0a'}; box-shadow: 0 0 6px rgba(0,0,0,0.8);"></div>
+            <div style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 2px solid ${isSelected ? '#facc15' : '#0b1018'}; box-shadow: 0 0 6px rgba(0,0,0,0.8);"></div>
           </div>
         `,
         iconSize: [20, 20],

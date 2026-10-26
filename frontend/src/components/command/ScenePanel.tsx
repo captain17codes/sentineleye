@@ -32,7 +32,7 @@ export function ScenePanel({ value, onChange, disabled }: ScenePanelProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-xs font-medium text-[#f5f5f0]">Sensor band</label>
+      <label className="text-xs font-medium text-[#e6eaf0]">Sensor band</label>
       <div className="grid grid-cols-3 gap-2.5">
         {options.map((opt) => {
           const active = value === opt.type;
@@ -46,22 +46,22 @@ export function ScenePanel({ value, onChange, disabled }: ScenePanelProps) {
               onClick={() => onChange(opt.type)}
               className={`relative flex flex-col items-start p-3 rounded-lg text-left transition-colors select-none ${
                 active
-                  ? 'bg-[#1a1a1a] border-2 border-[#facc15] text-[#f5f5f0]'
-                  : 'bg-[#121212] border border-[#2e2e2e] text-[#f5f5f0] hover:border-[#facc15]/50'
+                  ? 'bg-[#172031] border-2 border-[#facc15]/40 text-[#e6eaf0]'
+                  : 'bg-[#111826] border border-[#222c3d] text-[#e6eaf0] hover:border-[#facc15]/50'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               {/* Green checkmark on top-right of active card */}
               {active && (
-                <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#facc15] flex items-center justify-center text-[#0a0a0a]">
+                <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#facc15] flex items-center justify-center text-[#0b1018]">
                   <Check className="w-2.5 h-2.5 stroke-[3]" />
                 </div>
               )}
 
               <div className="flex items-center gap-1.5 mb-1.5 pr-4">
-                <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#facc15]' : 'text-[#b5b5ad]'}`} />
+                <Icon className={`w-3.5 h-3.5 ${active ? 'text-[#facc15]' : 'text-[#98a2b3]'}`} />
                 <span className="text-xs font-semibold">{opt.label}</span>
               </div>
-              <span className="text-[12px] text-[#b5b5ad] leading-snug">
+              <span className="text-[12px] text-[#98a2b3] leading-snug">
                 {opt.desc}
               </span>
             </button>

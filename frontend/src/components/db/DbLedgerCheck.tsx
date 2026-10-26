@@ -24,14 +24,14 @@ export function DbLedgerCheck() {
   };
 
   return (
-    <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+    <div className="p-5 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col gap-3">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2">
             <Database className="w-4 h-4 text-[#facc15]" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#f5f5f0]">Database copy (Supabase)</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#e6eaf0]">Database copy (Supabase)</span>
           </div>
-          <p className="text-[11px] text-[#b5b5ad] mt-1">
+          <p className="text-[11px] text-[#98a2b3] mt-1">
             {isDbConfigured()
               ? 'Every block is also appended to a PostgreSQL table that rejects updates and deletes. Comparing the browser chain with that copy shows whether anything was changed afterwards.'
               : 'Not connected. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to mirror the ledger to an append-only database table.'}

@@ -16,9 +16,9 @@ export function AlertSourceBadge({ alert, isReal, className = '' }: AlertSourceB
     return (
       <span
         title="Synthetic arrays modeled on a real site"
-        className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider bg-[#0c1d2a] text-[#7dd3fc] border border-[#38bdf8]/40 select-none shadow-sm ${className}`}
+        className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-medium bg-[#0c1d2a] text-[#7dd3fc] border border-[#38bdf8]/40 select-none ${className}`}
       >
-        MODELED SITE
+        Modeled site
       </span>
     );
   }
@@ -27,9 +27,9 @@ export function AlertSourceBadge({ alert, isReal, className = '' }: AlertSourceB
     return (
       <span
         title="Computed from real Copernicus Sentinel-2 L2A imagery"
-        className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider bg-[#2a2405] text-[#fde047] border border-[#facc15]/50 select-none shadow-sm ${className}`}
+        className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-medium bg-[#2a2405] text-[#fde047] border border-[#facc15]/50 select-none ${className}`}
       >
-        REAL
+        Real
       </span>
     );
   }
@@ -37,9 +37,7 @@ export function AlertSourceBadge({ alert, isReal, className = '' }: AlertSourceB
   return (
     <span
       title="Calibration dataset: synthetic scene with known ground truth"
-      className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider bg-[#1e293b] text-[#cbd5e1] border border-[#64748b]/50 select-none shadow-sm ${className}`}
-    >
-      CALIBRATION
-    </span>
+      className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-medium bg-[#1e293b] text-[#cbd5e1] border border-[#64748b]/50 select-none ${className}`}
+    >Calibration</span>
   );
 }

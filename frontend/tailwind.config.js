@@ -7,18 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bg': '#0a0a0a',
-        'panel': '#121212',
-        'raised': '#1a1a1a',
-        'panel-light': '#1a1a1a',
-        'border': '#2e2e2e',
-        'border-subtle': '#2e2e2e',
-        'text': '#f5f5f0',
-        'muted': '#b5b5ad',
-        'subtle': '#8f8f86',
+        'bg': '#0b1018',
+        'panel': '#111826',
+        'raised': '#172031',
+        'panel-light': '#172031',
+        'border': '#222c3d',
+        'border-subtle': '#222c3d',
+        'text': '#e6eaf0',
+        'muted': '#98a2b3',
+        'subtle': '#6f7a8c',
         'accent': '#facc15',
         'accent-hover': '#eab308',
-        'accent-dim': '#1a1a1a',
+        'accent-dim': '#172031',
         // Severity colors (strictly for badges & map polygons)
         'critical': '#ef4444',
         'high': '#f59e0b',

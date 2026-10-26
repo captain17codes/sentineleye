@@ -10,10 +10,10 @@ export function Footer() {
           Prototype
         </span>
       </div>
-      <p className="max-w-2xl text-[11px] text-[#b5b5ad] leading-relaxed">
+      <p className="max-w-2xl text-[11px] text-[#98a2b3] leading-relaxed">
         Research prototype running in the browser: accounts, workflow and the evidence ledger are stored locally. Site scans for Z-102 and Z-104 use real Copernicus Sentinel-2 L2A imagery; other scenes form a calibration dataset with known ground truth. Zone boundaries are indicative, not survey records.
       </p>
-      <div className="text-[10px] font-mono text-[#8f8f86] mt-1">
+      <div className="text-[10px] font-mono text-[#6f7a8c] mt-1">
         WebCrypto ECDSA P-256 Ledger Active • Section 63 BSA 2023 Evidentiary Protocol
       </div>
     </footer>

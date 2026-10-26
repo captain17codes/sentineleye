@@ -110,7 +110,7 @@ function OverlayCanvas({ base, overlay }: { base: string; overlay: Uint8ClampedA
     };
     img.src = base;
   }, [base, overlay]);
-  return <canvas ref={ref} width={512} height={512} className="w-full aspect-square rounded-md border border-[#2e2e2e]" />;
+  return <canvas ref={ref} width={512} height={512} className="w-full aspect-square rounded-md border border-[#222c3d]" />;
 }
 
 function verdict(a: Analysis, control: SurfaceChangeResult | null, documented: [number, number]) {
@@ -159,23 +159,23 @@ export function Cases() {
 
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto">
-      <div className="pb-4 border-b border-[#2e2e2e]">
-        <h1 className="text-xl font-semibold text-[#f5f5f0]">Ground-truth cases</h1>
-        <p className="text-sm text-[#b5b5ad] mt-1 max-w-3xl">
+      <div className="pb-4 border-b border-[#222c3d]">
+        <h1 className="text-xl font-semibold text-[#e6eaf0]">Ground-truth cases</h1>
+        <p className="text-sm text-[#98a2b3] mt-1 max-w-3xl">
           Land-change events documented by courts and news reports, analysed with the same engine on real Copernicus
           Sentinel-2 L2A images. The engine combines NDVI (vegetation), the bare-soil index BSI (uses the SWIR band) and a
           redness index (bright roofs turning to brown earth), removes whole-scene seasonal shifts, and keeps only compact
           change clusters. The real control site at Asola Bhatti (Z-104) gives the normal background level of change.
         </p>
         {control && (
-          <p className="text-xs text-[#8f8f86] mt-2">
+          <p className="text-xs text-[#6f7a8c] mt-2">
             Control background (Z-104, 2022 → 2026): {pct(changedShare(control))} of the site in change clusters, largest
             cluster {ha(largest(control))}.
           </p>
         )}
       </div>
 
-      {error && <div className="p-4 rounded-md border border-[#2e2e2e] text-sm text-[#b5b5ad]">{error}</div>}
+      {error && <div className="p-4 rounded-md border border-[#222c3d] text-sm text-[#98a2b3]">{error}</div>}
 
       {cases.map((c) => {
         const state = runs[c.zone_id];
@@ -183,13 +183,13 @@ export function Cases() {
         const v = a ? verdict(a, control, c.center) : null;
         const obs = OBSERVED[c.zone_id];
         return (
-          <section key={c.zone_id} className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-4">
+          <section key={c.zone_id} className="p-5 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col gap-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="max-w-3xl">
                 <span className="text-xs font-mono text-[#facc15]">{c.code}</span>
-                <h2 className="text-lg font-semibold text-[#f5f5f0]">{c.name}</h2>
-                <p className="text-sm text-[#b5b5ad] mt-1">{c.event}</p>
-                <p className="text-xs text-[#8f8f86] mt-2 flex items-start gap-1.5">
+                <h2 className="text-lg font-semibold text-[#e6eaf0]">{c.name}</h2>
+                <p className="text-sm text-[#98a2b3] mt-1">{c.event}</p>
+                <p className="text-xs text-[#6f7a8c] mt-2 flex items-start gap-1.5">
                   <Scale className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                   <span>
                     {c.citation}
@@ -205,7 +205,7 @@ export function Cases() {
                 type="button"
                 onClick={() => run(c)}
                 disabled={state === 'running'}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[#facc15] text-[#0a0a0a] text-sm font-semibold hover:bg-[#eab308] disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[#facc15] text-[#0b1018] text-sm font-semibold hover:bg-[#eab308] disabled:opacity-60"
               >
                 {state === 'running' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
                 Run analysis
@@ -214,20 +214,20 @@ export function Cases() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <figure className="flex flex-col gap-1.5">
-                <img src={`/real/cases/${c.zone_id}/t0_rgb.png`} alt={`${c.name} before`} className="w-full aspect-square rounded-md border border-[#2e2e2e]" />
-                <figcaption className="text-xs text-[#b5b5ad]">
-                  Before · {day(c.t0.datetime)} <span className="font-mono text-[#8f8f86]">{c.t0.scene_id}</span>
+                <img src={`/real/cases/${c.zone_id}/t0_rgb.png`} alt={`${c.name} before`} className="w-full aspect-square rounded-md border border-[#222c3d]" />
+                <figcaption className="text-xs text-[#98a2b3]">
+                  Before · {day(c.t0.datetime)} <span className="font-mono text-[#6f7a8c]">{c.t0.scene_id}</span>
                 </figcaption>
               </figure>
               <figure className="flex flex-col gap-1.5">
-                <img src={`/real/cases/${c.zone_id}/t1_rgb.png`} alt={`${c.name} after`} className="w-full aspect-square rounded-md border border-[#2e2e2e]" />
-                <figcaption className="text-xs text-[#b5b5ad]">
-                  After · {day(c.t1.datetime)} <span className="font-mono text-[#8f8f86]">{c.t1.scene_id}</span>
+                <img src={`/real/cases/${c.zone_id}/t1_rgb.png`} alt={`${c.name} after`} className="w-full aspect-square rounded-md border border-[#222c3d]" />
+                <figcaption className="text-xs text-[#98a2b3]">
+                  After · {day(c.t1.datetime)} <span className="font-mono text-[#6f7a8c]">{c.t1.scene_id}</span>
                 </figcaption>
               </figure>
               <figure className="flex flex-col gap-1.5">
                 <OverlayCanvas base={`/real/cases/${c.zone_id}/t1_rgb.png`} overlay={a?.overlay ?? null} />
-                <figcaption className="text-xs text-[#b5b5ad]">
+                <figcaption className="text-xs text-[#98a2b3]">
                   {a ? 'Detected change on the after image' : 'Run the analysis to see detected change'}
                 </figcaption>
               </figure>
@@ -239,13 +239,13 @@ export function Cases() {
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap gap-2">
                   {CHANGE_CLASSES.filter((k) => k.id > 0).map((k) => (
-                    <span key={k.key} className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#1a1a1a] border border-[#2e2e2e] text-xs text-[#f5f5f0]">
+                    <span key={k.key} className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#172031] border border-[#222c3d] text-xs text-[#e6eaf0]">
                       <span className="w-2.5 h-2.5 rounded-sm" style={{ background: `rgba(${k.color[0]},${k.color[1]},${k.color[2]},1)` }} />
                       {k.label}: <span className="font-mono">{ha(a.result.areaM2[k.key])}</span>
                     </span>
                   ))}
                 </div>
-                <p className="text-xs font-mono text-[#8f8f86]">
+                <p className="text-xs font-mono text-[#6f7a8c]">
                   {a.result.clusters.length} change clusters · {pct(a.result.changedShare)} of the site · whole-scene shift removed: ΔNDVI{' '}
                   {a.result.sceneShift.ndvi.toFixed(3)}, ΔBSI {a.result.sceneShift.bsi.toFixed(3)} · valid pixels {a.result.validPixels.toLocaleString()}
                 </p>
@@ -255,7 +255,7 @@ export function Cases() {
                       ? 'border-[#facc15]/60 text-[#facc15] bg-[#2a2405]'
                       : v.tone === 'weak'
                       ? 'border-[#f59e0b]/40 text-[#fbbf24]'
-                      : 'border-[#2e2e2e] text-[#b5b5ad]'
+                      : 'border-[#222c3d] text-[#98a2b3]'
                   }`}
                 >
                   {v.text} Expected event: {c.expected_change}.
@@ -280,7 +280,7 @@ export function Cases() {
         );
       })}
 
-      <p className="text-xs text-[#8f8f86] flex items-center gap-1.5">
+      <p className="text-xs text-[#6f7a8c] flex items-center gap-1.5">
         <Satellite className="w-3.5 h-3.5" /> Contains modified Copernicus Sentinel data. Coordinates are approximate and come
         from public sources; every detection is a candidate for an officer to verify.
       </p>

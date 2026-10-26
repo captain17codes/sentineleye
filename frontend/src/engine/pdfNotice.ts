@@ -85,7 +85,7 @@ function createFallbackEvidenceDataUrl(label: string, isAfter: boolean, alert: A
   ctx.font = 'bold 11px Courier, monospace';
   ctx.fillText(label, 8, 168);
 
-  ctx.fillStyle = '#b5b5ad';
+  ctx.fillStyle = '#98a2b3';
   ctx.font = '9px Courier, monospace';
   ctx.fillText(`${alert.lat.toFixed(4)}N, ${alert.lng.toFixed(4)}E`, 125, 168);
 

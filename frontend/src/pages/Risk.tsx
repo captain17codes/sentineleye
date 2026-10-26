@@ -47,29 +47,29 @@ export function Risk() {
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto">
       {/* Page Header with Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2e2e]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#222c3d]">
         <div>
-          <h1 className="text-xl font-semibold text-[#f5f5f0]">Risk by zone</h1>
-          <p className="text-xs text-[#b5b5ad] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#e6eaf0]">Risk by zone</h1>
+          <p className="text-xs text-[#98a2b3] mt-0.5">
             Which protected zones have the most alerts, and how fast new ones are appearing
           </p>
         </div>
 
-        {/* Sector Filter Dropdown (Solid #0a0a0a) */}
+        {/* Sector Filter Dropdown (Solid #0b1018) */}
         <div className="flex items-center gap-2.5">
-          <label htmlFor="sector-filter" className="text-xs text-[#b5b5ad] font-medium whitespace-nowrap">
+          <label htmlFor="sector-filter" className="text-xs text-[#98a2b3] font-medium whitespace-nowrap">
             Filter sector:
           </label>
           <select
             id="sector-filter"
             value={selectedZoneFilter}
             onChange={(e) => setSelectedZoneFilter(e.target.value)}
-            className="bg-[#0a0a0a] border border-[#2e2e2e] text-[#f5f5f0] rounded-md px-3 py-1.5 text-xs focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15] cursor-pointer"
-            style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
+            className="bg-[#0b1018] border border-[#222c3d] text-[#e6eaf0] rounded-md px-3 py-1.5 text-xs focus:outline-none focus:border-[#facc15]/40 focus:ring-1 focus:ring-[#facc15]/40 cursor-pointer"
+            style={{ backgroundColor: '#0b1018', color: '#e6eaf0' }}
           >
-            <option value="all" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>All ecological sectors</option>
+            <option value="all" style={{ backgroundColor: '#0b1018', color: '#e6eaf0' }}>All ecological sectors</option>
             {stats?.byZone?.map((z) => (
-              <option key={z.id} value={String(z.id)} style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>
+              <option key={z.id} value={String(z.id)} style={{ backgroundColor: '#0b1018', color: '#e6eaf0' }}>
                 {z.name}
               </option>
             ))}
@@ -85,76 +85,76 @@ export function Risk() {
         />
       ) : (
         <>
-          {/* Aggregate KPI Cards (Solid #121212, high-contrast, projector readable) */}
+          {/* Aggregate KPI Cards (Solid #111826, high-contrast, projector readable) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {/* Card 1: Total Intercepts */}
-            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
-                <span className="text-xs font-semibold text-[#f5f5f0]">All alerts</span>
+            <div className="p-4 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#98a2b3] mb-2">
+                <span className="text-xs font-semibold text-[#e6eaf0]">All alerts</span>
                 <AlertOctagon className="w-4 h-4 text-[#facc15]" />
               </div>
               <div>
-                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f5f5f0] kpi-number">
+                <span className="text-3xl sm:text-4xl font-semibold text-[#e6eaf0] kpi-number">
                   {totalCount}
                 </span>
-                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Cumulative records</div>
-                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#98a2b3] mt-1 font-mono">Cumulative records</div>
+                <p className="text-[11px] text-[#98a2b3] mt-2 pt-2 border-t border-[#222c3d]/60 kpi-subtitle leading-snug">
                   Every change found so far across all zones
                 </p>
               </div>
             </div>
 
             {/* Card 2: Critical Threats */}
-            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
-                <span className="text-xs font-semibold text-[#f5f5f0]">Critical threats</span>
+            <div className="p-4 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#98a2b3] mb-2">
+                <span className="text-xs font-semibold text-[#e6eaf0]">Critical threats</span>
                 <span className="w-2.5 h-2.5 rounded-full bg-critical" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-3xl sm:text-4xl font-bold font-mono text-critical kpi-number">
+                  <span className="text-3xl sm:text-4xl font-semibold text-critical kpi-number">
                     {critical}
                   </span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#1a1a1a] border border-critical text-critical uppercase tracking-wider">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#172031] border border-critical text-critical uppercase tracking-wider">
                     Critical
                   </span>
                 </div>
-                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Immediate action required</div>
-                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#98a2b3] mt-1 font-mono">Immediate action required</div>
+                <p className="text-[11px] text-[#98a2b3] mt-2 pt-2 border-t border-[#222c3d]/60 kpi-subtitle leading-snug">
                   Large or very sensitive changes to check first
                 </p>
               </div>
             </div>
 
             {/* Card 3: Verified Cases */}
-            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
-                <span className="text-xs font-semibold text-[#f5f5f0]">Verified cases</span>
+            <div className="p-4 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#98a2b3] mb-2">
+                <span className="text-xs font-semibold text-[#e6eaf0]">Verified cases</span>
                 <CheckCircle className="w-4 h-4 text-[#facc15]" />
               </div>
               <div>
-                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#facc15] kpi-number">
+                <span className="text-3xl sm:text-4xl font-semibold text-[#eef2f7] kpi-number">
                   {verified}
                 </span>
-                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Confirmed spectral violations</div>
-                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#98a2b3] mt-1 font-mono">Confirmed spectral violations</div>
+                <p className="text-[11px] text-[#98a2b3] mt-2 pt-2 border-t border-[#222c3d]/60 kpi-subtitle leading-snug">
                   Checked by an officer and confirmed
                 </p>
               </div>
             </div>
 
             {/* Card 4: Notices Issued */}
-            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
-                <span className="text-xs font-semibold text-[#f5f5f0]">Notices issued</span>
+            <div className="p-4 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#98a2b3] mb-2">
+                <span className="text-xs font-semibold text-[#e6eaf0]">Notices issued</span>
                 <TrendingUp className="w-4 h-4 text-[#facc15]" />
               </div>
               <div>
-                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f5f5f0] kpi-number">
+                <span className="text-3xl sm:text-4xl font-semibold text-[#e6eaf0] kpi-number">
                   {noticeIssued}
                 </span>
-                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Enforcement actions</div>
-                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#98a2b3] mt-1 font-mono">Enforcement actions</div>
+                <p className="text-[11px] text-[#98a2b3] mt-2 pt-2 border-t border-[#222c3d]/60 kpi-subtitle leading-snug">
                   Alerts with a legal notice drafted or served
                 </p>
               </div>
@@ -164,11 +164,11 @@ export function Risk() {
           {/* Charts Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Incident Velocity (8 cols) */}
-            <div className="lg:col-span-8 p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
+            <div className="lg:col-span-8 p-5 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col gap-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#222c3d]">
                 <div>
-                  <h3 className="text-sm font-semibold text-[#f5f5f0]">30-day incident velocity</h3>
-                  <p className="text-xs text-[#b5b5ad] kpi-subtitle">
+                  <h3 className="text-sm font-semibold text-[#e6eaf0]">30-day incident velocity</h3>
+                  <p className="text-xs text-[#98a2b3] kpi-subtitle">
                     New alerts found each day
                   </p>
                 </div>
@@ -177,11 +177,11 @@ export function Risk() {
             </div>
 
             {/* Severity Breakdown (4 cols) */}
-            <div className="lg:col-span-4 p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
+            <div className="lg:col-span-4 p-5 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col gap-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#222c3d]">
                 <div>
-                  <h3 className="text-sm font-semibold text-[#f5f5f0]">Severity distribution</h3>
-                  <p className="text-xs text-[#b5b5ad] kpi-subtitle">
+                  <h3 className="text-sm font-semibold text-[#e6eaf0]">Severity distribution</h3>
+                  <p className="text-xs text-[#98a2b3] kpi-subtitle">
                     How serious the alerts are
                   </p>
                 </div>
@@ -191,11 +191,11 @@ export function Risk() {
           </div>
 
           {/* Sector Risk Score Bar Chart */}
-          <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
-            <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
+          <div className="p-5 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-2 border-b border-[#222c3d]">
               <div>
-                <h3 className="text-sm font-semibold text-[#f5f5f0]">Vulnerability index by ecological sector</h3>
-                <p className="text-xs text-[#b5b5ad] kpi-subtitle">
+                <h3 className="text-sm font-semibold text-[#e6eaf0]">Vulnerability index by ecological sector</h3>
+                <p className="text-xs text-[#98a2b3] kpi-subtitle">
                   Which zones have the most serious alerts (critical counts more than low)
                 </p>
               </div>

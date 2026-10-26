@@ -42,31 +42,31 @@ export function AlertAreaChart({ data }: AlertAreaChartProps) {
               <stop offset="95%" stopColor="#facc15" stopOpacity={0.02} />
             </linearGradient>
           </defs>
-          <CartesianGrid stroke="#2e2e2e" strokeDasharray="3 3" />
+          <CartesianGrid stroke="#222c3d" strokeDasharray="3 3" />
           <XAxis
             dataKey="day"
-            stroke="#b5b5ad"
+            stroke="#98a2b3"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2e2e2e' }}
+            axisLine={{ stroke: '#222c3d' }}
           />
           <YAxis
-            stroke="#b5b5ad"
+            stroke="#98a2b3"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2e2e2e' }}
+            axisLine={{ stroke: '#222c3d' }}
             allowDecimals={false}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#121212',
-              borderColor: '#2e2e2e',
+              backgroundColor: '#111826',
+              borderColor: '#222c3d',
               borderRadius: '8px',
-              color: '#f5f5f0',
+              color: '#e6eaf0',
               fontSize: '12px',
               boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
             }}
-            labelStyle={{ color: '#f5f5f0', fontWeight: 600 }}
+            labelStyle={{ color: '#e6eaf0', fontWeight: 600 }}
             formatter={(value: any) => [`${value} incidents`, 'Encroachments']}
             labelFormatter={(label: string) => `Date: ${label}`}
           />

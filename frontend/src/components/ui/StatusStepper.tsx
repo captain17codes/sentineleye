@@ -39,7 +39,7 @@ export function StatusStepper({
               <div
                 className={cn(
                   'absolute top-3.5 -left-1/2 w-full h-[2px] transition-colors',
-                  idx <= currentIndex ? 'bg-[#facc15]' : 'bg-[#2e2e2e]'
+                  idx <= currentIndex ? 'bg-[#facc15]' : 'bg-[#222c3d]'
                 )}
               />
             )}
@@ -51,10 +51,10 @@ export function StatusStepper({
               onClick={() => onStatusClick && onStatusClick(step)}
               className={cn(
                 'relative z-10 w-7 h-7 rounded-full flex items-center justify-center font-mono text-xs transition-colors',
-                isCompleted && 'bg-[#facc15] text-[#0a0a0a] font-bold',
-                isCurrent && 'bg-[#121212] border-2 border-[#facc15] text-[#facc15] font-bold',
-                isUpcoming && 'bg-[#121212] border border-[#2e2e2e] text-[#b5b5ad]',
-                !readonly && onStatusClick && 'cursor-pointer hover:border-[#facc15]'
+                isCompleted && 'bg-[#facc15] text-[#0b1018] font-bold',
+                isCurrent && 'bg-[#111826] border-2 border-[#facc15]/40 text-[#facc15] font-bold',
+                isUpcoming && 'bg-[#111826] border border-[#222c3d] text-[#98a2b3]',
+                !readonly && onStatusClick && 'cursor-pointer hover:border-[#facc15]/40'
               )}
             >
               {isCompleted ? '✓' : idx + 1}
@@ -65,8 +65,8 @@ export function StatusStepper({
               className={cn(
                 'mt-1.5 text-[10px] font-mono tracking-wider text-center select-none truncate max-w-full px-1',
                 isCurrent && 'text-[#facc15] font-semibold',
-                isCompleted && 'text-[#f5f5f0]',
-                isUpcoming && 'text-[#b5b5ad]'
+                isCompleted && 'text-[#e6eaf0]',
+                isUpcoming && 'text-[#98a2b3]'
               )}
             >
               {STEP_LABELS[step]}

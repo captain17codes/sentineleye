@@ -11,8 +11,8 @@ export function CloudSlider({ value, onChange, disabled }: CloudSliderProps) {
   return (
     <div className="flex flex-col gap-2 pt-2">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-[#f5f5f0] flex items-center gap-1.5">
-          <Cloud className="w-3.5 h-3.5 text-[#b5b5ad]" />
+        <label className="text-xs font-medium text-[#e6eaf0] flex items-center gap-1.5">
+          <Cloud className="w-3.5 h-3.5 text-[#98a2b3]" />
           <span>Cloud coverage threshold</span>
         </label>
       </div>
@@ -24,7 +24,7 @@ export function CloudSlider({ value, onChange, disabled }: CloudSliderProps) {
           className="absolute top-0 -translate-x-1/2 pointer-events-none transition-all duration-75"
           style={{ left: `${value}%` }}
         >
-          <span className="px-1.5 py-0.5 rounded bg-[#1a1a1a] border border-[#2e2e2e] font-mono text-[11px] font-semibold text-[#facc15] shadow-sm">
+          <span className="px-1.5 py-0.5 rounded bg-[#172031] border border-[#222c3d] font-mono text-[11px] font-semibold text-[#facc15] shadow-sm">
             {value}%
           </span>
         </div>
@@ -41,24 +41,24 @@ export function CloudSlider({ value, onChange, disabled }: CloudSliderProps) {
             onChange={(e) => onChange(Number(e.target.value))}
             className="w-full h-1.5 rounded-full appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-1 focus:ring-[#facc15]"
             style={{
-              background: `linear-gradient(to right, #facc15 0%, #facc15 ${value}%, #2e2e2e ${value}%, #2e2e2e 100%)`,
+              background: `linear-gradient(to right, #facc15 0%, #facc15 ${value}%, #222c3d ${value}%, #222c3d 100%)`,
             }}
           />
         </div>
       </div>
 
       {/* Subtle tick hints at 0%, 50%, 100% underneath */}
-      <div className="flex justify-between items-center text-[11px] text-[#b5b5ad] font-mono px-0.5">
+      <div className="flex justify-between items-center text-[11px] text-[#98a2b3] font-mono px-0.5">
         <span className="flex flex-col items-start">
-          <span className="w-0.5 h-1.5 bg-[#2e2e2e] mb-0.5" />
+          <span className="w-0.5 h-1.5 bg-[#222c3d] mb-0.5" />
           <span>0%</span>
         </span>
         <span className="flex flex-col items-center">
-          <span className="w-0.5 h-1.5 bg-[#2e2e2e] mb-0.5" />
+          <span className="w-0.5 h-1.5 bg-[#222c3d] mb-0.5" />
           <span>50%</span>
         </span>
         <span className="flex flex-col items-end">
-          <span className="w-0.5 h-1.5 bg-[#2e2e2e] mb-0.5" />
+          <span className="w-0.5 h-1.5 bg-[#222c3d] mb-0.5" />
           <span>100%</span>
         </span>
       </div>
@@ -72,7 +72,7 @@ export function CloudSlider({ value, onChange, disabled }: CloudSliderProps) {
           height: 18px;
           border-radius: 50%;
           background: #facc15;
-          border: 2px solid #0a0a0a;
+          border: 2px solid #0b1018;
           cursor: pointer;
           box-shadow: none;
         }
@@ -81,7 +81,7 @@ export function CloudSlider({ value, onChange, disabled }: CloudSliderProps) {
           height: 18px;
           border-radius: 50%;
           background: #facc15;
-          border: 2px solid #0a0a0a;
+          border: 2px solid #0b1018;
           cursor: pointer;
           box-shadow: none;
         }

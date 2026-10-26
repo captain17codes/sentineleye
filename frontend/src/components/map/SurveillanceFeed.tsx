@@ -38,14 +38,14 @@ export function SurveillanceFeed({
         collapsed ? 'w-10' : 'w-[360px]'
       }`}
     >
-      <div className="relative w-full rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col shadow-[0_4px_16px_rgba(0,0,0,0.4)] overflow-hidden max-h-[calc(100vh-140px)]">
+      <div className="relative w-full rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col shadow-[0_4px_16px_rgba(0,0,0,0.4)] overflow-hidden max-h-[calc(100vh-140px)]">
         {/* Header */}
-        <div className="h-11 px-3.5 bg-[#1a1a1a] border-b border-[#2e2e2e] flex items-center justify-between flex-shrink-0">
+        <div className="h-11 px-3.5 bg-[#172031] border-b border-[#222c3d] flex items-center justify-between flex-shrink-0">
           {!collapsed ? (
             <div className="flex items-center gap-2">
               <span className="live-dot" />
-              <span className="text-xs font-semibold text-[#f5f5f0]">Surveillance feed</span>
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#121212] border border-[#2e2e2e] text-[#facc15] font-semibold">
+              <span className="text-xs font-semibold text-[#e6eaf0]">Surveillance feed</span>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#111826] border border-[#222c3d] text-[#facc15] font-semibold">
                 {alerts.length}
               </span>
             </div>
@@ -57,7 +57,7 @@ export function SurveillanceFeed({
 
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-1 rounded text-[#b5b5ad] hover:text-[#f5f5f0] hover:bg-[#121212] transition-colors"
+            className="p-1 rounded text-[#98a2b3] hover:text-[#e6eaf0] hover:bg-[#111826] transition-colors"
             title={collapsed ? 'Expand feed' : 'Collapse feed'}
           >
             {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -66,14 +66,14 @@ export function SurveillanceFeed({
 
         {!collapsed && (
           <>
-            {/* Tabs (active tab white with green underline, inactive #b5b5ad) */}
-            <div className="flex border-b border-[#2e2e2e] text-xs font-medium">
+            {/* Tabs (active tab white with green underline, inactive #98a2b3) */}
+            <div className="flex border-b border-[#222c3d] text-xs font-medium">
               <button
                 onClick={() => setActiveTab('alerts')}
                 className={`flex-1 py-2 text-center transition-colors border-b-2 ${
                   activeTab === 'alerts'
-                    ? 'text-[#f5f5f0] font-semibold border-[#facc15] bg-[#1a1a1a]'
-                    : 'text-[#b5b5ad] border-transparent hover:text-[#f5f5f0] bg-[#121212]'
+                    ? 'text-[#e6eaf0] font-semibold border-[#facc15]/40 bg-[#172031]'
+                    : 'text-[#98a2b3] border-transparent hover:text-[#e6eaf0] bg-[#111826]'
                 }`}
               >
                 Alerts ({alerts.length})
@@ -82,8 +82,8 @@ export function SurveillanceFeed({
                 onClick={() => setActiveTab('telemetry')}
                 className={`flex-1 py-2 text-center transition-colors border-b-2 ${
                   activeTab === 'telemetry'
-                    ? 'text-[#f5f5f0] font-semibold border-[#facc15] bg-[#1a1a1a]'
-                    : 'text-[#b5b5ad] border-transparent hover:text-[#f5f5f0] bg-[#121212]'
+                    ? 'text-[#e6eaf0] font-semibold border-[#facc15]/40 bg-[#172031]'
+                    : 'text-[#98a2b3] border-transparent hover:text-[#e6eaf0] bg-[#111826]'
                 }`}
               >
                 Telemetry logs
@@ -92,9 +92,9 @@ export function SurveillanceFeed({
 
             {/* Tab 1: Alerts List */}
             {activeTab === 'alerts' && (
-              <div className="flex-1 overflow-y-auto p-2.5 space-y-2 bg-[#121212]">
+              <div className="flex-1 overflow-y-auto p-2.5 space-y-2 bg-[#111826]">
                 {alerts.length === 0 ? (
-                  <div className="p-5 text-center text-xs text-[#b5b5ad]">
+                  <div className="p-5 text-center text-xs text-[#98a2b3]">
                     No active alerts in this jurisdiction
                   </div>
                 ) : (
@@ -110,14 +110,14 @@ export function SurveillanceFeed({
                         onClick={() => onSelectAlert(alert)}
                         className={`p-3 rounded-md border text-xs cursor-pointer transition-colors ${
                           isSelected
-                            ? 'bg-[#1a1a1a] border-[#2e2e2e] border-l-[3px] border-l-[#facc15]'
-                            : 'bg-[#121212] border-[#2e2e2e] hover:bg-[#1a1a1a]'
+                            ? 'bg-[#172031] border-[#222c3d] border-l-[3px] border-l-[#facc15]'
+                            : 'bg-[#111826] border-[#222c3d] hover:bg-[#172031]'
                         }`}
                       >
                         {/* Line 1: class name in white (Inter 14px semibold) + source badge + severity badge */}
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <div className="flex items-center gap-1.5 min-w-0">
-                            <span className="font-semibold text-[14px] text-[#f5f5f0] truncate font-sans">
+                            <span className="font-semibold text-[14px] text-[#e6eaf0] truncate font-sans">
                               {alert.class}
                             </span>
                             <AlertSourceBadge alert={alert} />
@@ -126,7 +126,7 @@ export function SurveillanceFeed({
                             className="px-2 py-0.5 rounded text-[10px] font-bold uppercase border flex-shrink-0 tracking-wider"
                             style={{
                               borderColor: sevColor,
-                              backgroundColor: '#1a1a1a',
+                              backgroundColor: '#172031',
                               color: sevColor,
                             }}
                           >
@@ -134,15 +134,15 @@ export function SurveillanceFeed({
                           </span>
                         </div>
 
-                        {/* Line 2: zone name in #b5b5ad (13px) */}
-                        <div className="text-[13px] text-[#b5b5ad] truncate mb-1">
+                        {/* Line 2: zone name in #98a2b3 (13px) */}
+                        <div className="text-[13px] text-[#98a2b3] truncate mb-1">
                           {alert.zone_name
                             ? `${alert.zone_name.startsWith('Z-') ? '' : `Z-${alert.zone_id} • `}${alert.zone_name}`
                             : `Zone Z-${alert.zone_id}`}
                         </div>
 
-                        {/* Line 3: mono 12px "1,200 m² · New · 46m ago" in #8f8f86 */}
-                        <div className="font-mono text-[12px] text-[#8f8f86]">
+                        {/* Line 3: mono 12px "1,200 m² · New · 46m ago" in #6f7a8c */}
+                        <div className="font-mono text-[12px] text-[#6f7a8c]">
                           {areaFormatted} m² · {alert.status} · {timeFormatted}
                         </div>
                       </div>
@@ -154,15 +154,15 @@ export function SurveillanceFeed({
 
             {/* Tab 2: Telemetry Log */}
             {activeTab === 'telemetry' && (
-              <div className="flex-1 overflow-y-auto p-3 font-mono text-[11px] space-y-2.5 text-[#b5b5ad] bg-[#121212]">
-                <div className="flex items-center gap-1.5 text-[#facc15] text-[11px] pb-1.5 border-b border-[#2e2e2e] font-semibold">
+              <div className="flex-1 overflow-y-auto p-3 font-mono text-[11px] space-y-2.5 text-[#98a2b3] bg-[#111826]">
+                <div className="flex items-center gap-1.5 text-[#facc15] text-[11px] pb-1.5 border-b border-[#222c3d] font-semibold">
                   <Terminal className="w-3.5 h-3.5" />
                   <span>Real-time orbital feed</span>
                 </div>
                 {TELEMETRY_LOGS.map((log, i) => (
                   <div key={i} className="flex items-start gap-2 leading-relaxed">
-                    <span className="text-[#8f8f86] text-[10px] flex-shrink-0">{log.time}</span>
-                    <span className="text-[#f5f5f0]">{log.msg}</span>
+                    <span className="text-[#6f7a8c] text-[10px] flex-shrink-0">{log.time}</span>
+                    <span className="text-[#e6eaf0]">{log.msg}</span>
                   </div>
                 ))}
               </div>

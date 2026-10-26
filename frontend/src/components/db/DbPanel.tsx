@@ -25,29 +25,29 @@ export function DbPanel() {
   const inside = rows ? rows.filter((r) => r.inside_zone).length : 0;
 
   return (
-    <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+    <div className="p-5 rounded-lg bg-[#111826] border border-[#222c3d] flex flex-col gap-3">
       <div className="flex items-center gap-2">
         <Database className="w-4 h-4 text-[#facc15]" />
-        <h2 className="text-sm font-semibold text-[#f5f5f0]">Database</h2>
+        <h2 className="text-sm font-semibold text-[#e6eaf0]">Database</h2>
       </div>
       <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
         <div>
-          <dt className="text-[#8f8f86]">Backend</dt>
-          <dd className="text-[#f5f5f0] mt-0.5">{isDbConfigured() ? 'Supabase (PostgreSQL + PostGIS)' : 'Browser storage only'}</dd>
+          <dt className="text-[#6f7a8c]">Backend</dt>
+          <dd className="text-[#e6eaf0] mt-0.5">{isDbConfigured() ? 'Supabase (PostgreSQL + PostGIS)' : 'Browser storage only'}</dd>
         </div>
         <div>
-          <dt className="text-[#8f8f86]">Status</dt>
-          <dd className="text-[#f5f5f0] mt-0.5">
+          <dt className="text-[#6f7a8c]">Status</dt>
+          <dd className="text-[#e6eaf0] mt-0.5">
             {s.state}
             {s.lastSync ? ` · last sync ${new Date(s.lastSync).toLocaleTimeString()}` : ''}
           </dd>
         </div>
         <div>
-          <dt className="text-[#8f8f86]">Project</dt>
-          <dd className="text-[#f5f5f0] mt-0.5 font-mono">{s.host || '—'}</dd>
+          <dt className="text-[#6f7a8c]">Project</dt>
+          <dd className="text-[#e6eaf0] mt-0.5 font-mono">{s.host || '—'}</dd>
         </div>
       </dl>
-      <p className="text-[11px] text-[#b5b5ad]">
+      <p className="text-[11px] text-[#98a2b3]">
         Tables: alerts (case state), ledger_blocks and chain_anchors (append-only: the database rejects updates and
         deletes), zones (PostGIS geometry). The browser keeps a local copy so the app keeps working if the database is
         unreachable.
@@ -65,7 +65,7 @@ export function DbPanel() {
           </button>
           {err && <p className="text-xs text-[#fca5a5]">{err}</p>}
           {rows && (
-            <p className="text-sm text-[#f5f5f0]">
+            <p className="text-sm text-[#e6eaf0]">
               The database checked {rows.length} alerts with <span className="font-mono">ST_Contains</span>:{' '}
               <span className="text-[#86efac]">{inside} inside</span> their protected zone,{' '}
               <span className="text-[#fbbf24]">{rows.length - inside} outside</span> (alert point outside the polygon; the

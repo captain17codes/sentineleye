@@ -1,5 +1,6 @@
 import React from 'react';
 import { DbStatusChip } from '../db/DbStatusChip';
+import { useAlerts } from '../../hooks/useAlerts';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useJurisdiction, JURISDICTION_CONFIG, JurisdictionOption } from '../../context/JurisdictionContext';
@@ -39,29 +40,31 @@ export function AppShell({ children }: AppShellProps) {
   };
 
   const [guideOpen, setGuideOpen] = React.useState(false);
+  const { alerts } = useAlerts();
+  const criticalOpen = alerts.filter((a) => a.severity === 'CRITICAL').length;
 
   const navGroups: { title: string; items: { label: string; hint: string; to: string; icon: any }[] }[] = [
-    { title: 'Start', items: [{ label: 'Overview', hint: 'Summary of all zones', to: '/overview', icon: LayoutDashboard }] },
     {
-      title: 'Monitor',
+      title: '',
       items: [
+        { label: 'Overview', hint: 'Summary of all zones', to: '/overview', icon: LayoutDashboard },
         { label: 'Scan', hint: 'Compare two satellite dates', to: '/scan', icon: Radar },
         { label: 'Alerts', hint: 'Review and act on findings', to: '/alerts', icon: AlertTriangle },
         { label: 'Live Map', hint: 'See alerts on the map', to: '/map', icon: MapPin },
       ],
     },
     {
-      title: 'Proof',
+      title: 'Analysis',
       items: [
-        { label: 'Case studies', hint: 'Tested on real court cases', to: '/cases', icon: Gavel },
-        { label: 'Ledger', hint: 'Tamper-evident record', to: '/ledger', icon: Lock },
-        { label: 'Risk', hint: 'Which zones need attention', to: '/risk', icon: BarChart3 },
+        { label: 'Case Studies', hint: 'Tested on real court cases', to: '/cases', icon: Gavel },
+        { label: 'Evidence Ledger', hint: 'Tamper-evident record', to: '/ledger', icon: Lock },
+        { label: 'Risk Analysis', hint: 'Which zones need attention', to: '/risk', icon: BarChart3 },
+        { label: 'Policy & Rules', hint: 'Laws and rules used', to: '/policy', icon: BookOpen },
       ],
     },
     {
       title: 'Help',
       items: [
-        { label: 'Policy', hint: 'Laws and rules used', to: '/policy', icon: BookOpen },
         { label: 'FAQ', hint: 'Common questions', to: '/faq', icon: HelpCircle },
         { label: 'Settings', hint: 'Account and database', to: '/settings', icon: Settings },
       ],
@@ -71,37 +74,24 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-bg text-text selection:bg-accent/20 selection:text-white">
       {/* ── Left Sidebar (Dark, Flat, Professional) ── */}
-      <aside className="w-64 flex-shrink-0 flex flex-col bg-panel border-r border-border select-none">
-        {/* Brand Header */}
-        <div className="h-14 px-5 flex items-center gap-3 border-b border-border">
-          <div className="w-7 h-7 rounded-md bg-accent flex items-center justify-center text-bg font-bold text-sm">
-            <Shield className="w-4 h-4 text-bg" />
+      <aside className="w-[248px] flex-shrink-0 flex flex-col bg-[#0d131e] border-r border-[#1b2331] select-none">
+        <div className="h-16 px-5 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
+            <Shield className="w-4 h-4 text-[#0b1018]" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-sm tracking-tight text-text">SentinelEye</span>
-            <span className="text-[10px] text-muted tracking-wide">Land encroachment monitoring</span>
+          <div className="flex flex-col leading-tight">
+            <span className="font-semibold text-[15px] tracking-tight text-text">SentinelEye</span>
+            <span className="text-[11px] text-[#6f7a8c]">Land encroachment monitoring</span>
           </div>
         </div>
 
-        {/* User Chip */}
-        {user && (
-          <div className="p-3 mx-3 mt-3 mb-2 rounded-lg bg-panel-light border border-border flex items-center justify-between">
-            <div className="flex flex-col min-w-0 pr-2">
-              <span className="text-xs font-medium text-text truncate">{user.email}</span>
-              <span className="text-[10px] font-mono text-muted capitalize">{user.role}</span>
-            </div>
-            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase font-semibold bg-accent-dim text-accent border border-accent/30">
-              {user.role}
-            </span>
-          </div>
-        )}
-
-        {/* Navigation Items */}
-        <nav className="flex-1 px-3 py-2 overflow-y-auto">
-          {navGroups.map((group) => (
-            <div key={group.title} className="mb-3">
-              <p className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6f6f68]">{group.title}</p>
-              <div className="space-y-0.5">
+        <nav className="flex-1 px-3 pt-3 overflow-y-auto">
+          {navGroups.map((group, gi) => (
+            <div key={gi} className={gi ? 'mt-5 pt-4 border-t border-[#1b2331]' : ''}>
+              {group.title && (
+                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#5d6778]">{group.title}</p>
+              )}
+              <div className="space-y-1">
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const isActive =
@@ -111,17 +101,19 @@ export function AppShell({ children }: AppShellProps) {
                       key={item.to}
                       to={item.to}
                       title={item.hint}
-                      className={`flex items-center gap-3 px-3 py-1.5 rounded-md transition-colors ${
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] transition-colors ${
                         isActive
-                          ? 'bg-raised text-text border-l-[3px] border-l-accent border-y-transparent border-r-transparent'
-                          : 'text-muted hover:text-text hover:bg-raised border border-transparent'
+                          ? 'bg-[#172031] text-text font-medium shadow-[inset_2px_0_0_#facc15]'
+                          : 'text-[#98a2b3] hover:text-text hover:bg-[#141b28]'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-accent' : 'text-muted'}`} />
-                      <span className="flex flex-col min-w-0 leading-tight">
-                        <span className="text-xs font-medium">{item.label}</span>
-                        <span className="text-[10px] text-[#7d7d76] truncate">{item.hint}</span>
-                      </span>
+                      <Icon className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? 'text-[#facc15]' : 'text-[#7d8798]'}`} />
+                      <span className="flex-1">{item.label}</span>
+                      {item.to === '/alerts' && criticalOpen > 0 && (
+                        <span className="min-w-[20px] h-5 px-1.5 rounded-md bg-[#3b1d22] text-[#f87171] text-[11px] font-semibold flex items-center justify-center">
+                          {criticalOpen}
+                        </span>
+                      )}
                     </NavLink>
                   );
                 })}
@@ -130,108 +122,67 @@ export function AppShell({ children }: AppShellProps) {
           ))}
         </nav>
 
-        {/* Logout Button */}
-        <div className="p-3 border-t border-border">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium text-muted hover:text-critical hover:bg-critical/10 transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sign out</span>
-          </button>
-        </div>
+        {user && (
+          <div className="m-3 p-3 rounded-xl bg-[#111826] border border-[#1b2331] flex items-center gap-3">
+            <span className="w-9 h-9 rounded-full bg-[#1d2636] text-[#c9d1dc] text-xs font-semibold flex items-center justify-center uppercase">
+              {(user.email || 'op').slice(0, 2)}
+            </span>
+            <span className="flex-1 min-w-0 leading-tight">
+              <span className="block text-[13px] text-text truncate">{(user.email || '').split('@')[0]}</span>
+              <span className="block text-[11px] text-[#6f7a8c] capitalize">{user.role}</span>
+            </span>
+            <button onClick={handleLogout} title="Sign out" className="p-1.5 rounded-md text-[#7d8798] hover:text-[#f87171] hover:bg-white/5">
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </aside>
 
       {/* ── Main Content Area with Top Status Bar ── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Slim Top Status Bar */}
-        <header className="h-12 flex-shrink-0 px-5 bg-panel border-b border-border flex items-center justify-between gap-4 text-xs select-none">
-          {/* Left: status */}
-          <div className="flex items-center gap-3 text-muted min-w-0 whitespace-nowrap">
-            <div className="flex items-center gap-2" title="The app is running">
-              <span className="live-dot" />
-              <span className="text-text font-medium text-xs">Online</span>
-            </div>
-            <span
-              className="hidden lg:inline-flex items-center gap-1.5 text-xs text-muted"
-              title="Real Sentinel-2 L2A images for the case studies and Z-102 / Z-104; a calibration set (known answers) elsewhere"
-            >
-              <Layers className="w-3.5 h-3.5 text-muted" />
-              Sentinel-2 data
-            </span>
-            <span
-              className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#facc15] bg-raised border border-[#facc15]/40"
-              title="Student research prototype, not an official government system"
-            >
-              Prototype
-            </span>
+        <header className="h-14 flex-shrink-0 px-6 border-b border-[#1b2331] flex items-center justify-between gap-4 text-xs select-none bg-[#0b1018]">
+          <div className="flex items-center gap-3 min-w-0 whitespace-nowrap">
             <DbStatusChip />
           </div>
-
-          {/* Right Controls: Presentation Mode Toggle + Jurisdiction Picker + Ledger Status */}
-          <div className="flex items-center gap-3 whitespace-nowrap">
-            <button
-              type="button"
-              onClick={() => setGuideOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-[#facc15]/50 text-[#facc15] text-xs font-semibold hover:bg-[#facc15]/10 min-h-[36px]"
-            >
-              <HelpCircle className="w-3.5 h-3.5" />
-              How to use
-            </button>
-            {/* Presentation Mode Toggle Button */}
-            <button
-              type="button"
-              onClick={togglePresentationMode}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md border text-xs font-semibold transition-all min-h-[36px] ${
-                isPresentationMode
-                  ? 'bg-[#facc15]/20 border-[#facc15] text-[#facc15] shadow-[0_0_12px_rgba(250, 204, 21,0.35)]'
-                  : 'bg-[#0a0a0a] border-[#2e2e2e] text-[#b5b5ad] hover:text-[#f5f5f0] hover:border-[#facc15]/50'
-              }`}
-              title={isPresentationMode ? 'Exit Presentation Mode' : 'Enter Presentation Mode (Projector & High Visibility)'}
-              aria-label="Toggle Presentation Mode"
-            >
-              <Tv className={`w-3.5 h-3.5 ${isPresentationMode ? 'text-[#facc15]' : 'text-[#b5b5ad]'}`} />
-              <span className="hidden sm:inline font-medium">Presentation</span>
-              <span
-                className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
-                  isPresentationMode
-                    ? 'bg-[#facc15] text-[#0a0a0a]'
-                    : 'bg-[#1a1a1a] text-[#8f8f86] border border-[#2e2e2e]'
-                }`}
-              >
-                {isPresentationMode ? 'ON' : 'OFF'}
-              </span>
-            </button>
-
-            {/* Jurisdiction Picker (Explicitly styled solid to avoid OS white-on-white) */}
+          <div className="flex items-center gap-2.5 whitespace-nowrap">
             <div className="relative flex items-center">
+              <MapPin className="w-3.5 h-3.5 text-[#7d8798] absolute left-3 pointer-events-none" />
               <select
                 value={jurisdiction}
                 onChange={(e) => setJurisdiction(e.target.value as JurisdictionOption)}
                 aria-label="Jurisdiction Selector"
                 title="Filter everything by area"
-                className="appearance-none bg-bg border border-border text-text rounded-md px-3 py-1.5 pr-8 text-xs font-medium focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent cursor-pointer shadow-sm"
-                style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
+                className="appearance-none bg-[#111826] border border-[#222c3d] text-text rounded-lg pl-8 pr-8 py-2 text-xs font-medium focus:outline-none focus:border-[#facc15]/50 cursor-pointer"
+                style={{ backgroundColor: '#111826', color: '#e6eaf0' }}
               >
                 {Object.entries(JURISDICTION_CONFIG).map(([key, cfg]) => (
-                  <option
-                    key={key}
-                    value={key}
-                    style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
-                    className="bg-bg text-text"
-                  >
+                  <option key={key} value={key} style={{ backgroundColor: '#111826', color: '#e6eaf0' }}>
                     {cfg.label}
                   </option>
                 ))}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-muted absolute right-2.5 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#7d8798] absolute right-2.5 pointer-events-none" />
             </div>
-
-            {/* Ledger status */}
-            <NavLink to="/ledger" className="hidden xl:flex items-center gap-1.5 text-[11px] font-mono text-muted hover:text-text" title="Open the evidence ledger">
-              <Lock className="w-3 h-3" />
-              <span className="text-accent font-semibold">Ledger</span>
-            </NavLink>
+            <button
+              type="button"
+              onClick={() => setGuideOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#222c3d] bg-[#111826] text-[#c9d1dc] text-xs font-medium hover:border-[#2f3a4d]"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+              How to use
+            </button>
+            <button
+              type="button"
+              onClick={togglePresentationMode}
+              className={`p-2 rounded-lg border transition-colors ${
+                isPresentationMode ? 'border-[#facc15]/40 text-[#facc15] bg-[#facc15]/10' : 'border-[#222c3d] bg-[#111826] text-[#98a2b3] hover:text-text'
+              }`}
+              title={isPresentationMode ? 'Exit presentation mode' : 'Presentation mode (larger text for a projector)'}
+              aria-label="Toggle Presentation Mode"
+            >
+              <Tv className="w-3.5 h-3.5" />
+            </button>
           </div>
         </header>
 
@@ -240,17 +191,17 @@ export function AppShell({ children }: AppShellProps) {
           className={`flex-1 bg-bg ${
             location.pathname === '/map'
               ? 'p-0 overflow-hidden'
-              : 'p-4 sm:p-6 lg:p-7 overflow-y-auto overflow-x-hidden'
+              : 'p-5 sm:p-7 lg:p-8 overflow-y-auto overflow-x-hidden'
           }`}
         >
           {children}
         </main>
 
         {/* Honest data-provenance footer */}
-        <footer className="h-7 flex-shrink-0 px-4 bg-[#0a0a0a] border-t border-[#2e2e2e] flex items-center justify-between gap-4 text-[11px] text-[#8f8f86] font-mono select-none whitespace-nowrap overflow-hidden">
+        <footer className="h-7 flex-shrink-0 px-4 bg-[#0b1018] border-t border-[#222c3d] flex items-center justify-between gap-4 text-[11px] text-[#6f7a8c] font-mono select-none whitespace-nowrap overflow-hidden">
           <div className="flex items-center gap-2 min-w-0">
             <span className="w-1.5 h-1.5 rounded-full bg-[#facc15] flex-shrink-0" />
-            <span className="text-[#b5b5ad] truncate">Research prototype · data saved in your browser and copied to the database</span>
+            <span className="text-[#98a2b3] truncate">Research prototype · data saved in your browser and copied to the database</span>
           </div>
           <div className="hidden xl:flex items-center gap-3 text-[10px] presentation-hidden">
             <span>Real Sentinel-2: Z-102, Z-104, 3 case studies</span>
@@ -283,26 +234,26 @@ function QuickGuide({ onClose }: { onClose: () => void }) {
       <div
         role="dialog"
         aria-label="How to use SentinelEye"
-        className="w-full max-w-2xl rounded-2xl border border-[#2e2e2e] bg-[#111] p-6 shadow-2xl"
+        className="w-full max-w-2xl rounded-2xl border border-[#222c3d] bg-[#111] p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4 mb-5">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#facc15]">Quick guide</p>
-            <h2 className="mt-1 text-xl font-semibold text-[#f5f5f0]">How to use SentinelEye in 4 steps</h2>
+            <h2 className="mt-1 text-xl font-semibold text-[#e6eaf0]">How to use SentinelEye in 4 steps</h2>
           </div>
-          <button onClick={onClose} className="text-[#8f8f86] hover:text-[#f5f5f0] text-sm px-2 py-1 rounded-md border border-[#2e2e2e]">
+          <button onClick={onClose} className="text-[#6f7a8c] hover:text-[#e6eaf0] text-sm px-2 py-1 rounded-md border border-[#222c3d]">
             Close
           </button>
         </div>
         <ol className="grid sm:grid-cols-2 gap-3">
           {GUIDE_STEPS.map((s) => (
-            <li key={s.n} className="rounded-xl border border-[#262626] bg-[#0a0a0a] p-4 flex flex-col">
+            <li key={s.n} className="rounded-xl border border-[#262626] bg-[#0b1018] p-4 flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-[#facc15] text-[#0a0a0a] text-xs font-bold flex items-center justify-center">{s.n}</span>
-                <span className="text-sm font-semibold text-[#f5f5f0]">{s.title}</span>
+                <span className="w-6 h-6 rounded-full bg-[#facc15] text-[#0b1018] text-xs font-bold flex items-center justify-center">{s.n}</span>
+                <span className="text-sm font-semibold text-[#e6eaf0]">{s.title}</span>
               </div>
-              <p className="mt-2 text-[13px] leading-relaxed text-[#b5b5ad] flex-1">{s.body}</p>
+              <p className="mt-2 text-[13px] leading-relaxed text-[#98a2b3] flex-1">{s.body}</p>
               <button
                 onClick={() => {
                   onClose();
@@ -315,7 +266,7 @@ function QuickGuide({ onClose }: { onClose: () => void }) {
             </li>
           ))}
         </ol>
-        <p className="mt-4 text-[12px] text-[#8f8f86]">
+        <p className="mt-4 text-[12px] text-[#6f7a8c]">
           Tip: hover over any menu item for a short description. Case studies shows the method tested on real, documented sites.
         </p>
       </div>

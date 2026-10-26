@@ -32,8 +32,8 @@ export function DbStatusChip() {
   }, []);
 
   const map: Record<DbStatus['state'], { text: string; cls: string }> = {
-    off: { text: 'DB: browser only', cls: 'text-[#b5b5ad] border-[#2e2e2e]' },
-    connecting: { text: 'DB: connecting…', cls: 'text-[#b5b5ad] border-[#2e2e2e]' },
+    off: { text: 'DB: browser only', cls: 'text-[#98a2b3] border-[#222c3d]' },
+    connecting: { text: 'DB: connecting…', cls: 'text-[#98a2b3] border-[#222c3d]' },
     online: { text: 'DB: Supabase synced', cls: 'text-[#86efac] border-[#22c55e]/40' },
     error: { text: 'DB: offline (local copy)', cls: 'text-[#fca5a5] border-[#ef4444]/40' },
   };

@@ -69,7 +69,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
     <div className="flex flex-col gap-1">
       <span className="text-white block font-medium">{label}</span>
       <span className="break-all block">{id}</span>
-      <span className="text-[10px] text-[#b5b5ad]">
+      <span className="text-[10px] text-[#98a2b3]">
         {new Date(date).toUTCString()}
         {typeof cloud === 'number' ? ` · site cloud ${cloud.toFixed(1)}%` : ''}
       </span>
@@ -89,7 +89,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
             <li key={r.label} className={`flex items-start gap-1 text-[10px] ${r.ok ? 'text-[#fde047]' : 'text-[#f87171]'}`}>
               {r.ok ? <ShieldCheck className="w-3 h-3 mt-px flex-shrink-0" /> : <ShieldAlert className="w-3 h-3 mt-px flex-shrink-0" />}
               <span>
-                {r.label}: <span className="text-[#b5b5ad]">{r.detail}</span>
+                {r.label}: <span className="text-[#98a2b3]">{r.detail}</span>
               </span>
             </li>
           ))}
@@ -101,7 +101,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
 
   return (
     <div
-      className={`p-3 rounded-lg bg-[#1a1a1a] border flex flex-col gap-2 font-mono text-xs ${
+      className={`p-3 rounded-lg bg-[#172031] border flex flex-col gap-2 font-mono text-xs ${
         real ? 'border-[#facc15]/60' : 'border-[#f59e0b]/40'
       }`}
     >
@@ -124,14 +124,14 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-[#b5b5ad] pt-1 border-t border-[#2e2e2e]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-[#98a2b3] pt-1 border-t border-[#222c3d]">
         {sceneBlock('T0 (before) scene', meta.t0SceneId, meta.t0Date, meta.t0CloudPct, t0Check)}
         {sceneBlock('T1 (after) scene', meta.t1SceneId, meta.t1Date, meta.t1CloudPct, t1Check)}
       </div>
 
       {real && (
-        <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[#2e2e2e]">
-          <span className="text-[10px] text-[#b5b5ad]">
+        <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[#222c3d]">
+          <span className="text-[10px] text-[#98a2b3]">
             {meta.mgrsGrid ? `MGRS tile ${meta.mgrsGrid} · ` : ''}
             {meta.aoiBbox ? `site ${meta.aoiBbox.map((v) => v.toFixed(4)).join(', ')}` : ''}
           </span>
@@ -139,7 +139,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
             type="button"
             onClick={runVerify}
             disabled={t0Check.status === 'running'}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#facc15] text-[#0a0a0a] hover:bg-[#eab308] disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#facc15] text-[#0b1018] hover:bg-[#eab308] disabled:opacity-60"
           >
             {t0Check.status === 'running' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
             Verify live against public STAC

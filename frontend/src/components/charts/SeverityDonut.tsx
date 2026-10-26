@@ -24,11 +24,11 @@ export function SeverityDonut({ data: propData }: SeverityDonutProps) {
         <PieChart>
           <Tooltip
             contentStyle={{
-              backgroundColor: '#121212',
-              borderColor: '#2e2e2e',
+              backgroundColor: '#111826',
+              borderColor: '#222c3d',
               borderRadius: '8px',
               fontSize: '12px',
-              color: '#f5f5f0',
+              color: '#e6eaf0',
               boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
             }}
             formatter={(value: any, name: any) => [`${value} incidents`, `${name}`]}
@@ -44,7 +44,7 @@ export function SeverityDonut({ data: propData }: SeverityDonutProps) {
           >
             {chartData.map((entry) => {
               const color = severityColor[entry.name as keyof typeof severityColor] || '#64748b';
-              return <Cell key={`cell-${entry.name}`} fill={color} stroke="#121212" strokeWidth={2} />;
+              return <Cell key={`cell-${entry.name}`} fill={color} stroke="#111826" strokeWidth={2} />;
             })}
           </Pie>
         </PieChart>
@@ -60,8 +60,8 @@ export function SeverityDonut({ data: propData }: SeverityDonutProps) {
                 className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-[#b5b5ad] capitalize">{item.name.toLowerCase()}:</span>
-              <span className="font-semibold text-[#f5f5f0] font-mono">{item.value}</span>
+              <span className="text-[#98a2b3] capitalize">{item.name.toLowerCase()}:</span>
+              <span className="font-semibold text-[#e6eaf0] font-mono">{item.value}</span>
             </div>
           );
         })}

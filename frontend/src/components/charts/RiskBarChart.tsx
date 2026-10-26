@@ -39,28 +39,28 @@ export function RiskBarChart({ data }: RiskBarChartProps) {
     <div className="w-full h-64 select-none">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <CartesianGrid stroke="#2e2e2e" strokeDasharray="3 3" />
+          <CartesianGrid stroke="#222c3d" strokeDasharray="3 3" />
           <XAxis
             dataKey="name"
-            stroke="#b5b5ad"
+            stroke="#98a2b3"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2e2e2e' }}
+            axisLine={{ stroke: '#222c3d' }}
           />
           <YAxis
-            stroke="#b5b5ad"
+            stroke="#98a2b3"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2e2e2e' }}
+            axisLine={{ stroke: '#222c3d' }}
             allowDecimals={false}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#121212',
-              borderColor: '#2e2e2e',
+              backgroundColor: '#111826',
+              borderColor: '#222c3d',
               borderRadius: '8px',
               fontSize: '12px',
-              color: '#f5f5f0',
+              color: '#e6eaf0',
               boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
             }}
             formatter={(value: any) => [`${value} pts`, 'Vulnerability Index']}
