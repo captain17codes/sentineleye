@@ -44,7 +44,7 @@ export function StarField({ className = 'fixed inset-0 pointer-events-none -z-10
           star.x = Math.random() * width;
         }
 
-        ctx.fillStyle = `rgba(0, 255, 157, ${star.alpha * 0.7})`;
+        ctx.fillStyle = `rgba(250, 204, 21, ${star.alpha * 0.7})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();

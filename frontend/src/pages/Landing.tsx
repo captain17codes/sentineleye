@@ -24,7 +24,7 @@ const ScrollGlobeStory = React.lazy(() => import('../components/landing/ScrollGl
 // Static hero shown while the 3D story loads (and on phones / no WebGL inside the story itself).
 function StaticHero({ children }: { children: React.ReactNode }) {
   return (
-    <section className="relative w-full min-h-screen overflow-hidden border-b border-[#1f2a26] bg-[#05080a]">
+    <section className="relative w-full min-h-screen overflow-hidden border-b border-[#242424] bg-[#050505]">
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-50">
         <GlobeFallback size={720} />
       </div>
@@ -158,20 +158,20 @@ export function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0f0e] text-[#f1f5f3] flex flex-col selection:bg-[#22c55e]/20 selection:text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#f5f5f0] flex flex-col selection:bg-[#facc15]/20 selection:text-white">
       {/* ── 1. Full-Viewport Entry Screen (Hero + Globe + Auth Card) ── */}
       <HeroShell>
         {/* Top Bar: Logo Top-Left only (No top nav pill) */}
         <header className="relative z-20 flex items-center justify-between w-full">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#22c55e] flex items-center justify-center text-[#0b0f0e] font-bold shadow-sm">
-              <Shield className="w-4 h-4 text-[#0b0f0e]" />
+            <div className="w-8 h-8 rounded-lg bg-[#facc15] flex items-center justify-center text-[#0a0a0a] font-bold shadow-sm">
+              <Shield className="w-4 h-4 text-[#0a0a0a]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-sm tracking-tight text-[#f1f5f3] font-sans">
+              <span className="font-bold text-sm tracking-tight text-[#f5f5f0] font-sans">
                 SENTINELEYE
               </span>
-              <span className="text-[10px] text-[#b4c2bb] font-sans">
+              <span className="text-[10px] text-[#b5b5ad] font-sans">
                 Land encroachment monitoring
               </span>
             </div>
@@ -183,15 +183,15 @@ export function Landing() {
         <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto py-8">
           {/* Left Column: plain statement of what the tool does */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
-            <p className="text-xs font-medium uppercase tracking-wider text-[#22c55e] mb-4">
+            <p className="text-xs font-medium uppercase tracking-wider text-[#facc15] mb-4">
               Protected land around Delhi NCR
             </p>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#f1f5f3] leading-[1.15] max-w-2xl">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#f5f5f0] leading-[1.15] max-w-2xl">
               Spot illegal construction and clearing in protected land, from satellite images.
             </h1>
 
-            <p className="mt-5 text-base text-[#b4c2bb] max-w-xl leading-relaxed">
+            <p className="mt-5 text-base text-[#b5b5ad] max-w-xl leading-relaxed">
               SentinelEye compares Sentinel-2 images of protected zones taken years apart, flags vegetation loss
               and new construction inside the boundary, and keeps a tamper-evident record that an officer can
               take forward as evidence.
@@ -199,65 +199,65 @@ export function Landing() {
 
             <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-4 text-sm">
               <div>
-                <dt className="text-[#8fa097] text-xs">Protected zones</dt>
-                <dd className="text-[#f1f5f3] font-semibold mt-0.5">8</dd>
+                <dt className="text-[#8f8f86] text-xs">Protected zones</dt>
+                <dd className="text-[#f5f5f0] font-semibold mt-0.5">8</dd>
               </div>
               <div>
-                <dt className="text-[#8fa097] text-xs">Pixel size</dt>
-                <dd className="text-[#f1f5f3] font-semibold mt-0.5">10 m</dd>
+                <dt className="text-[#8f8f86] text-xs">Pixel size</dt>
+                <dd className="text-[#f5f5f0] font-semibold mt-0.5">10 m</dd>
               </div>
               <div>
-                <dt className="text-[#8fa097] text-xs">New image every</dt>
-                <dd className="text-[#f1f5f3] font-semibold mt-0.5">5 days</dd>
+                <dt className="text-[#8f8f86] text-xs">New image every</dt>
+                <dd className="text-[#f5f5f0] font-semibold mt-0.5">5 days</dd>
               </div>
               <div>
-                <dt className="text-[#8fa097] text-xs">Data</dt>
-                <dd className="text-[#f1f5f3] font-semibold mt-0.5">Copernicus, free</dd>
+                <dt className="text-[#8f8f86] text-xs">Data</dt>
+                <dd className="text-[#f5f5f0] font-semibold mt-0.5">Copernicus, free</dd>
               </div>
             </dl>
           </div>
 
-          {/* Right Column: 400px Solid Login Card (NO blur, solid #111816) */}
+          {/* Right Column: 400px Solid Login Card (NO blur, solid #121212) */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end w-full">
-            <div className="w-full max-w-[400px] rounded-xl bg-[#111816] border border-[#2a3832] p-6 sm:p-7 shadow-2xl flex flex-col">
+            <div className="w-full max-w-[400px] rounded-xl bg-[#121212] border border-[#2e2e2e] p-6 sm:p-7 shadow-2xl flex flex-col">
               {user ? (
                 /* Active Session State: Instant 1-Click Access to Console */
                 <div className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#2a3832]">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#2e2e2e]">
                     <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#22c55e] animate-pulse" />
-                      <span className="text-xs font-semibold text-[#f1f5f3]">Active Session</span>
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#facc15] animate-pulse" />
+                      <span className="text-xs font-semibold text-[#f5f5f0]">Active Session</span>
                     </div>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/30">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-[#facc15]/20 text-[#facc15] border border-[#facc15]/30">
                       {user.role}
                     </span>
                   </div>
 
-                  <div className="p-3.5 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col gap-1">
-                    <span className="text-[11px] text-[#b4c2bb]">Signed in as:</span>
-                    <span className="text-xs font-mono font-bold text-[#f1f5f3] truncate">{user.email}</span>
+                  <div className="p-3.5 rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] flex flex-col gap-1">
+                    <span className="text-[11px] text-[#b5b5ad]">Signed in as:</span>
+                    <span className="text-xs font-mono font-bold text-[#f5f5f0] truncate">{user.email}</span>
                   </div>
 
                   <button
                     onClick={() => navigate('/overview')}
-                    className="w-full py-3 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-bold text-xs hover:bg-[#16a34a] flex items-center justify-center gap-2 transition-colors shadow-lg cursor-pointer"
+                    className="w-full py-3 rounded-lg bg-[#facc15] text-[#0a0a0a] font-bold text-xs hover:bg-[#eab308] flex items-center justify-center gap-2 transition-colors shadow-lg cursor-pointer"
                   >
                     <span>Open dashboard</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#2a3832]">
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#2e2e2e]">
                     <button
                       type="button"
                       onClick={fillDemoAccount}
-                      className="py-2 px-2 rounded-md bg-[#16201c] border border-[#2a3832] hover:border-[#22c55e] text-[#f1f5f3] text-xs font-medium text-center transition-colors"
+                      className="py-2 px-2 rounded-md bg-[#1a1a1a] border border-[#2e2e2e] hover:border-[#facc15] text-[#f5f5f0] text-xs font-medium text-center transition-colors"
                     >
                       Reset workspace
                     </button>
                     <button
                       type="button"
                       onClick={logout}
-                      className="py-2 px-2 rounded-md bg-[#16201c] border border-[#2a3832] hover:text-[#ef4444] text-[#b4c2bb] text-xs font-medium text-center transition-colors"
+                      className="py-2 px-2 rounded-md bg-[#1a1a1a] border border-[#2e2e2e] hover:text-[#ef4444] text-[#b5b5ad] text-xs font-medium text-center transition-colors"
                     >
                       Sign out
                     </button>
@@ -267,7 +267,7 @@ export function Landing() {
                 /* Unauthenticated Login Form */
                 <>
                   {/* Tab Selector: Sign in / Create account */}
-                  <div className="grid grid-cols-2 p-1 rounded-lg bg-[#0b0f0e] border border-[#2a3832] mb-5">
+                  <div className="grid grid-cols-2 p-1 rounded-lg bg-[#0a0a0a] border border-[#2e2e2e] mb-5">
                     <button
                       type="button"
                       onClick={() => {
@@ -277,8 +277,8 @@ export function Landing() {
                       }}
                       className={`py-2 text-xs font-semibold rounded-md transition-colors ${
                         tab === 'signin'
-                          ? 'bg-[#16201c] text-[#f1f5f3] border border-[#2a3832]'
-                          : 'text-[#b4c2bb] hover:text-[#f1f5f3]'
+                          ? 'bg-[#1a1a1a] text-[#f5f5f0] border border-[#2e2e2e]'
+                          : 'text-[#b5b5ad] hover:text-[#f5f5f0]'
                       }`}
                     >
                       Sign in
@@ -292,8 +292,8 @@ export function Landing() {
                       }}
                       className={`py-2 text-xs font-semibold rounded-md transition-colors ${
                         tab === 'register'
-                          ? 'bg-[#16201c] text-[#f1f5f3] border border-[#2a3832]'
-                          : 'text-[#b4c2bb] hover:text-[#f1f5f3]'
+                          ? 'bg-[#1a1a1a] text-[#f5f5f0] border border-[#2e2e2e]'
+                          : 'text-[#b5b5ad] hover:text-[#f5f5f0]'
                       }`}
                     >
                       Create account
@@ -302,10 +302,10 @@ export function Landing() {
 
                   {/* Form Heading */}
                   <div className="mb-4">
-                    <h2 className="text-base font-semibold text-[#f1f5f3]">
+                    <h2 className="text-base font-semibold text-[#f5f5f0]">
                       {tab === 'signin' ? 'Sign in' : 'Register operator account'}
                     </h2>
-                    <p className="text-xs text-[#b4c2bb] mt-0.5">
+                    <p className="text-xs text-[#b5b5ad] mt-0.5">
                       {tab === 'signin'
                         ? 'Enter your credentials to access surveillance operations.'
                         : 'Create a operator account with cadastral monitoring clearance.'}
@@ -314,7 +314,7 @@ export function Landing() {
 
                   {/* Error Alert Box */}
                   {errorMessage && (
-                    <div className="mb-4 p-3 rounded-lg bg-[#16201c] border border-critical text-critical text-xs flex items-start gap-2">
+                    <div className="mb-4 p-3 rounded-lg bg-[#1a1a1a] border border-critical text-critical text-xs flex items-start gap-2">
                       <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                       <span>{errorMessage}</span>
                     </div>
@@ -323,11 +323,11 @@ export function Landing() {
                   {/* Form */}
                   <form onSubmit={handleAuthSubmit} className="flex flex-col gap-4">
                     <div>
-                      <label className="text-xs font-medium text-[#f1f5f3] mb-1.5 block">
+                      <label className="text-xs font-medium text-[#f5f5f0] mb-1.5 block">
                         Email address
                       </label>
                       <div className="relative">
-                        <Mail className="w-4 h-4 text-[#b4c2bb] absolute left-3 top-1/2 -translate-y-1/2" />
+                        <Mail className="w-4 h-4 text-[#b5b5ad] absolute left-3 top-1/2 -translate-y-1/2" />
                         <input
                           type="email"
                           value={email}
@@ -336,9 +336,9 @@ export function Landing() {
                             if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }));
                           }}
                           placeholder="operator@sentineleye.com"
-                          className={`w-full bg-[#0b0f0e] border ${
-                            fieldErrors.email ? 'border-critical' : 'border-[#2a3832]'
-                          } rounded-md pl-9 pr-3 py-2 text-xs text-[#f1f5f3] placeholder-[#8a9a93] focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e]`}
+                          className={`w-full bg-[#0a0a0a] border ${
+                            fieldErrors.email ? 'border-critical' : 'border-[#2e2e2e]'
+                          } rounded-md pl-9 pr-3 py-2 text-xs text-[#f5f5f0] placeholder-[#8a9a93] focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15]`}
                         />
                       </div>
                       {fieldErrors.email && (
@@ -347,11 +347,11 @@ export function Landing() {
                     </div>
 
                     <div>
-                      <label className="text-xs font-medium text-[#f1f5f3] mb-1.5 block">
+                      <label className="text-xs font-medium text-[#f5f5f0] mb-1.5 block">
                         Password
                       </label>
                       <div className="relative">
-                        <Key className="w-4 h-4 text-[#b4c2bb] absolute left-3 top-1/2 -translate-y-1/2" />
+                        <Key className="w-4 h-4 text-[#b5b5ad] absolute left-3 top-1/2 -translate-y-1/2" />
                         <input
                           type={showPassword ? 'text' : 'password'}
                           value={password}
@@ -360,14 +360,14 @@ export function Landing() {
                             if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: undefined }));
                           }}
                           placeholder="••••••••••••"
-                          className={`w-full bg-[#0b0f0e] border ${
-                            fieldErrors.password ? 'border-critical' : 'border-[#2a3832]'
-                          } rounded-md pl-9 pr-9 py-2 text-xs text-[#f1f5f3] placeholder-[#8a9a93] focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e]`}
+                          className={`w-full bg-[#0a0a0a] border ${
+                            fieldErrors.password ? 'border-critical' : 'border-[#2e2e2e]'
+                          } rounded-md pl-9 pr-9 py-2 text-xs text-[#f5f5f0] placeholder-[#8a9a93] focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15]`}
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#b4c2bb] hover:text-[#f1f5f3]"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#b5b5ad] hover:text-[#f5f5f0]"
                           title={showPassword ? 'Hide password' : 'Show password'}
                         >
                           {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -381,7 +381,7 @@ export function Landing() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full py-2.5 rounded-md bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors mt-1"
+                      className="w-full py-2.5 rounded-md bg-[#facc15] text-[#0a0a0a] font-semibold text-xs hover:bg-[#eab308] disabled:opacity-50 transition-colors mt-1"
                     >
                       {loading
                         ? tab === 'signin'
@@ -394,15 +394,15 @@ export function Landing() {
                   </form>
 
                   {/* Operator quick sign-in */}
-                  <div className="mt-4 pt-4 border-t border-[#2a3832] flex flex-col gap-2">
+                  <div className="mt-4 pt-4 border-t border-[#2e2e2e] flex flex-col gap-2">
                     <button
                       type="button"
                       onClick={fillDemoAccount}
-                      className="w-full py-2 px-3 rounded-md bg-[#16201c] border border-[#2a3832] hover:border-[#22c55e] text-[#f1f5f3] text-xs font-medium text-center transition-colors"
+                      className="w-full py-2 px-3 rounded-md bg-[#1a1a1a] border border-[#2e2e2e] hover:border-[#facc15] text-[#f5f5f0] text-xs font-medium text-center transition-colors"
                     >
                       Sign in as field operator
                     </button>
-                    <div className="text-[11px] text-[#b4c2bb] text-center font-mono">
+                    <div className="text-[11px] text-[#b5b5ad] text-center font-mono">
                       operator@sentineleye.com / operator123
                     </div>
                   </div>
@@ -413,9 +413,9 @@ export function Landing() {
         </div>
 
         {/* Bottom indicator for scrolling */}
-        <div className="relative z-20 flex items-center justify-between pt-4 border-t border-[#1f2a26] text-xs text-[#b4c2bb]">
+        <div className="relative z-20 flex items-center justify-between pt-4 border-t border-[#242424] text-xs text-[#b5b5ad]">
           <span>8 protected zones · Delhi NCR</span>
-          <span className="text-[#8fa097]">Scroll to follow a satellite ↓</span>
+          <span className="text-[#8f8f86]">Scroll to follow a satellite ↓</span>
         </div>
       </HeroShell>
 
@@ -423,8 +423,8 @@ export function Landing() {
       <section className="w-full max-w-6xl mx-auto px-6 sm:px-10 py-16 flex flex-col gap-16">
         <div className="flex flex-col gap-5">
           <div className="max-w-3xl">
-            <h2 className="text-xl font-semibold text-[#f1f5f3]">A real example: Mangar Bani sacred grove</h2>
-            <p className="text-sm text-[#b4c2bb] mt-2 leading-relaxed">
+            <h2 className="text-xl font-semibold text-[#f5f5f0]">A real example: Mangar Bani sacred grove</h2>
+            <p className="text-sm text-[#b5b5ad] mt-2 leading-relaxed">
               Two Sentinel-2 images of the same 2.6 × 2.6 km area, taken in the same season four years apart.
               Colours show vegetation (NDVI): green is dense vegetation, brown is bare ground. On the right, red
               marks pixels where vegetation dropped sharply.
@@ -441,19 +441,19 @@ export function Landing() {
                 <img
                   src={img.src}
                   alt={`${img.label}, Mangar Bani`}
-                  className="w-full aspect-square object-cover rounded-md border border-[#2a3832]"
+                  className="w-full aspect-square object-cover rounded-md border border-[#2e2e2e]"
                   style={{ imageRendering: 'pixelated' }}
                   loading="lazy"
                 />
                 <figcaption className="flex items-baseline justify-between gap-2">
-                  <span className="text-sm font-medium text-[#f1f5f3]">{img.label}</span>
-                  <span className="text-[11px] font-mono text-[#8fa097]">{img.sub}</span>
+                  <span className="text-sm font-medium text-[#f5f5f0]">{img.label}</span>
+                  <span className="text-[11px] font-mono text-[#8f8f86]">{img.sub}</span>
                 </figcaption>
               </figure>
             ))}
           </div>
 
-          <p className="text-sm text-[#b4c2bb] max-w-3xl leading-relaxed">
+          <p className="text-sm text-[#b5b5ad] max-w-3xl leading-relaxed">
             About 3.7 hectares of pixels lost vegetation, mostly around the existing settlement in the middle of
             the image. The system reports these as candidates for an officer to check, not as confirmed violations.
           </p>
@@ -461,14 +461,14 @@ export function Landing() {
 
         {/* ── 3. How it works ── */}
         <div className="flex flex-col gap-5">
-          <h2 className="text-xl font-semibold text-[#f1f5f3]">How it works</h2>
+          <h2 className="text-xl font-semibold text-[#f5f5f0]">How it works</h2>
           <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
             {pipelineSteps.map((step, idx) => (
               <li key={step.name} className="flex gap-3">
-                <span className="font-mono text-sm text-[#22c55e] pt-0.5">{idx + 1}</span>
+                <span className="font-mono text-sm text-[#facc15] pt-0.5">{idx + 1}</span>
                 <div>
-                  <p className="text-sm font-medium text-[#f1f5f3]">{step.name}</p>
-                  <p className="text-xs text-[#b4c2bb] mt-0.5 leading-relaxed">{step.sub}</p>
+                  <p className="text-sm font-medium text-[#f5f5f0]">{step.name}</p>
+                  <p className="text-xs text-[#b5b5ad] mt-0.5 leading-relaxed">{step.sub}</p>
                 </div>
               </li>
             ))}
@@ -478,18 +478,18 @@ export function Landing() {
         {/* ── 4. From alert to notice ── */}
         <div className="flex flex-col gap-5">
           <div>
-            <h2 className="text-xl font-semibold text-[#f1f5f3]">From alert to notice</h2>
-            <p className="text-sm text-[#b4c2bb] mt-1">The software prepares the case. People make the decisions.</p>
+            <h2 className="text-xl font-semibold text-[#f5f5f0]">From alert to notice</h2>
+            <p className="text-sm text-[#b5b5ad] mt-1">The software prepares the case. People make the decisions.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {escalationTimeline.map((item) => (
-              <div key={item.time} className="p-5 rounded-md bg-[#111816] border border-[#2a3832] flex flex-col gap-2">
+              <div key={item.time} className="p-5 rounded-md bg-[#121212] border border-[#2e2e2e] flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#8fa097]">{item.time}</span>
-                  <span className="text-[11px] text-[#b4c2bb]">{item.badge}</span>
+                  <span className="text-xs text-[#8f8f86]">{item.time}</span>
+                  <span className="text-[11px] text-[#b5b5ad]">{item.badge}</span>
                 </div>
-                <h3 className="text-base font-semibold text-[#f1f5f3]">{item.title}</h3>
-                <p className="text-sm text-[#b4c2bb] leading-relaxed">{item.desc}</p>
+                <h3 className="text-base font-semibold text-[#f5f5f0]">{item.title}</h3>
+                <p className="text-sm text-[#b5b5ad] leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -498,22 +498,22 @@ export function Landing() {
         {/* ── 5. Honest scope ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <h2 className="text-base font-semibold text-[#f1f5f3] mb-3">What it can do</h2>
-            <ul className="flex flex-col gap-2 text-sm text-[#b4c2bb]">
+            <h2 className="text-base font-semibold text-[#f5f5f0] mb-3">What it can do</h2>
+            <ul className="flex flex-col gap-2 text-sm text-[#b5b5ad]">
               {canDo.map((t) => (
                 <li key={t} className="flex gap-2">
-                  <span className="text-[#22c55e]">✓</span>
+                  <span className="text-[#facc15]">✓</span>
                   <span>{t}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="text-base font-semibold text-[#f1f5f3] mb-3">What it can't do</h2>
-            <ul className="flex flex-col gap-2 text-sm text-[#b4c2bb]">
+            <h2 className="text-base font-semibold text-[#f5f5f0] mb-3">What it can't do</h2>
+            <ul className="flex flex-col gap-2 text-sm text-[#b5b5ad]">
               {cannotDo.map((t) => (
                 <li key={t} className="flex gap-2">
-                  <span className="text-[#8fa097]">–</span>
+                  <span className="text-[#8f8f86]">–</span>
                   <span>{t}</span>
                 </li>
               ))}
@@ -522,7 +522,7 @@ export function Landing() {
         </div>
 
         {/* ── 6. Footer ── */}
-        <footer className="pt-8 border-t border-[#2a3832] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#8fa097]">
+        <footer className="pt-8 border-t border-[#2e2e2e] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#8f8f86]">
           <span>SentinelEye · land encroachment monitoring prototype</span>
           <span>Contains modified Copernicus Sentinel data (2022, 2026). Zone boundaries are indicative.</span>
         </footer>

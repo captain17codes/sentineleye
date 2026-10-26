@@ -59,7 +59,7 @@ export function AppShell({ children }: AppShellProps) {
           </div>
           <div className="flex flex-col">
             <span className="font-semibold text-sm tracking-tight text-text">SentinelEye</span>
-            <span className="text-[10px] text-muted tracking-wide">Orbital Defense Platform</span>
+            <span className="text-[10px] text-muted tracking-wide">Land encroachment monitoring</span>
           </div>
         </div>
 
@@ -129,7 +129,7 @@ export function AppShell({ children }: AppShellProps) {
               <span>Data: Sentinel-2 L2A + calibration set</span>
             </div>
             <span className="hidden sm:inline text-border">|</span>
-            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#22c55e] bg-raised border border-[#22c55e]/40">
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#facc15] bg-raised border border-[#facc15]/40">
               Prototype
             </span>
           </div>
@@ -142,19 +142,19 @@ export function AppShell({ children }: AppShellProps) {
               onClick={togglePresentationMode}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-md border text-xs font-semibold transition-all min-h-[36px] ${
                 isPresentationMode
-                  ? 'bg-[#22c55e]/20 border-[#22c55e] text-[#22c55e] shadow-[0_0_12px_rgba(34,197,94,0.35)]'
-                  : 'bg-[#0b0f0e] border-[#2a3832] text-[#b4c2bb] hover:text-[#f1f5f3] hover:border-[#22c55e]/50'
+                  ? 'bg-[#facc15]/20 border-[#facc15] text-[#facc15] shadow-[0_0_12px_rgba(250, 204, 21,0.35)]'
+                  : 'bg-[#0a0a0a] border-[#2e2e2e] text-[#b5b5ad] hover:text-[#f5f5f0] hover:border-[#facc15]/50'
               }`}
               title={isPresentationMode ? 'Exit Presentation Mode' : 'Enter Presentation Mode (Projector & High Visibility)'}
               aria-label="Toggle Presentation Mode"
             >
-              <Tv className={`w-3.5 h-3.5 ${isPresentationMode ? 'text-[#22c55e]' : 'text-[#b4c2bb]'}`} />
+              <Tv className={`w-3.5 h-3.5 ${isPresentationMode ? 'text-[#facc15]' : 'text-[#b5b5ad]'}`} />
               <span className="hidden sm:inline font-medium">Presentation</span>
               <span
                 className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
                   isPresentationMode
-                    ? 'bg-[#22c55e] text-[#0b0f0e]'
-                    : 'bg-[#16201c] text-[#8fa097] border border-[#2a3832]'
+                    ? 'bg-[#facc15] text-[#0a0a0a]'
+                    : 'bg-[#1a1a1a] text-[#8f8f86] border border-[#2e2e2e]'
                 }`}
               >
                 {isPresentationMode ? 'ON' : 'OFF'}
@@ -170,13 +170,13 @@ export function AppShell({ children }: AppShellProps) {
                 onChange={(e) => setJurisdiction(e.target.value as JurisdictionOption)}
                 aria-label="Jurisdiction Selector"
                 className="appearance-none bg-bg border border-border text-text rounded-md px-3 py-1.5 pr-8 text-xs font-medium focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent cursor-pointer shadow-sm"
-                style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+                style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
               >
                 {Object.entries(JURISDICTION_CONFIG).map(([key, cfg]) => (
                   <option
                     key={key}
                     value={key}
-                    style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+                    style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
                     className="bg-bg text-text"
                   >
                     {cfg.label}
@@ -208,10 +208,10 @@ export function AppShell({ children }: AppShellProps) {
         </main>
 
         {/* Honest data-provenance footer */}
-        <footer className="h-7 flex-shrink-0 px-4 bg-[#0b0f0e] border-t border-[#2a3832] flex items-center justify-between text-[11px] text-[#8fa097] font-mono select-none">
+        <footer className="h-7 flex-shrink-0 px-4 bg-[#0a0a0a] border-t border-[#2e2e2e] flex items-center justify-between text-[11px] text-[#8f8f86] font-mono select-none">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
-            <span className="text-[#b4c2bb]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#facc15]" />
+            <span className="text-[#b5b5ad]">
               Research prototype · runs in your browser · ledger stored locally
             </span>
           </div>

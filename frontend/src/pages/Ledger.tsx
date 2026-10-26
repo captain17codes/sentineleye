@@ -115,13 +115,13 @@ export function Ledger() {
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto select-none">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2a3832]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2e2e]">
         <div>
-          <h1 className="text-xl font-semibold text-[#f1f5f3] flex items-center gap-2">
-            <Lock className="w-5 h-5 text-[#22c55e]" />
+          <h1 className="text-xl font-semibold text-[#f5f5f0] flex items-center gap-2">
+            <Lock className="w-5 h-5 text-[#facc15]" />
             <span>Cryptographic chain of custody ledger</span>
           </h1>
-          <p className="text-xs text-[#b4c2bb] mt-0.5">
+          <p className="text-xs text-[#b5b5ad] mt-0.5">
             Immutable SHA-256 block chain anchoring electronic evidence under Section 63, Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B, Indian Evidence Act, 1872)
           </p>
         </div>
@@ -131,7 +131,7 @@ export function Ledger() {
           <button
             onClick={handleVerify}
             disabled={isVerifying}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] transition-colors shadow-sm disabled:opacity-50 min-h-[38px]"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#facc15] text-[#0a0a0a] font-semibold text-xs hover:bg-[#eab308] transition-colors shadow-sm disabled:opacity-50 min-h-[38px]"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />
             <span>{isVerifying ? 'Verifying...' : 'Verify chain'}</span>
@@ -141,7 +141,7 @@ export function Ledger() {
             <>
               <button
                 onClick={handleNaiveTamper}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#16201c] border border-amber-500/40 text-amber-400 text-xs font-semibold hover:bg-amber-500/10 transition-colors min-h-[38px]"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1a1a1a] border border-amber-500/40 text-amber-400 text-xs font-semibold hover:bg-amber-500/10 transition-colors min-h-[38px]"
                 title="Level 1: Mutates Block #14 payload without updating following hashes"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
@@ -150,7 +150,7 @@ export function Ledger() {
 
               <button
                 onClick={handleSmartTamper}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#16201c] border border-red-500/40 text-red-400 text-xs font-semibold hover:bg-red-500/10 transition-colors min-h-[38px]"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1a1a1a] border border-red-500/40 text-red-400 text-xs font-semibold hover:bg-red-500/10 transition-colors min-h-[38px]"
                 title="Level 2: Mutates Block #14 payload AND recomputes all subsequent hashes to trick the chain"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
@@ -160,9 +160,9 @@ export function Ledger() {
           ) : (
             <button
               onClick={handleRestore}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#16201c] border border-[#22c55e] text-[#22c55e] text-xs font-semibold hover:bg-[#22c55e]/10 transition-colors min-h-[38px]"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1a1a1a] border border-[#facc15] text-[#facc15] text-xs font-semibold hover:bg-[#facc15]/10 transition-colors min-h-[38px]"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#22c55e]" />
+              <RotateCcw className="w-3.5 h-3.5 text-[#facc15]" />
               <span>Restore chain ({tamperedType === 'smart' ? 'Smart Tamper' : 'Naive Tamper'})</span>
             </button>
           )}
@@ -170,42 +170,42 @@ export function Ledger() {
       </div>
 
       {/* Chain Head & External Anchoring Card */}
-      <div className="p-4 rounded-xl bg-[#111816] border border-[#2a3832] flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+      <div className="p-4 rounded-xl bg-[#121212] border border-[#2e2e2e] flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
         <div className="flex flex-col gap-1.5 min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <Anchor className="w-4 h-4 text-[#22c55e]" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#f1f5f3]">
+            <Anchor className="w-4 h-4 text-[#facc15]" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#f5f5f0]">
               Chain head & anchor
             </span>
             {anchor && (
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#22c55e]/15 border border-[#22c55e]/30 text-[#22c55e]">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#facc15]/15 border border-[#facc15]/30 text-[#facc15]">
                 ANCHORED
               </span>
             )}
           </div>
-          <p className="text-[11px] text-[#b4c2bb] kpi-subtitle">
+          <p className="text-[11px] text-[#b5b5ad] kpi-subtitle">
             The latest block hash is saved in a separate anchor record. In this prototype the anchor is stored locally; in production it would be published to a public timestamping service.
           </p>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#b4c2bb] mt-0.5">
-            <span className="text-[#8fa097]">Current Head:</span>
-            <span className="text-[#22c55e] font-semibold truncate max-w-md" title={currentHeadHash}>
+          <div className="flex items-center gap-2 text-xs font-mono text-[#b5b5ad] mt-0.5">
+            <span className="text-[#8f8f86]">Current Head:</span>
+            <span className="text-[#facc15] font-semibold truncate max-w-md" title={currentHeadHash}>
               {currentHeadHash}
             </span>
             <button
               onClick={handleCopyHead}
-              className="p-1.5 hover:text-[#f1f5f3] transition-colors min-h-[28px] min-w-[28px] flex items-center justify-center"
+              className="p-1.5 hover:text-[#f5f5f0] transition-colors min-h-[28px] min-w-[28px] flex items-center justify-center"
               title="Copy Chain Head Hash"
               aria-label="Copy Chain Head Hash"
             >
               <Copy className="w-3.5 h-3.5" />
             </button>
-            {copiedHead && <span className="text-[10px] text-[#22c55e]">Copied!</span>}
+            {copiedHead && <span className="text-[10px] text-[#facc15]">Copied!</span>}
           </div>
           {anchor && (
-            <div className="text-[11px] text-[#8fa097] font-mono flex items-center gap-2 flex-wrap">
+            <div className="text-[11px] text-[#8f8f86] font-mono flex items-center gap-2 flex-wrap">
               <span>Anchored at: {new Date(anchor.anchoredAt).toLocaleTimeString()}</span>
               <span>•</span>
-              <span className="text-[#22c55e] flex items-center gap-1">
+              <span className="text-[#facc15] flex items-center gap-1">
                 <span>{anchor.anchorRef}</span>
               </span>
             </div>
@@ -214,7 +214,7 @@ export function Ledger() {
 
         <button
           onClick={handleAnchorNow}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#16201c] hover:bg-[#111816] border border-[#22c55e] text-[#22c55e] font-semibold text-xs transition-colors shrink-0 min-h-[38px]"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1a1a1a] hover:bg-[#121212] border border-[#facc15] text-[#facc15] font-semibold text-xs transition-colors shrink-0 min-h-[38px]"
         >
           <Anchor className="w-3.5 h-3.5" />
           <span>Anchor chain head</span>
@@ -226,15 +226,15 @@ export function Ledger() {
         <div
           className={`p-4 rounded-lg border flex items-center justify-between gap-4 ${
             verification.valid
-              ? 'bg-[#16201c] border-[#22c55e] text-[#22c55e]'
+              ? 'bg-[#1a1a1a] border-[#facc15] text-[#facc15]'
               : verification.smartRewriteDetected
               ? 'bg-red-950/40 border-red-500 text-red-400'
-              : 'bg-[#16201c] border-critical text-critical'
+              : 'bg-[#1a1a1a] border-critical text-critical'
           }`}
         >
           <div className="flex items-center gap-3">
             {verification.valid ? (
-              <ShieldCheck className="w-6 h-6 text-[#22c55e] shrink-0" />
+              <ShieldCheck className="w-6 h-6 text-[#facc15] shrink-0" />
             ) : (
               <ShieldAlert className="w-6 h-6 text-critical shrink-0 animate-pulse" />
             )}
@@ -246,18 +246,18 @@ export function Ledger() {
                   ? `🚨 SMART REWRITE DETECTED: Chain Internally Valid but Anchored Head Mismatch!`
                   : `Tampering Detected at Block #${verification.firstInvalidIndex}`}
               </div>
-              <p className="text-[11px] text-[#b4c2bb] kpi-subtitle mt-0.5">
+              <p className="text-[11px] text-[#b5b5ad] kpi-subtitle mt-0.5">
                 Cryptographic integrity: SHA-256 block hash tree ensuring complete tamper resistance under Sec 63 BSA
               </p>
-              <div className="text-xs text-[#b4c2bb] mt-0.5 leading-relaxed">
+              <div className="text-xs text-[#b5b5ad] mt-0.5 leading-relaxed">
                 {verification.valid
-                  ? 'All sequential SHA-256 block hashes, ECDSA operator signatures, and external anchor match root provenance.'
+                  ? 'All sequential SHA-256 block hashes, ECDSA operator signatures, and the saved anchor record all match.'
                   : verification.reason}
               </div>
             </div>
           </div>
 
-          <div className="font-mono text-xs px-2.5 py-1 rounded bg-[#111816] border border-[#2a3832] shrink-0 text-[#f1f5f3]">
+          <div className="font-mono text-xs px-2.5 py-1 rounded bg-[#121212] border border-[#2e2e2e] shrink-0 text-[#f5f5f0]">
             {verification.valid
               ? 'VALID SEAL'
               : verification.smartRewriteDetected
@@ -268,13 +268,13 @@ export function Ledger() {
       )}
 
       {/* Filter and Stats Bar */}
-      <div className="flex items-center justify-between gap-4 p-3 rounded-lg bg-[#111816] border border-[#2a3832] text-xs">
+      <div className="flex items-center justify-between gap-4 p-3 rounded-lg bg-[#121212] border border-[#2e2e2e] text-xs">
         <div className="flex items-center gap-2">
-          <span className="text-[#b4c2bb]">Filter by block type:</span>
+          <span className="text-[#b5b5ad]">Filter by block type:</span>
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="bg-[#0b0f0e] border border-[#2a3832] text-[#f1f5f3] rounded px-2.5 py-1 text-xs focus:outline-none focus:border-[#22c55e]"
+            className="bg-[#0a0a0a] border border-[#2e2e2e] text-[#f5f5f0] rounded px-2.5 py-1 text-xs focus:outline-none focus:border-[#facc15]"
           >
             <option value="all">All Block Types ({chain.length})</option>
             <option value="SCENE_INGEST">SCENE_INGEST</option>
@@ -285,7 +285,7 @@ export function Ledger() {
           </select>
         </div>
 
-        <div className="text-[#b4c2bb] font-mono">
+        <div className="text-[#b5b5ad] font-mono">
           Showing {filteredChain.length} of {chain.length} blocks
         </div>
       </div>
@@ -316,10 +316,10 @@ export function Ledger() {
           return (
             <div
               key={block.index}
-              className={`p-4 rounded-lg bg-[#111816] border transition-colors flex flex-col gap-3 ${
+              className={`p-4 rounded-lg bg-[#121212] border transition-colors flex flex-col gap-3 ${
                 isBroken
                   ? 'border-critical/80 bg-critical/5'
-                  : 'border-[#2a3832] hover:border-[#22c55e]/50'
+                  : 'border-[#2e2e2e] hover:border-[#facc15]/50'
               }`}
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -328,40 +328,40 @@ export function Ledger() {
                     className={`px-2 py-0.5 rounded font-mono text-[11px] font-semibold border ${
                       isBroken
                         ? 'border-critical text-critical bg-critical/10'
-                        : 'border-[#22c55e] text-[#22c55e] bg-[#16201c]'
+                        : 'border-[#facc15] text-[#facc15] bg-[#1a1a1a]'
                     }`}
                   >
                     Block #{block.index}
                   </span>
-                  <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#16201c] border border-[#2a3832] text-[#f1f5f3]">
+                  <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#1a1a1a] border border-[#2e2e2e] text-[#f5f5f0]">
                     {block.type}
                   </span>
-                  <span className="text-xs text-[#b4c2bb] font-mono">
+                  <span className="text-xs text-[#b5b5ad] font-mono">
                     {new Date(block.timestamp).toLocaleString()}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-[#b4c2bb] font-mono">
+                <div className="flex items-center gap-2 text-xs text-[#b5b5ad] font-mono">
                   <span>Operator:</span>
-                  <span className="text-[#f1f5f3]">{block.operator}</span>
+                  <span className="text-[#f5f5f0]">{block.operator}</span>
                 </div>
               </div>
 
               {/* Hash Links & Cryptographic Signature */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono pt-2 border-t border-[#2a3832]/60">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono pt-2 border-t border-[#2e2e2e]/60">
                 <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis">
-                  <LinkIcon className="w-3.5 h-3.5 text-[#b4c2bb] shrink-0" />
-                  <span className="text-[#b4c2bb] shrink-0">Prev:</span>
-                  <span className="text-[#8fa097] truncate" title={block.prevHash}>
+                  <LinkIcon className="w-3.5 h-3.5 text-[#b5b5ad] shrink-0" />
+                  <span className="text-[#b5b5ad] shrink-0">Prev:</span>
+                  <span className="text-[#8f8f86] truncate" title={block.prevHash}>
                     {block.prevHash}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis">
-                  <Lock className={`w-3.5 h-3.5 shrink-0 ${isBroken ? 'text-critical' : 'text-[#22c55e]'}`} />
-                  <span className="text-[#b4c2bb] shrink-0">Hash:</span>
+                  <Lock className={`w-3.5 h-3.5 shrink-0 ${isBroken ? 'text-critical' : 'text-[#facc15]'}`} />
+                  <span className="text-[#b5b5ad] shrink-0">Hash:</span>
                   <span
                     className={`font-semibold truncate ${
-                      isBroken ? 'text-critical' : 'text-[#22c55e]'
+                      isBroken ? 'text-critical' : 'text-[#facc15]'
                     }`}
                     title={block.hash}
                   >
@@ -371,19 +371,19 @@ export function Ledger() {
               </div>
 
               {/* ECDSA P-256 Signature & Merkle Root */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] font-mono text-[#b4c2bb] pt-1">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] font-mono text-[#b5b5ad] pt-1">
                 <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis">
-                  <KeyRound className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
-                  <span className="shrink-0 text-[#8fa097]">ECDSA Sig:</span>
+                  <KeyRound className="w-3.5 h-3.5 text-[#facc15] shrink-0" />
+                  <span className="shrink-0 text-[#8f8f86]">ECDSA Sig:</span>
                   <span className="truncate" title={block.signature || 'Unsigned'}>
                     {block.signature ? `${block.signature.slice(0, 24)}... (P-256)` : 'System Genesis'}
                   </span>
                 </div>
                 {block.manifest && (
                   <div className="flex items-center gap-1.5 overflow-hidden text-ellipsis">
-                    <FileCode2 className="w-3.5 h-3.5 text-[#22c55e] shrink-0" />
-                    <span className="shrink-0 text-[#8fa097]">Merkle Root:</span>
-                    <span className="truncate text-[#f1f5f3]" title={block.manifest.merkleRoot}>
+                    <FileCode2 className="w-3.5 h-3.5 text-[#facc15] shrink-0" />
+                    <span className="shrink-0 text-[#8f8f86]">Merkle Root:</span>
+                    <span className="truncate text-[#f5f5f0]" title={block.manifest.merkleRoot}>
                       {block.manifest.merkleRoot.slice(0, 24)}...
                     </span>
                   </div>
@@ -391,11 +391,11 @@ export function Ledger() {
               </div>
 
               {/* Payload Preview */}
-              <div className="p-2.5 rounded bg-[#0b0f0e] border border-[#2a3832] text-xs font-mono text-[#b4c2bb] overflow-x-auto">
-                <div className="text-[10px] uppercase tracking-wider text-[#8fa097] mb-1 font-sans font-semibold">
+              <div className="p-2.5 rounded bg-[#0a0a0a] border border-[#2e2e2e] text-xs font-mono text-[#b5b5ad] overflow-x-auto">
+                <div className="text-[10px] uppercase tracking-wider text-[#8f8f86] mb-1 font-sans font-semibold">
                   Block Payload (Canonical)
                 </div>
-                <pre className="text-[11px] text-[#f1f5f3]">
+                <pre className="text-[11px] text-[#f5f5f0]">
                   {JSON.stringify(block.payload, null, 2)}
                 </pre>
               </div>

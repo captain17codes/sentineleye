@@ -38,35 +38,35 @@ export function AlertAreaChart({ data }: AlertAreaChartProps) {
         <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#22c55e" stopOpacity={0.02} />
+              <stop offset="5%" stopColor="#facc15" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="#facc15" stopOpacity={0.02} />
             </linearGradient>
           </defs>
-          <CartesianGrid stroke="#2a3832" strokeDasharray="3 3" />
+          <CartesianGrid stroke="#2e2e2e" strokeDasharray="3 3" />
           <XAxis
             dataKey="day"
-            stroke="#b4c2bb"
+            stroke="#b5b5ad"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2a3832' }}
+            axisLine={{ stroke: '#2e2e2e' }}
           />
           <YAxis
-            stroke="#b4c2bb"
+            stroke="#b5b5ad"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2a3832' }}
+            axisLine={{ stroke: '#2e2e2e' }}
             allowDecimals={false}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#111816',
-              borderColor: '#2a3832',
+              backgroundColor: '#121212',
+              borderColor: '#2e2e2e',
               borderRadius: '8px',
-              color: '#f1f5f3',
+              color: '#f5f5f0',
               fontSize: '12px',
               boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
             }}
-            labelStyle={{ color: '#f1f5f3', fontWeight: 600 }}
+            labelStyle={{ color: '#f5f5f0', fontWeight: 600 }}
             formatter={(value: any) => [`${value} incidents`, 'Encroachments']}
             labelFormatter={(label: string) => `Date: ${label}`}
           />
@@ -74,7 +74,7 @@ export function AlertAreaChart({ data }: AlertAreaChartProps) {
             type="monotone"
             dataKey="count"
             name="Encroachments"
-            stroke="#22c55e"
+            stroke="#facc15"
             strokeWidth={2}
             fillOpacity={1}
             fill="url(#areaGradient)"

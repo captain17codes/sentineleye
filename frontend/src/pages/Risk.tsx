@@ -47,29 +47,29 @@ export function Risk() {
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto">
       {/* Page Header with Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2a3832]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2e2e]">
         <div>
-          <h1 className="text-xl font-semibold text-[#f1f5f3]">Risk analytics & threat indices</h1>
-          <p className="text-xs text-[#b4c2bb] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#f5f5f0]">Risk analytics & threat indices</h1>
+          <p className="text-xs text-[#b5b5ad] mt-0.5">
             Aggregated spatial encroachment metrics, incident velocity, and sector exposure
           </p>
         </div>
 
-        {/* Sector Filter Dropdown (Solid #0b0f0e) */}
+        {/* Sector Filter Dropdown (Solid #0a0a0a) */}
         <div className="flex items-center gap-2.5">
-          <label htmlFor="sector-filter" className="text-xs text-[#b4c2bb] font-medium whitespace-nowrap">
+          <label htmlFor="sector-filter" className="text-xs text-[#b5b5ad] font-medium whitespace-nowrap">
             Filter sector:
           </label>
           <select
             id="sector-filter"
             value={selectedZoneFilter}
             onChange={(e) => setSelectedZoneFilter(e.target.value)}
-            className="bg-[#0b0f0e] border border-[#2a3832] text-[#f1f5f3] rounded-md px-3 py-1.5 text-xs focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e] cursor-pointer"
-            style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+            className="bg-[#0a0a0a] border border-[#2e2e2e] text-[#f5f5f0] rounded-md px-3 py-1.5 text-xs focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15] cursor-pointer"
+            style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
           >
-            <option value="all" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>All ecological sectors</option>
+            <option value="all" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>All ecological sectors</option>
             {stats?.byZone?.map((z) => (
-              <option key={z.id} value={String(z.id)} style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>
+              <option key={z.id} value={String(z.id)} style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>
                 {z.name}
               </option>
             ))}
@@ -85,29 +85,29 @@ export function Risk() {
         />
       ) : (
         <>
-          {/* Aggregate KPI Cards (Solid #111816, high-contrast, projector readable) */}
+          {/* Aggregate KPI Cards (Solid #121212, high-contrast, projector readable) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {/* Card 1: Total Intercepts */}
-            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-                <span className="text-xs font-semibold text-[#f1f5f3]">Total intercepts</span>
-                <AlertOctagon className="w-4 h-4 text-[#22c55e]" />
+            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
+                <span className="text-xs font-semibold text-[#f5f5f0]">Total intercepts</span>
+                <AlertOctagon className="w-4 h-4 text-[#facc15]" />
               </div>
               <div>
-                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f1f5f3] kpi-number">
+                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f5f5f0] kpi-number">
                   {totalCount}
                 </span>
-                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Cumulative records</div>
-                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Cumulative records</div>
+                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
                   Total intercepts: Cumulative spatial anomalies identified by orbital change algorithms
                 </p>
               </div>
             </div>
 
             {/* Card 2: Critical Threats */}
-            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-                <span className="text-xs font-semibold text-[#f1f5f3]">Critical threats</span>
+            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
+                <span className="text-xs font-semibold text-[#f5f5f0]">Critical threats</span>
                 <span className="w-2.5 h-2.5 rounded-full bg-critical" />
               </div>
               <div>
@@ -115,46 +115,46 @@ export function Risk() {
                   <span className="text-3xl sm:text-4xl font-bold font-mono text-critical kpi-number">
                     {critical}
                   </span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#16201c] border border-critical text-critical uppercase tracking-wider">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#1a1a1a] border border-critical text-critical uppercase tracking-wider">
                     Critical
                   </span>
                 </div>
-                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Immediate action required</div>
-                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Immediate action required</div>
+                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
                   Critical threats: High-confidence violations exceeding critical scale or reserve thresholds
                 </p>
               </div>
             </div>
 
             {/* Card 3: Verified Cases */}
-            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-                <span className="text-xs font-semibold text-[#f1f5f3]">Verified cases</span>
-                <CheckCircle className="w-4 h-4 text-[#22c55e]" />
+            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
+                <span className="text-xs font-semibold text-[#f5f5f0]">Verified cases</span>
+                <CheckCircle className="w-4 h-4 text-[#facc15]" />
               </div>
               <div>
-                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#22c55e] kpi-number">
+                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#facc15] kpi-number">
                   {verified}
                 </span>
-                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Confirmed spectral violations</div>
-                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Confirmed spectral violations</div>
+                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
                   Verified cases: Multi-temporal detections confirmed by automated radar-optical cross validation
                 </p>
               </div>
             </div>
 
             {/* Card 4: Notices Issued */}
-            <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-              <div className="flex items-center justify-between text-[#b4c2bb] mb-2">
-                <span className="text-xs font-semibold text-[#f1f5f3]">Notices issued</span>
-                <TrendingUp className="w-4 h-4 text-[#22c55e]" />
+            <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+              <div className="flex items-center justify-between text-[#b5b5ad] mb-2">
+                <span className="text-xs font-semibold text-[#f5f5f0]">Notices issued</span>
+                <TrendingUp className="w-4 h-4 text-[#facc15]" />
               </div>
               <div>
-                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f1f5f3] kpi-number">
+                <span className="text-3xl sm:text-4xl font-bold font-mono text-[#f5f5f0] kpi-number">
                   {noticeIssued}
                 </span>
-                <div className="text-[12px] text-[#b4c2bb] mt-1 font-mono">Enforcement actions</div>
-                <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+                <div className="text-[12px] text-[#b5b5ad] mt-1 font-mono">Enforcement actions</div>
+                <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
                   Notices issued: Statutory Section 63 BSA legal notices generated and drafted for enforcement
                 </p>
               </div>
@@ -164,11 +164,11 @@ export function Risk() {
           {/* Charts Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Incident Velocity (8 cols) */}
-            <div className="lg:col-span-8 p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+            <div className="lg:col-span-8 p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
                 <div>
-                  <h3 className="text-sm font-semibold text-[#f1f5f3]">30-day incident velocity</h3>
-                  <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+                  <h3 className="text-sm font-semibold text-[#f5f5f0]">30-day incident velocity</h3>
+                  <p className="text-xs text-[#b5b5ad] kpi-subtitle">
                     Incident velocity: Daily anomaly detection rate across all monitored conservation corridors
                   </p>
                 </div>
@@ -177,11 +177,11 @@ export function Risk() {
             </div>
 
             {/* Severity Breakdown (4 cols) */}
-            <div className="lg:col-span-4 p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+            <div className="lg:col-span-4 p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
                 <div>
-                  <h3 className="text-sm font-semibold text-[#f1f5f3]">Severity distribution</h3>
-                  <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+                  <h3 className="text-sm font-semibold text-[#f5f5f0]">Severity distribution</h3>
+                  <p className="text-xs text-[#b5b5ad] kpi-subtitle">
                     Severity distribution: Proportion of active alerts categorized by environmental impact tier
                   </p>
                 </div>
@@ -191,11 +191,11 @@ export function Risk() {
           </div>
 
           {/* Sector Risk Score Bar Chart */}
-          <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-            <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+          <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
               <div>
-                <h3 className="text-sm font-semibold text-[#f1f5f3]">Vulnerability index by ecological sector</h3>
-                <p className="text-xs text-[#b4c2bb] kpi-subtitle">
+                <h3 className="text-sm font-semibold text-[#f5f5f0]">Vulnerability index by ecological sector</h3>
+                <p className="text-xs text-[#b5b5ad] kpi-subtitle">
                   Vulnerability index: Comparative threat exposure based on weighted severity scores per protected zone
                 </p>
               </div>

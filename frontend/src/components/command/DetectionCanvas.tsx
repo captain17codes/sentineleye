@@ -105,17 +105,17 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage, sce
     <div className="flex flex-col gap-4">
       {/* Stage-by-Stage Progress Bar & Indicator */}
       {isRunning && (
-        <div className="p-3 rounded-lg bg-[#16201c] border border-[#22c55e]/40 flex flex-col gap-2">
+        <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#facc15]/40 flex flex-col gap-2">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-medium text-[#f1f5f3] flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-ping" />
+            <span className="font-medium text-[#f5f5f0] flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#facc15] animate-ping" />
               {currentStage || 'Running multi-temporal pipeline...'}
             </span>
-            <span className="font-mono text-[#22c55e] font-semibold">{progress}%</span>
+            <span className="font-mono text-[#facc15] font-semibold">{progress}%</span>
           </div>
-          <div className="w-full bg-[#111816] border border-[#2a3832] rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-[#121212] border border-[#2e2e2e] rounded-full h-2 overflow-hidden">
             <div
-              className="bg-[#22c55e] h-full rounded-full transition-all duration-200"
+              className="bg-[#facc15] h-full rounded-full transition-all duration-200"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -124,9 +124,9 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage, sce
 
       {/* Layer Toggle Buttons (when result is available) */}
       {result && (
-        <div className="flex items-center justify-between gap-2 p-1.5 rounded-lg bg-[#0b0f0e] border border-[#2a3832]">
-          <div className="flex items-center gap-1 text-xs text-[#b4c2bb]">
-            <Layers className="w-3.5 h-3.5 text-[#22c55e]" />
+        <div className="flex items-center justify-between gap-2 p-1.5 rounded-lg bg-[#0a0a0a] border border-[#2e2e2e]">
+          <div className="flex items-center gap-1 text-xs text-[#b5b5ad]">
+            <Layers className="w-3.5 h-3.5 text-[#facc15]" />
             <span className="font-medium text-[11px] hidden sm:inline">Layer view:</span>
           </div>
           <div className="flex items-center gap-1">
@@ -144,8 +144,8 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage, sce
                 onClick={() => setActiveLayer(tab.id)}
                 className={`px-2.5 py-1 rounded text-[11px] font-medium transition-colors ${
                   activeLayer === tab.id
-                    ? 'bg-[#16201c] text-[#22c55e] border border-[#22c55e]'
-                    : 'text-[#b4c2bb] hover:text-[#f1f5f3] border border-transparent'
+                    ? 'bg-[#1a1a1a] text-[#facc15] border border-[#facc15]'
+                    : 'text-[#b5b5ad] hover:text-[#f5f5f0] border border-transparent'
                 }`}
               >
                 {tab.label}
@@ -161,28 +161,28 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage, sce
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-xs font-semibold text-[#f1f5f3]">
+              <span className="text-xs font-semibold text-[#f5f5f0]">
                 Timeline T0 · Baseline Reference
               </span>
-              <span className="text-[10px] font-mono text-[#22c55e]">
+              <span className="text-[10px] font-mono text-[#facc15]">
                 {t0DateLabel}
               </span>
             </div>
-            <span className="text-[10px] text-[#b4c2bb] font-mono px-2 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
+            <span className="text-[10px] text-[#b5b5ad] font-mono px-2 py-0.5 rounded bg-[#121212] border border-[#2e2e2e]">
               {sensorLabel}
             </span>
           </div>
 
-          <div className="relative aspect-square rounded-lg overflow-hidden border border-[#2a3832] bg-[#16201c] flex items-center justify-center">
+          <div className="relative aspect-square rounded-lg overflow-hidden border border-[#2e2e2e] bg-[#1a1a1a] flex items-center justify-center">
             {result?.t0_scene ? (
               <SceneRenderer data={result.t0_scene} className="w-full h-full" />
             ) : isRunning ? (
               <div className="flex flex-col items-center gap-2">
                 <Spinner color="neon" size="md" />
-                <span className="text-xs text-[#b4c2bb]">Loading baseline scene...</span>
+                <span className="text-xs text-[#b5b5ad]">Loading baseline scene...</span>
               </div>
             ) : (
-              <div className="text-xs text-[#b4c2bb] text-center px-4">
+              <div className="text-xs text-[#b5b5ad] text-center px-4">
                 Select a zone and click "Run scan"
               </div>
             )}
@@ -193,7 +193,7 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage, sce
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-xs font-semibold text-[#f1f5f3]">
+              <span className="text-xs font-semibold text-[#f5f5f0]">
                 {activeLayer === 'composite'
                   ? 'Timeline T1 · Detection Pass'
                   : activeLayer === 'ndvi'
@@ -206,12 +206,12 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage, sce
                 {t1DateLabel}
               </span>
             </div>
-            <span className="text-[10px] text-[#22c55e] font-mono px-2 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
+            <span className="text-[10px] text-[#facc15] font-mono px-2 py-0.5 rounded bg-[#121212] border border-[#2e2e2e]">
               {sensorLabel}
             </span>
           </div>
 
-          <div className="relative aspect-square rounded-lg overflow-hidden border border-border bg-[#16201c] flex items-center justify-center">
+          <div className="relative aspect-square rounded-lg overflow-hidden border border-border bg-[#1a1a1a] flex items-center justify-center">
             {t1LayerScene ? (
               <div className="relative w-full h-full">
                 <SceneRenderer
@@ -274,7 +274,7 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage, sce
                             y={Math.max(0, minY - 12)}
                             width={Math.min(120, blob.class.length * 6 + 10)}
                             height="12"
-                            fill="#111816"
+                            fill="#121212"
                             stroke={color}
                             strokeWidth="0.5"
                           />

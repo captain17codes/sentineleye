@@ -69,7 +69,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
     <div className="flex flex-col gap-1">
       <span className="text-white block font-medium">{label}</span>
       <span className="break-all block">{id}</span>
-      <span className="text-[10px] text-[#b4c2bb]">
+      <span className="text-[10px] text-[#b5b5ad]">
         {new Date(date).toUTCString()}
         {typeof cloud === 'number' ? ` · site cloud ${cloud.toFixed(1)}%` : ''}
       </span>
@@ -78,7 +78,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
           href={STAC_ITEM_URL(id)}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1 text-[10px] text-[#22c55e] hover:underline"
+          className="inline-flex items-center gap-1 text-[10px] text-[#facc15] hover:underline"
         >
           Open public archive record <ExternalLink className="w-3 h-3" />
         </a>
@@ -86,10 +86,10 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
       {check.status === 'done' && (
         <ul className="mt-1 flex flex-col gap-0.5">
           {check.rows.map((r) => (
-            <li key={r.label} className={`flex items-start gap-1 text-[10px] ${r.ok ? 'text-[#4ade80]' : 'text-[#f87171]'}`}>
+            <li key={r.label} className={`flex items-start gap-1 text-[10px] ${r.ok ? 'text-[#fde047]' : 'text-[#f87171]'}`}>
               {r.ok ? <ShieldCheck className="w-3 h-3 mt-px flex-shrink-0" /> : <ShieldAlert className="w-3 h-3 mt-px flex-shrink-0" />}
               <span>
-                {r.label}: <span className="text-[#b4c2bb]">{r.detail}</span>
+                {r.label}: <span className="text-[#b5b5ad]">{r.detail}</span>
               </span>
             </li>
           ))}
@@ -101,17 +101,17 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
 
   return (
     <div
-      className={`p-3 rounded-lg bg-[#16201c] border flex flex-col gap-2 font-mono text-xs ${
-        real ? 'border-[#22c55e]/60' : 'border-[#f59e0b]/40'
+      className={`p-3 rounded-lg bg-[#1a1a1a] border flex flex-col gap-2 font-mono text-xs ${
+        real ? 'border-[#facc15]/60' : 'border-[#f59e0b]/40'
       }`}
     >
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <span className={`font-semibold flex items-center gap-1.5 ${real ? 'text-[#22c55e]' : 'text-[#fbbf24]'}`}>
+        <span className={`font-semibold flex items-center gap-1.5 ${real ? 'text-[#facc15]' : 'text-[#fbbf24]'}`}>
           <Satellite className="w-3.5 h-3.5" />
           {real ? 'REAL DATA — Copernicus Sentinel-2 L2A' : 'Modeled site — calibrated synthetic arrays'}
         </span>
         {meta.isControl && (
-          <span className="px-2 py-0.5 rounded text-[10px] bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/40 font-bold">
+          <span className="px-2 py-0.5 rounded text-[10px] bg-[#facc15]/20 text-[#facc15] border border-[#facc15]/40 font-bold">
             NEGATIVE CONTROL SITE
           </span>
         )}
@@ -124,14 +124,14 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-[#b4c2bb] pt-1 border-t border-[#2a3832]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-[#b5b5ad] pt-1 border-t border-[#2e2e2e]">
         {sceneBlock('T0 (before) scene', meta.t0SceneId, meta.t0Date, meta.t0CloudPct, t0Check)}
         {sceneBlock('T1 (after) scene', meta.t1SceneId, meta.t1Date, meta.t1CloudPct, t1Check)}
       </div>
 
       {real && (
-        <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[#2a3832]">
-          <span className="text-[10px] text-[#b4c2bb]">
+        <div className="flex items-center justify-between gap-2 flex-wrap pt-1 border-t border-[#2e2e2e]">
+          <span className="text-[10px] text-[#b5b5ad]">
             {meta.mgrsGrid ? `MGRS tile ${meta.mgrsGrid} · ` : ''}
             {meta.aoiBbox ? `site ${meta.aoiBbox.map((v) => v.toFixed(4)).join(', ')}` : ''}
           </span>
@@ -139,7 +139,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
             type="button"
             onClick={runVerify}
             disabled={t0Check.status === 'running'}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#22c55e] text-[#0b0f0e] hover:bg-[#16a34a] disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#facc15] text-[#0a0a0a] hover:bg-[#eab308] disabled:opacity-60"
           >
             {t0Check.status === 'running' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
             Verify live against public STAC
@@ -147,7 +147,7 @@ export function SceneProvenanceCard({ meta }: { meta: RealSceneMetadata }) {
         </div>
       )}
       {real && (
-        <span className="text-[10px] text-[#6b7f76]">Contains modified Copernicus Sentinel data, processed by SentinelEye.</span>
+        <span className="text-[10px] text-[#77776f]">Contains modified Copernicus Sentinel data, processed by SentinelEye.</span>
       )}
     </div>
   );

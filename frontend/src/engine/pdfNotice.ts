@@ -81,11 +81,11 @@ function createFallbackEvidenceDataUrl(label: string, isAfter: boolean, alert: A
   // Label banner
   ctx.fillStyle = 'rgba(11, 15, 14, 0.85)';
   ctx.fillRect(0, 150, 240, 30);
-  ctx.fillStyle = isAfter ? '#ef4444' : '#22c55e';
+  ctx.fillStyle = isAfter ? '#ef4444' : '#facc15';
   ctx.font = 'bold 11px Courier, monospace';
   ctx.fillText(label, 8, 168);
 
-  ctx.fillStyle = '#b4c2bb';
+  ctx.fillStyle = '#b5b5ad';
   ctx.font = '9px Courier, monospace';
   ctx.fillText(`${alert.lat.toFixed(4)}N, ${alert.lng.toFixed(4)}E`, 125, 168);
 
@@ -175,7 +175,7 @@ export async function generateNoticePdf({
   doc.setFillColor(15, 23, 20); // Dark tactical header #0f1714
   doc.rect(0, 0, pageWidth, 32, 'F');
 
-  doc.setTextColor(34, 197, 94); // #22c55e
+  doc.setTextColor(250, 204, 21); // #facc15
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(13);
   doc.text('GOVERNMENT OF NATIONAL CAPITAL TERRITORY OF DELHI', 14, 11);
@@ -359,7 +359,7 @@ export async function generateNoticePdf({
   doc.setFillColor(15, 23, 20);
   doc.rect(0, 0, pageWidth, 28, 'F');
 
-  doc.setTextColor(34, 197, 94);
+  doc.setTextColor(250, 204, 21);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12);
   doc.text('GOVERNMENT OF NATIONAL CAPITAL TERRITORY OF DELHI', 14, 10);

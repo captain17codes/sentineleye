@@ -86,87 +86,87 @@ export function Alerts() {
   return (
     <div className="flex flex-col gap-5 max-w-7xl mx-auto">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2a3832]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2e2e2e]">
         <div>
-          <h1 className="text-xl font-semibold text-[#f1f5f3]">Alerts management</h1>
-          <p className="text-xs text-[#b4c2bb] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#f5f5f0]">Alerts management</h1>
+          <p className="text-xs text-[#b5b5ad] mt-0.5">
             Cadastral boundary violations and verified threat vectors across protected zones
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-[#b4c2bb]">
+        <div className="flex items-center gap-2 text-xs font-mono text-[#b5b5ad]">
           <span>Total: {alerts.length}</span>
           <span>•</span>
-          <span className="text-[#22c55e] font-semibold">Filtered: {filteredAlerts.length}</span>
+          <span className="text-[#facc15] font-semibold">Filtered: {filteredAlerts.length}</span>
         </div>
       </div>
 
       {/* ── 4 KPI Summary Cards with One-line Subtitles ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Total intercepts</span>
-            <AlertOctagon className="w-4 h-4 text-[#22c55e]" />
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Total intercepts</span>
+            <AlertOctagon className="w-4 h-4 text-[#facc15]" />
           </div>
-          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f1f5f3] kpi-number">
+          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f5f5f0] kpi-number">
             {totalCount}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Total intercepts: All candidate spatial change detections recorded
           </p>
         </div>
 
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Critical violations</span>
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Critical violations</span>
             <ShieldAlert className="w-4 h-4 text-critical" />
           </div>
           <span className="text-2xl sm:text-3xl font-bold font-mono text-critical kpi-number">
             {criticalCount}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Critical violations: Incidents requiring immediate emergency enforcement
           </p>
         </div>
 
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Verified cases</span>
-            <CheckCircle className="w-4 h-4 text-[#22c55e]" />
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Verified cases</span>
+            <CheckCircle className="w-4 h-4 text-[#facc15]" />
           </div>
-          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#22c55e] kpi-number">
+          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#facc15] kpi-number">
             {verifiedCount}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Verified cases: Detections confirmed by automated radar-optical cross validation
           </p>
         </div>
 
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Statutory notices</span>
-            <TrendingUp className="w-4 h-4 text-[#22c55e]" />
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Statutory notices</span>
+            <TrendingUp className="w-4 h-4 text-[#facc15]" />
           </div>
-          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f1f5f3] kpi-number">
+          <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f5f5f0] kpi-number">
             {noticesCount}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Statutory notices: Formal evidentiary packages prepared or served under Sec 63 BSA
           </p>
         </div>
       </div>
 
-      {/* ── Filter Controls Bar (Solid #111816 with styled form controls) ── */}
-      <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-wrap items-center justify-between gap-3 text-xs">
+      {/* ── Filter Controls Bar (Solid #121212 with styled form controls) ── */}
+      <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-wrap items-center justify-between gap-3 text-xs">
         {/* Search Input */}
         <div className="relative flex-1 min-w-[200px] max-w-md">
-          <Search className="w-3.5 h-3.5 text-[#b4c2bb] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-3.5 h-3.5 text-[#b5b5ad] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             placeholder="Search by zone, class, ID or description..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#0b0f0e] border border-[#2a3832] rounded-md pl-8 pr-3 py-2 text-xs text-[#f1f5f3] placeholder-[#b4c2bb] focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e]"
+            className="w-full bg-[#0a0a0a] border border-[#2e2e2e] rounded-md pl-8 pr-3 py-2 text-xs text-[#f5f5f0] placeholder-[#b5b5ad] focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15]"
           />
         </div>
 
@@ -177,14 +177,14 @@ export function Alerts() {
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
             aria-label="Filter by class"
-            className="bg-[#0b0f0e] border border-[#2a3832] text-[#f1f5f3] rounded-md px-3 py-2 text-xs focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e] cursor-pointer"
-            style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+            className="bg-[#0a0a0a] border border-[#2e2e2e] text-[#f5f5f0] rounded-md px-3 py-2 text-xs focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15] cursor-pointer"
+            style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
           >
-            <option value="all" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>All classes</option>
-            <option value="Deforestation" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Deforestation</option>
-            <option value="Unauthorized Construction" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Unauthorized Construction</option>
-            <option value="Mining" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Mining</option>
-            <option value="Land Encroachment" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Land Encroachment</option>
+            <option value="all" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>All classes</option>
+            <option value="Deforestation" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Deforestation</option>
+            <option value="Unauthorized Construction" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Unauthorized Construction</option>
+            <option value="Mining" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Mining</option>
+            <option value="Land Encroachment" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Land Encroachment</option>
           </select>
 
           {/* Severity Filter */}
@@ -192,14 +192,14 @@ export function Alerts() {
             value={selectedSeverity}
             onChange={(e) => setSelectedSeverity(e.target.value)}
             aria-label="Filter by severity"
-            className="bg-[#0b0f0e] border border-[#2a3832] text-[#f1f5f3] rounded-md px-3 py-2 text-xs focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e] cursor-pointer"
-            style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+            className="bg-[#0a0a0a] border border-[#2e2e2e] text-[#f5f5f0] rounded-md px-3 py-2 text-xs focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15] cursor-pointer"
+            style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
           >
-            <option value="all" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>All severities</option>
-            <option value="CRITICAL" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Critical</option>
-            <option value="HIGH" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>High</option>
-            <option value="MEDIUM" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Medium</option>
-            <option value="LOW" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Low</option>
+            <option value="all" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>All severities</option>
+            <option value="CRITICAL" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Critical</option>
+            <option value="HIGH" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>High</option>
+            <option value="MEDIUM" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Medium</option>
+            <option value="LOW" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Low</option>
           </select>
 
           {/* Status Filter */}
@@ -207,14 +207,14 @@ export function Alerts() {
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
             aria-label="Filter by status"
-            className="bg-[#0b0f0e] border border-[#2a3832] text-[#f1f5f3] rounded-md px-3 py-2 text-xs focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e] cursor-pointer"
-            style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+            className="bg-[#0a0a0a] border border-[#2e2e2e] text-[#f5f5f0] rounded-md px-3 py-2 text-xs focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15] cursor-pointer"
+            style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
           >
-            <option value="all" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>All statuses</option>
-            <option value="New" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>New</option>
-            <option value="Verified" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Verified</option>
-            <option value="Notice Issued" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Notice Drafted</option>
-            <option value="Signed & Served" style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}>Signed & Served</option>
+            <option value="all" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>All statuses</option>
+            <option value="New" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>New</option>
+            <option value="Verified" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Verified</option>
+            <option value="Notice Issued" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Notice Drafted</option>
+            <option value="Signed & Served" style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}>Signed & Served</option>
           </select>
 
           {(search || selectedClass !== 'all' || selectedSeverity !== 'all' || selectedStatus !== 'all') && (
@@ -225,7 +225,7 @@ export function Alerts() {
                 setSelectedSeverity('all');
                 setSelectedStatus('all');
               }}
-              className="text-xs text-[#b4c2bb] hover:text-[#f1f5f3] px-2 py-1.5 underline"
+              className="text-xs text-[#b5b5ad] hover:text-[#f5f5f0] px-2 py-1.5 underline"
             >
               Reset
             </button>
@@ -233,7 +233,7 @@ export function Alerts() {
         </div>
       </div>
 
-      {/* ── Compact Alerts Table (Sentence case headers, #b4c2bb 12px, cells >= 13px) ── */}
+      {/* ── Compact Alerts Table (Sentence case headers, #b5b5ad 12px, cells >= 13px) ── */}
       {loading ? (
         <LoadingState
           title="SYNCHRONIZING TELEMETRY ALERTS..."
@@ -252,11 +252,11 @@ export function Alerts() {
           }}
         />
       ) : (
-        <div className="rounded-lg bg-[#111816] border border-[#2a3832] overflow-hidden select-none shadow-sm">
+        <div className="rounded-lg bg-[#121212] border border-[#2e2e2e] overflow-hidden select-none shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#16201c] border-b border-[#2a3832] text-[#b4c2bb] text-[12px] font-medium normal-case">
+                <tr className="bg-[#1a1a1a] border-b border-[#2e2e2e] text-[#b5b5ad] text-[12px] font-medium normal-case">
                   <th className="py-3 px-3.5">ID</th>
                   <th className="py-3 px-3.5">Source</th>
                   <th className="py-3 px-3.5">Class</th>
@@ -269,7 +269,7 @@ export function Alerts() {
                   <th className="py-3 px-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#2a3832]">
+              <tbody className="divide-y divide-[#2e2e2e]">
                 {filteredAlerts.map((alert) => {
                   const color = getClassColor(alert.class);
                   const sevColor = severityColor[alert.severity] || '#94a3b8';
@@ -280,11 +280,11 @@ export function Alerts() {
                   return (
                     <tr
                       key={alert.id}
-                      className="hover:bg-[#16201c] transition-colors cursor-pointer group"
+                      className="hover:bg-[#1a1a1a] transition-colors cursor-pointer group"
                       onClick={() => setSelectedAlert(alert)}
                     >
                       {/* ID */}
-                      <td className="py-3 px-3.5 font-mono text-[12px] text-[#b4c2bb]">
+                      <td className="py-3 px-3.5 font-mono text-[12px] text-[#b5b5ad]">
                         #{alert.id}
                       </td>
 
@@ -299,7 +299,7 @@ export function Alerts() {
                           className="px-2.5 py-1 rounded text-[12px] font-semibold border inline-block whitespace-nowrap"
                           style={{
                             borderColor: color,
-                            backgroundColor: '#16201c',
+                            backgroundColor: '#1a1a1a',
                             color: color,
                           }}
                         >
@@ -308,7 +308,7 @@ export function Alerts() {
                       </td>
 
                       {/* Zone */}
-                      <td className="py-3 px-3.5 font-medium text-[#f1f5f3] text-[13px] max-w-[200px] truncate">
+                      <td className="py-3 px-3.5 font-medium text-[#f5f5f0] text-[13px] max-w-[200px] truncate">
                         {alert.zone_name
                           ? `${alert.zone_name.startsWith('Z-') ? '' : `Z-${alert.zone_id} `}${alert.zone_name}`
                           : `Zone Z-${alert.zone_id}`}
@@ -320,7 +320,7 @@ export function Alerts() {
                           className="px-2 py-0.5 rounded text-[11px] font-bold border inline-block uppercase tracking-wider"
                           style={{
                             borderColor: sevColor,
-                            backgroundColor: '#16201c',
+                            backgroundColor: '#1a1a1a',
                             color: sevColor,
                           }}
                         >
@@ -329,19 +329,19 @@ export function Alerts() {
                       </td>
 
                       {/* Area */}
-                      <td className="py-3 px-3.5 font-mono text-[13px] text-[#f1f5f3]">
+                      <td className="py-3 px-3.5 font-mono text-[13px] text-[#f5f5f0]">
                         {(alert.area_m2 || 3850).toLocaleString()}
                       </td>
 
                       {/* Overlap */}
-                      <td className="py-3 px-3.5 font-mono text-[13px] text-[#f1f5f3]">
+                      <td className="py-3 px-3.5 font-mono text-[13px] text-[#f5f5f0]">
                         {alert.overlap_pct || 88.5}%
                       </td>
 
                       {/* Status Workflow Advance */}
                       <td className="py-3 px-3.5" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-[13px] text-[#f1f5f3]">
+                          <span className="font-mono text-[13px] text-[#f5f5f0]">
                             {alert.status}
                           </span>
                           {canAdvance && (
@@ -349,7 +349,7 @@ export function Alerts() {
                               type="button"
                               onClick={() => handleAdvanceStatus(alert)}
                               disabled={advancingId === alert.id}
-                              className="px-3 py-1.5 rounded-md text-xs font-semibold bg-[#16201c] hover:bg-[#22c55e]/25 border border-[#22c55e] text-[#f1f5f3] transition-colors disabled:opacity-50 min-h-[34px] shadow-sm"
+                              className="px-3 py-1.5 rounded-md text-xs font-semibold bg-[#1a1a1a] hover:bg-[#facc15]/25 border border-[#facc15] text-[#f5f5f0] transition-colors disabled:opacity-50 min-h-[34px] shadow-sm"
                               title={`Advance to ${nextStatus}`}
                             >
                               {advancingId === alert.id ? '...' : `→ ${nextStatus}`}
@@ -359,7 +359,7 @@ export function Alerts() {
                       </td>
 
                       {/* Detected */}
-                      <td className="py-3 px-3.5 font-mono text-[12px] text-[#b4c2bb] whitespace-nowrap">
+                      <td className="py-3 px-3.5 font-mono text-[12px] text-[#b5b5ad] whitespace-nowrap">
                         {formatTimeAgo(alert.created_at)}
                       </td>
 
@@ -369,7 +369,7 @@ export function Alerts() {
                           <button
                             type="button"
                             onClick={() => setSelectedAlert(alert)}
-                            className="p-2 min-h-[36px] min-w-[36px] rounded-lg bg-[#16201c] border border-[#2a3832] text-[#b4c2bb] hover:text-[#f1f5f3] hover:border-[#22c55e] transition-colors flex items-center justify-center"
+                            className="p-2 min-h-[36px] min-w-[36px] rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] text-[#b5b5ad] hover:text-[#f5f5f0] hover:border-[#facc15] transition-colors flex items-center justify-center"
                             title="Inspect dossier"
                             aria-label="Inspect incident dossier"
                           >
@@ -380,7 +380,7 @@ export function Alerts() {
                             type="button"
                             onClick={() => handleDownloadPdf(alert)}
                             disabled={downloadingId === alert.id}
-                            className="p-2 min-h-[36px] min-w-[36px] rounded-lg bg-[#16201c] border border-[#2a3832] text-[#b4c2bb] hover:text-[#22c55e] hover:border-[#22c55e] transition-colors disabled:opacity-50 flex items-center justify-center"
+                            className="p-2 min-h-[36px] min-w-[36px] rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] text-[#b5b5ad] hover:text-[#facc15] hover:border-[#facc15] transition-colors disabled:opacity-50 flex items-center justify-center"
                             title="Download Legal Notice PDF"
                             aria-label="Download Legal Notice PDF"
                           >

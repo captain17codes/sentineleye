@@ -11,13 +11,13 @@
 
   html {
     scroll-behavior: smooth;
-    background-color: #0b0f0e;
-    color: #f1f5f3;
+    background-color: #0a0a0a;
+    color: #f5f5f0;
   }
 
   body {
-    background-color: #0b0f0e;
-    color: #f1f5f3;
+    background-color: #0a0a0a;
+    color: #f5f5f0;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 15px;
     line-height: 1.5;
@@ -53,7 +53,7 @@
 
   .presentation-mode .kpi-subtitle {
     font-size: 0.9rem !important;
-    color: #d1fae5 !important;
+    color: #fef9c3 !important;
   }
 
   .presentation-mode button:not(.compact-btn),
@@ -63,22 +63,22 @@
     font-size: 14px !important;
   }
 
-  /* Form controls: solid #0b0f0e, light text #f1f5f3, 1px #2a3832 border, 2px #22c55e focus ring */
+  /* Form controls: solid #0a0a0a, light text #f5f5f0, 1px #2e2e2e border, 2px #facc15 focus ring */
   input, select, textarea {
-    background-color: #0b0f0e !important;
-    color: #f1f5f3 !important;
-    border: 1px solid #2a3832 !important;
+    background-color: #0a0a0a !important;
+    color: #f5f5f0 !important;
+    border: 1px solid #2e2e2e !important;
   }
 
   input:focus, select:focus, textarea:focus {
     outline: none !important;
-    border-color: #22c55e !important;
-    box-shadow: 0 0 0 2px #22c55e !important;
+    border-color: #facc15 !important;
+    box-shadow: 0 0 0 2px #facc15 !important;
   }
 
   option {
-    background-color: #0b0f0e !important;
-    color: #f1f5f3 !important;
+    background-color: #0a0a0a !important;
+    color: #f5f5f0 !important;
   }
 
   /* Compact scrollbars */
@@ -88,20 +88,20 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #0b0f0e;
+    background: #0a0a0a;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #2a3832;
+    background: #2e2e2e;
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #374b43;
+    background: #3d3d3d;
   }
 
   ::selection {
-    background: rgba(34, 197, 94, 0.35);
+    background: rgba(250, 204, 21, 0.35);
     color: #ffffff;
   }
 }
@@ -109,12 +109,12 @@
 @layer components {
   /* Flat solid panel card */
   .panel-card {
-    background-color: #111816;
-    border: 1px solid #2a3832;
+    background-color: #121212;
+    border: 1px solid #2e2e2e;
     border-radius: 10px;
   }
 
-  /* Compact table styling (sentence-case, #b4c2bb header, #f1f5f3 cells >= 13px) */
+  /* Compact table styling (sentence-case, #b5b5ad header, #f5f5f0 cells >= 13px) */
   .compact-table {
     width: 100%;
     border-collapse: separate;
@@ -123,48 +123,48 @@
   }
 
   .compact-table th {
-    background-color: #16201c;
-    color: #b4c2bb;
+    background-color: #1a1a1a;
+    color: #b5b5ad;
     font-size: 12px;
     font-weight: 500;
     text-transform: none;
     padding: 10px 12px;
-    border-bottom: 1px solid #2a3832;
+    border-bottom: 1px solid #2e2e2e;
     text-align: left;
   }
 
   .compact-table td {
     padding: 11px 12px;
-    border-bottom: 1px solid #2a3832;
-    color: #f1f5f3;
+    border-bottom: 1px solid #2e2e2e;
+    color: #f5f5f0;
     font-size: 13px;
   }
 
   .compact-table tr:hover td {
-    background-color: #16201c;
+    background-color: #1a1a1a;
   }
 
   /* Severity badge indicators (strictly badges & map polygons) */
   .badge-critical {
-    background-color: #16201c;
+    background-color: #1a1a1a;
     color: #ef4444;
     border: 1px solid #ef4444;
   }
 
   .badge-high {
-    background-color: #16201c;
+    background-color: #1a1a1a;
     color: #f59e0b;
     border: 1px solid #f59e0b;
   }
 
   .badge-medium {
-    background-color: #16201c;
+    background-color: #1a1a1a;
     color: #eab308;
     border: 1px solid #eab308;
   }
 
   .badge-low {
-    background-color: #16201c;
+    background-color: #1a1a1a;
     color: #64748b;
     border: 1px solid #64748b;
   }
@@ -177,7 +177,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #22c55e;
+  background-color: #facc15;
 }
 
 .live-dot::after {
@@ -188,7 +188,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 1px solid rgba(34, 197, 94, 0.6);
+  border: 1px solid rgba(250, 204, 21, 0.6);
   animation: pulse-ring 2.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 
@@ -200,44 +200,44 @@
 
 /* Leaflet Flat Dark Overrides */
 .leaflet-container {
-  background: #0b0f0e !important;
+  background: #0a0a0a !important;
   font-family: 'Inter', system-ui, sans-serif;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #111816 !important;
-  border: 1px solid #2a3832 !important;
+  background: #121212 !important;
+  border: 1px solid #2e2e2e !important;
   border-radius: 10px !important;
-  color: #f1f5f3 !important;
+  color: #f5f5f0 !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
 }
 
 .leaflet-popup-tip {
-  background: #111816 !important;
+  background: #121212 !important;
 }
 
 .leaflet-popup-close-button {
-  color: #b4c2bb !important;
+  color: #b5b5ad !important;
   padding: 6px !important;
 }
 
 .leaflet-popup-close-button:hover {
-  color: #f1f5f3 !important;
+  color: #f5f5f0 !important;
 }
 
 .leaflet-control-zoom a {
-  background: #111816 !important;
-  color: #f1f5f3 !important;
-  border: 1px solid #2a3832 !important;
+  background: #121212 !important;
+  color: #f5f5f0 !important;
+  border: 1px solid #2e2e2e !important;
 }
 
 .leaflet-control-zoom a:hover {
-  background: #16201c !important;
+  background: #1a1a1a !important;
 }
 
 .leaflet-control-attribution {
-  background: #0b0f0e !important;
-  color: #b4c2bb !important;
+  background: #0a0a0a !important;
+  color: #b5b5ad !important;
   font-size: 10px !important;
 }
 
@@ -245,10 +245,10 @@
 .marker-cluster-small,
 .marker-cluster-medium,
 .marker-cluster-large {
-  background-color: #16201c !important;
-  border: 2px solid #22c55e !important;
+  background-color: #1a1a1a !important;
+  border: 2px solid #facc15 !important;
   border-radius: 50% !important;
-  color: #f1f5f3 !important;
+  color: #f5f5f0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -262,8 +262,8 @@
   align-items: center !important;
   justify-content: center !important;
   border-radius: 50% !important;
-  background-color: #111816 !important;
-  color: #f1f5f3 !important;
+  background-color: #121212 !important;
+  color: #f5f5f0 !important;
   font-family: 'Inter', system-ui, sans-serif !important;
   font-weight: 600 !important;
   font-size: 12px !important;

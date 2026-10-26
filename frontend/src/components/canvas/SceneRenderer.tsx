@@ -58,7 +58,7 @@ export function SceneRenderer({
 
     // Optional 4x4 patch grid overlay
     if (showGrid) {
-      ctx.strokeStyle = 'rgba(0, 255, 157, 0.4)';
+      ctx.strokeStyle = 'rgba(250, 204, 21, 0.4)';
       ctx.lineWidth = 1;
       const patchSize = width / 4;
       for (let i = 1; i < 4; i++) {

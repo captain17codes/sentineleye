@@ -331,7 +331,7 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
 
   if (!enabled) {
     return (
-      <section className="relative w-full min-h-screen overflow-hidden border-b border-[#1f2a26]">
+      <section className="relative w-full min-h-screen overflow-hidden border-b border-[#242424]">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-60">
           <GlobeFallback size={720} />
         </div>
@@ -345,8 +345,8 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
   const heroOpacity = 1 - smooth(clamp((progress - 0.04) / 0.08));
 
   return (
-    <section ref={sectionRef} className="relative w-full border-b border-[#1f2a26]" style={{ height: '520vh' }}>
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#05080a]">
+    <section ref={sectionRef} className="relative w-full border-b border-[#242424]" style={{ height: '520vh' }}>
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#050505]">
         <div className="absolute inset-0">
           <Globe
             ref={globeRef}
@@ -370,11 +370,11 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
                 ? 'rgba(147,197,253,0.16)'
                 : d.properties?.id === 'site'
                 ? 'rgba(239,68,68,0.12)'
-                : 'rgba(34,197,94,0.14)'
+                : 'rgba(250, 204, 21,0.14)'
             }
             polygonSideColor={() => 'rgba(0,0,0,0)'}
             polygonStrokeColor={(d: any) =>
-              d.properties?.id === 'swath' ? '#93c5fd' : d.properties?.id === 'site' ? '#ef4444' : '#22c55e'
+              d.properties?.id === 'swath' ? '#93c5fd' : d.properties?.id === 'site' ? '#ef4444' : '#facc15'
             }
             polygonAltitude={(d: any) => (d.properties?.id === 'swath' ? 0.004 : 0.0006)}
             polygonsTransitionDuration={0}
@@ -397,7 +397,7 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
             htmlElement={(d: any) => {
               const el = document.createElement('div');
               el.style.cssText =
-                'transform:translate(-50%,-100%);pointer-events:none;font:600 11px Inter,system-ui,sans-serif;color:#f1f5f3;background:rgba(11,15,14,0.85);border:1px solid #2a3832;padding:2px 6px;border-radius:4px;white-space:nowrap;';
+                'transform:translate(-50%,-100%);pointer-events:none;font:600 11px Inter,system-ui,sans-serif;color:#f5f5f0;background:rgba(11,15,14,0.85);border:1px solid #2e2e2e;padding:2px 6px;border-radius:4px;white-space:nowrap;';
               el.textContent = d.text;
               return el;
             }}
@@ -406,7 +406,7 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* legibility gradient on the left */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#05080a]/85 via-[#05080a]/30 to-transparent" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#050505]/85 via-[#050505]/30 to-transparent" />
 
         {/* Chapter 0: hero (headline + sign in) */}
         <div
@@ -428,8 +428,8 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
               className="absolute z-20 left-6 sm:left-10 lg:left-14 bottom-[18vh] max-w-md pointer-events-none"
               style={{ opacity: o, transform: `translateY(${(1 - o) * 16}px)` }}
             >
-              <h2 className="text-2xl sm:text-3xl font-semibold text-[#f1f5f3] leading-tight">{c.title}</h2>
-              <p className="mt-3 text-base text-[#cdd6d1] leading-relaxed">{c.body}</p>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-[#f5f5f0] leading-tight">{c.title}</h2>
+              <p className="mt-3 text-base text-[#d6d6cf] leading-relaxed">{c.body}</p>
             </div>
           );
         })}
@@ -440,12 +440,12 @@ export function ScrollGlobeStory({ children }: { children: React.ReactNode }) {
             <span
               key={i}
               className="w-1.5 h-6 rounded-full"
-              style={{ background: progress + 0.001 >= f ? '#22c55e' : 'rgba(255,255,255,0.18)' }}
+              style={{ background: progress + 0.001 >= f ? '#facc15' : 'rgba(255,255,255,0.18)' }}
             />
           ))}
         </div>
 
-        <div className="absolute z-20 bottom-2 right-3 text-[10px] text-[#8fa097] pointer-events-none">
+        <div className="absolute z-20 bottom-2 right-3 text-[10px] text-[#8f8f86] pointer-events-none">
           {tilesOk ? 'Imagery: Esri World Imagery' : 'Imagery: NASA Blue Marble'}
         </div>
       </div>

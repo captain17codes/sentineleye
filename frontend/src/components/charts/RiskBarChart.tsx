@@ -39,28 +39,28 @@ export function RiskBarChart({ data }: RiskBarChartProps) {
     <div className="w-full h-64 select-none">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <CartesianGrid stroke="#2a3832" strokeDasharray="3 3" />
+          <CartesianGrid stroke="#2e2e2e" strokeDasharray="3 3" />
           <XAxis
             dataKey="name"
-            stroke="#b4c2bb"
+            stroke="#b5b5ad"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2a3832' }}
+            axisLine={{ stroke: '#2e2e2e' }}
           />
           <YAxis
-            stroke="#b4c2bb"
+            stroke="#b5b5ad"
             fontSize={12}
             tickLine={false}
-            axisLine={{ stroke: '#2a3832' }}
+            axisLine={{ stroke: '#2e2e2e' }}
             allowDecimals={false}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#111816',
-              borderColor: '#2a3832',
+              backgroundColor: '#121212',
+              borderColor: '#2e2e2e',
               borderRadius: '8px',
               fontSize: '12px',
-              color: '#f1f5f3',
+              color: '#f5f5f0',
               boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
             }}
             formatter={(value: any) => [`${value} pts`, 'Vulnerability Index']}
@@ -73,7 +73,7 @@ export function RiskBarChart({ data }: RiskBarChartProps) {
           />
           <Bar dataKey="risk_score" radius={[4, 4, 0, 0]}>
             {chartData.map((entry, index) => {
-              const color = (riskLevelColor as any)[entry.risk_level] || '#22c55e';
+              const color = (riskLevelColor as any)[entry.risk_level] || '#facc15';
               return <Cell key={`cell-${index}`} fill={color} />;
             })}
           </Bar>

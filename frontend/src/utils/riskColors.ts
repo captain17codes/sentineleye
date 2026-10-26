@@ -1,7 +1,7 @@
 export type Severity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
 
-// Design System B: Severity colors only on badges and polygons (min 4.5:1 contrast against #0b0f0e)
+// Design System B: Severity colors only on badges and polygons (min 4.5:1 contrast against #0a0a0a)
 export const severityColor: Record<Severity, string> = {
   LOW: '#94a3b8',
   MEDIUM: '#eab308',
@@ -27,7 +27,7 @@ export const classColors: Record<string, string> = {
   'Deforestation': '#ef4444',
   'Unauthorized Construction': '#f59e0b',
   'Mining': '#eab308',
-  'Land Encroachment': '#22c55e',
+  'Land Encroachment': '#38bdf8',
 };
 
 export function getSeverityClass(severity: string): string {
@@ -43,5 +43,5 @@ export function getRiskColor(riskLevel: string): string {
 }
 
 export function getClassColor(encroachmentClass: string): string {
-  return classColors[encroachmentClass] || '#22c55e';
+  return classColors[encroachmentClass] || '#facc15';
 }

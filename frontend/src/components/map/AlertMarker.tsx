@@ -20,7 +20,7 @@ export function AlertMarker({ alert, isSelected, onSelect }: AlertMarkerProps) {
     className: 'custom-flat-marker',
     html: `
       <div style="position: relative; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-        <div style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 2px solid #0b0f0e;"></div>
+        <div style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 2px solid #0a0a0a;"></div>
       </div>
     `,
     iconSize: [18, 18],

@@ -81,7 +81,7 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
         style={{
           backgroundImage: `
             radial-gradient(circle at 20% 35%, rgba(56, 189, 248, 0.4) 0%, transparent 50%),
-            radial-gradient(circle at 75% 65%, rgba(34, 197, 94, 0.3) 0%, transparent 60%)
+            radial-gradient(circle at 75% 65%, rgba(250, 204, 21, 0.3) 0%, transparent 60%)
           `,
         }}
       />
@@ -101,7 +101,7 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
           className="text-muted"
         >
           {/* Main bus */}
-          <rect x="18" y="18" width="12" height="12" rx="1.5" fill="#111816" stroke="#22c55e" strokeWidth="1.5" />
+          <rect x="18" y="18" width="12" height="12" rx="1.5" fill="#121212" stroke="#facc15" strokeWidth="1.5" />
           {/* Solar Panel Wings */}
           <rect x="2" y="21" width="12" height="6" fill="#1a2e26" stroke="#38bdf8" strokeWidth="1" />
           <line x1="6" y1="21" x2="6" y2="27" stroke="#38bdf8" strokeWidth="0.75" />
@@ -111,7 +111,7 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
           <line x1="42" y1="21" x2="42" y2="27" stroke="#38bdf8" strokeWidth="0.75" />
           {/* Antenna */}
           <line x1="24" y1="18" x2="24" y2="10" stroke="#8a9a93" strokeWidth="1.2" />
-          <circle cx="24" cy="9" r="1.5" fill="#22c55e" />
+          <circle cx="24" cy="9" r="1.5" fill="#facc15" />
         </svg>
       </div>
 
@@ -126,20 +126,20 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
           </p>
         </div>
 
-        {/* ── Main Comparison Card (16:10, max-w ~1100px, 16px radius, #1f2a26 border) ── */}
+        {/* ── Main Comparison Card (16:10, max-w ~1100px, 16px radius, #242424 border) ── */}
         <div
           ref={containerRef}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
-          className="relative w-full max-w-[1100px] aspect-[16/10] rounded-2xl overflow-hidden border border-[#1f2a26] bg-[#111816] shadow-2xl cursor-ew-resize group select-none"
+          className="relative w-full max-w-[1100px] aspect-[16/10] rounded-2xl overflow-hidden border border-[#242424] bg-[#121212] shadow-2xl cursor-ew-resize group select-none"
           style={{ touchAction: 'pan-y' }}
         >
           {/* Loading Skeleton Shimmer */}
           {!allLoaded && !hasError && (
-            <div className="absolute inset-0 bg-[#111816] flex items-center justify-center z-10">
-              <div className="w-full h-full animate-pulse bg-gradient-to-r from-[#111816] via-[#1a2622] to-[#111816]" />
+            <div className="absolute inset-0 bg-[#121212] flex items-center justify-center z-10">
+              <div className="w-full h-full animate-pulse bg-gradient-to-r from-[#121212] via-[#1a2622] to-[#121212]" />
               <div className="absolute flex flex-col items-center gap-2 text-xs text-muted">
                 <span className="live-dot" />
                 <span>Loading Sentinel-2 bitemporal evidence...</span>
@@ -219,24 +219,24 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
           </div>
 
           {/* Top-Left Corner Chip: Timeline T0 (Green-tinted) */}
-          <div className="absolute top-4 left-4 z-20 pointer-events-none flex flex-col gap-0.5 px-3 py-1.5 rounded-md bg-[#111816]/95 border border-[#22c55e]/50 text-xs shadow-xl">
-            <div className="flex items-center gap-1.5 text-[#22c55e] font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
+          <div className="absolute top-4 left-4 z-20 pointer-events-none flex flex-col gap-0.5 px-3 py-1.5 rounded-md bg-[#121212]/95 border border-[#facc15]/50 text-xs shadow-xl">
+            <div className="flex items-center gap-1.5 text-[#facc15] font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#facc15]" />
               <span>Timeline T0 · Baseline Reference</span>
             </div>
-            <span className="text-[10px] font-mono text-[#f1f5f3]">{data.beforeDate} · 10:32 UTC</span>
+            <span className="text-[10px] font-mono text-[#f5f5f0]">{data.beforeDate} · 10:32 UTC</span>
           </div>
 
           {/* Top-Right Corner Chip: Timeline T1 (Muted Red) */}
-          <div className="absolute top-4 right-4 z-20 pointer-events-none flex flex-col gap-0.5 px-3 py-1.5 rounded-md bg-[#111816]/95 border border-[#ef4444]/50 text-xs shadow-xl items-end">
+          <div className="absolute top-4 right-4 z-20 pointer-events-none flex flex-col gap-0.5 px-3 py-1.5 rounded-md bg-[#121212]/95 border border-[#ef4444]/50 text-xs shadow-xl items-end">
             <div className="flex items-center gap-1.5 text-[#ef4444] font-semibold">
               <span>Timeline T1 · Active Encroachment</span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#ef4444]" />
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-mono text-[#f1f5f3]">{data.afterDate} · 10:48 UTC</span>
+              <span className="text-[10px] font-mono text-[#f5f5f0]">{data.afterDate} · 10:48 UTC</span>
               {hasError && (
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-[#16201c] text-amber-400 border border-amber-400/30">
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-[#1a1a1a] text-amber-400 border border-amber-400/30">
                   Simulation
                 </span>
               )}
@@ -245,10 +245,10 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
 
           {/* ── 3px Green Vertical Divider Line & 40px Round Handle ── */}
           <div
-            className="absolute top-0 bottom-0 w-[3px] bg-[#22c55e] z-30 pointer-events-none"
+            className="absolute top-0 bottom-0 w-[3px] bg-[#facc15] z-30 pointer-events-none"
             style={{
               left: `calc(${sliderPos}% - 1.5px)`,
-              boxShadow: '0 0 10px rgba(34, 197, 94, 0.4)',
+              boxShadow: '0 0 10px rgba(250, 204, 21, 0.4)',
             }}
           >
             <div
@@ -260,10 +260,10 @@ export function EvidenceSlider({ data = EVIDENCE_SAMPLE, className = '' }: Evide
               aria-valuemin={0}
               aria-valuemax={100}
               onKeyDown={onKeyDown}
-              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#22c55e] border-2 border-[#0b0f0e] flex items-center justify-center pointer-events-auto cursor-ew-resize shadow-xl focus:outline-none focus:ring-2 focus:ring-[#22c55e] focus:ring-offset-2 focus:ring-offset-[#0b0f0e] transition-transform active:scale-95"
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#facc15] border-2 border-[#0a0a0a] flex items-center justify-center pointer-events-auto cursor-ew-resize shadow-xl focus:outline-none focus:ring-2 focus:ring-[#facc15] focus:ring-offset-2 focus:ring-offset-[#0a0a0a] transition-transform active:scale-95"
             >
               {/* Dark arrows icon */}
-              <Sliders className="w-4 h-4 text-[#0b0f0e]" />
+              <Sliders className="w-4 h-4 text-[#0a0a0a]" />
             </div>
           </div>
         </div>

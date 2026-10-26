@@ -53,7 +53,7 @@ export function GlobeFallback({ className = '', size = 440 }: GlobeFallbackProps
         <div
           className="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
           style={{
-            background: 'radial-gradient(circle at 55% 48%, rgba(56, 189, 248, 0.2) 0%, rgba(34, 197, 94, 0.12) 28%, transparent 60%)'
+            background: 'radial-gradient(circle at 55% 48%, rgba(56, 189, 248, 0.2) 0%, rgba(250, 204, 21, 0.12) 28%, transparent 60%)'
           }}
         />
 

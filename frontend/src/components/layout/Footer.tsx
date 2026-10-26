@@ -6,14 +6,14 @@ export function Footer() {
       <div className="flex flex-wrap items-center justify-center gap-2 text-text font-medium">
         <span>SentinelEye • Planetary intelligence for land protection</span>
         <span className="text-border">|</span>
-        <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#22c55e] bg-[#22c55e]/10 border border-[#22c55e]/20">
+        <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#facc15] bg-[#facc15]/10 border border-[#facc15]/20">
           Prototype
         </span>
       </div>
-      <p className="max-w-2xl text-[11px] text-[#b4c2bb] leading-relaxed">
+      <p className="max-w-2xl text-[11px] text-[#b5b5ad] leading-relaxed">
         Research prototype running in the browser: accounts, workflow and the evidence ledger are stored locally. Site scans for Z-102 and Z-104 use real Copernicus Sentinel-2 L2A imagery; other scenes form a calibration dataset with known ground truth. Zone boundaries are indicative, not survey records.
       </p>
-      <div className="text-[10px] font-mono text-[#8fa097] mt-1">
+      <div className="text-[10px] font-mono text-[#8f8f86] mt-1">
         WebCrypto ECDSA P-256 Ledger Active • Section 63 BSA 2023 Evidentiary Protocol
       </div>
     </footer>

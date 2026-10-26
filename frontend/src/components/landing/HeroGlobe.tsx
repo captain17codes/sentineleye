@@ -239,7 +239,7 @@ export function HeroGlobe({ size: propSize, className }: HeroGlobeProps = {}) {
         startLng: 40,
         endLat: 38,
         endLng: 100,
-        color: 'rgba(0, 255, 157, 0.15)',
+        color: 'rgba(250, 204, 21, 0.15)',
         altitude: 0.28,
         dashLength: 1,
         dashGap: 0,
@@ -351,7 +351,7 @@ export function HeroGlobe({ size: propSize, className }: HeroGlobeProps = {}) {
         ringsData={delhiMarker}
         ringLat={(d: any) => d.lat}
         ringLng={(d: any) => d.lng}
-        ringColor={() => (t: number) => `rgba(0, 255, 157, ${Math.max(0, 1 - t)})`}
+        ringColor={() => (t: number) => `rgba(250, 204, 21, ${Math.max(0, 1 - t)})`}
         ringMaxRadius={3.5}
         ringPropagationSpeed={1.8}
         ringRepeatPeriod={1600}
@@ -364,8 +364,8 @@ export function HeroGlobe({ size: propSize, className }: HeroGlobeProps = {}) {
           const el = document.createElement('div');
           el.innerHTML = `
             <div style="display:flex;align-items:center;gap:6px;transform:translate(-50%,-50%);pointer-events:none;user-select:none;">
-              <div style="position:relative;width:8px;height:8px;border-radius:50%;background:#22c55e;border:1.5px solid #0b0f0e;"></div>
-              <div style="font-family:Inter,sans-serif;font-size:10px;font-weight:600;color:#e6ede9;background:#111816;padding:2px 6px;border-radius:4px;border:1px solid #1f2a26;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.6);">
+              <div style="position:relative;width:8px;height:8px;border-radius:50%;background:#facc15;border:1.5px solid #0a0a0a;"></div>
+              <div style="font-family:Inter,sans-serif;font-size:10px;font-weight:600;color:#e6ede9;background:#121212;padding:2px 6px;border-radius:4px;border:1px solid #242424;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.6);">
                 ${d.name}
               </div>
             </div>

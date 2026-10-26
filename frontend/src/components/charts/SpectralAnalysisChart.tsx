@@ -46,17 +46,17 @@ export function SpectralAnalysisChart({ alerts: propAlerts }: SpectralAnalysisCh
     <div className="w-full h-64 select-none">
       <ResponsiveContainer width="100%" height="100%">
         <ScatterChart margin={{ top: 10, right: 20, left: 15, bottom: 20 }}>
-          <CartesianGrid stroke="#2a3832" strokeDasharray="3 3" />
+          <CartesianGrid stroke="#2e2e2e" strokeDasharray="3 3" />
           <XAxis
             type="number"
             dataKey="ndvi"
             name="NDVI Change"
             domain={[-0.6, 0.4]}
             tickFormatter={(v) => v.toFixed(2)}
-            stroke="#b4c2bb"
+            stroke="#b5b5ad"
             fontSize={12}
             tickLine={false}
-            label={{ value: 'Normalized NDVI Change (Vegetation Index)', position: 'insideBottom', offset: -12, fill: '#b4c2bb', fontSize: 12 }}
+            label={{ value: 'Normalized NDVI Change (Vegetation Index)', position: 'insideBottom', offset: -12, fill: '#b5b5ad', fontSize: 12 }}
           />
           <YAxis
             type="number"
@@ -64,10 +64,10 @@ export function SpectralAnalysisChart({ alerts: propAlerts }: SpectralAnalysisCh
             name="SAR Radar Backscatter"
             domain={[0, 1.1]}
             tickFormatter={(v) => v.toFixed(1)}
-            stroke="#b4c2bb"
+            stroke="#b5b5ad"
             fontSize={12}
             tickLine={false}
-            label={{ value: 'SAR Radar Backscatter', angle: -90, position: 'insideLeft', offset: 5, fill: '#b4c2bb', fontSize: 12 }}
+            label={{ value: 'SAR Radar Backscatter', angle: -90, position: 'insideLeft', offset: 5, fill: '#b5b5ad', fontSize: 12 }}
           />
           <ZAxis type="number" dataKey="area" range={[40, 140]} />
           <Tooltip
@@ -76,12 +76,12 @@ export function SpectralAnalysisChart({ alerts: propAlerts }: SpectralAnalysisCh
               if (active && payload && payload.length) {
                 const data = payload[0].payload;
                 return (
-                  <div className="p-3 rounded-md bg-[#111816] border border-[#2a3832] text-xs shadow-xl flex flex-col gap-1 font-mono">
-                    <span className="font-semibold text-[#f1f5f3] font-sans">{data.name}</span>
-                    <span className={data.rejected ? 'text-slate-400 font-semibold' : 'text-[#22c55e] text-xs font-sans'}>
+                  <div className="p-3 rounded-md bg-[#121212] border border-[#2e2e2e] text-xs shadow-xl flex flex-col gap-1 font-mono">
+                    <span className="font-semibold text-[#f5f5f0] font-sans">{data.name}</span>
+                    <span className={data.rejected ? 'text-slate-400 font-semibold' : 'text-[#facc15] text-xs font-sans'}>
                       {data.class}
                     </span>
-                    <div className="text-[#b4c2bb] text-xs space-y-0.5 pt-1 border-t border-[#2a3832]">
+                    <div className="text-[#b5b5ad] text-xs space-y-0.5 pt-1 border-t border-[#2e2e2e]">
                       <div>NDVI Change: {data.ndvi}</div>
                       <div>SAR Backscatter: {data.sar}</div>
                       <div>Area: {data.area.toLocaleString()} m²</div>
@@ -96,7 +96,7 @@ export function SpectralAnalysisChart({ alerts: propAlerts }: SpectralAnalysisCh
           <Legend
             verticalAlign="top"
             height={28}
-            wrapperStyle={{ fontSize: '11px', color: '#b4c2bb' }}
+            wrapperStyle={{ fontSize: '11px', color: '#b5b5ad' }}
           />
           <Scatter
             name="Deforestation"
@@ -116,7 +116,7 @@ export function SpectralAnalysisChart({ alerts: propAlerts }: SpectralAnalysisCh
           <Scatter
             name="Land Encroachment"
             data={validPoints.filter((d) => d.class === 'Land Encroachment')}
-            fill="#22c55e"
+            fill="#38bdf8"
           />
           <Scatter
             name="Seasonal Farm (Rejected)"

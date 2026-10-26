@@ -61,7 +61,7 @@ export function MapView() {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-[#0b0f0e]">
+    <div className="relative w-full h-full overflow-hidden bg-[#0a0a0a]">
       {/* ── Full-height Leaflet with Esri World Imagery tiles (zero gaps) ── */}
       <MapContainer
         center={mapCenter}
@@ -121,39 +121,39 @@ export function MapView() {
         />
       </MapContainer>
 
-      {/* ── Floating Left Surveillance Feed (Fixed 360px width, SOLID #111816) ── */}
+      {/* ── Floating Left Surveillance Feed (Fixed 360px width, SOLID #121212) ── */}
       <SurveillanceFeed
         alerts={filteredAlerts}
         selectedAlertId={selectedAlert?.id ?? null}
         onSelectAlert={handleSelectAlert}
       />
 
-      {/* ── Map Legend: Solid Pill Bar at bottom-left, colored dots + labels in #f1f5f3 ── */}
-      <div className="absolute bottom-4 left-4 z-20 pointer-events-auto px-4 py-2.5 rounded-full bg-[#111816] border border-[#2a3832] text-xs text-[#f1f5f3] flex items-center gap-5 select-none shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
+      {/* ── Map Legend: Solid Pill Bar at bottom-left, colored dots + labels in #f5f5f0 ── */}
+      <div className="absolute bottom-4 left-4 z-20 pointer-events-auto px-4 py-2.5 rounded-full bg-[#121212] border border-[#2e2e2e] text-xs text-[#f5f5f0] flex items-center gap-5 select-none shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-critical" />
-          <span className="font-medium text-[#f1f5f3]">Critical</span>
+          <span className="font-medium text-[#f5f5f0]">Critical</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-high" />
-          <span className="font-medium text-[#f1f5f3]">High</span>
+          <span className="font-medium text-[#f5f5f0]">High</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-medium" />
-          <span className="font-medium text-[#f1f5f3]">Medium</span>
+          <span className="font-medium text-[#f5f5f0]">Medium</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-low" />
-          <span className="font-medium text-[#f1f5f3]">Low</span>
+          <span className="font-medium text-[#f5f5f0]">Low</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-accent" />
-          <span className="font-medium text-[#f1f5f3]">Protected zone</span>
+          <span className="font-medium text-[#f5f5f0]">Protected zone</span>
         </div>
       </div>
 
       {/* Cadastral Boundary Attribution */}
-      <div className="absolute bottom-4 right-4 z-20 pointer-events-auto hidden md:flex items-center px-3 py-1.5 rounded-md bg-[#111816]/90 border border-[#2a3832] text-[10px] text-[#b4c2bb] font-mono select-none shadow presentation-hidden">
+      <div className="absolute bottom-4 right-4 z-20 pointer-events-auto hidden md:flex items-center px-3 py-1.5 rounded-md bg-[#121212]/90 border border-[#2e2e2e] text-[10px] text-[#b5b5ad] font-mono select-none shadow presentation-hidden">
         Indicative zone polygons (generated)
       </div>
 

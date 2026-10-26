@@ -130,11 +130,11 @@ export function Scan() {
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto select-none">
       {/* Page Header with Single Green Run Scan Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2a3832]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2e2e]">
         <div>
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-xl font-semibold text-[#f1f5f3]">Orbital scan & anomaly detection</h1>
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-[#16201c] border border-[#2a3832] text-[#b4c2bb]">
+            <h1 className="text-xl font-semibold text-[#f5f5f0]">Orbital scan & anomaly detection</h1>
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-[#1a1a1a] border border-[#2e2e2e] text-[#b5b5ad]">
               {dataSource === 'calibration'
                 ? 'Data source: Calibration scenes (synthetic, ground truth known)'
                 : result?.scene_metadata?.isRealData
@@ -142,7 +142,7 @@ export function Scan() {
                   : 'Data source: Site scenes (real Sentinel-2 where available, otherwise modeled)'}
             </span>
           </div>
-          <p className="text-xs text-[#b4c2bb] mt-0.5">
+          <p className="text-xs text-[#b5b5ad] mt-0.5">
             Bitemporal radar and optical fusion with automated false-alarm rejection & statutory classification
           </p>
         </div>
@@ -152,7 +152,7 @@ export function Scan() {
           <button
             onClick={handleRunScan}
             disabled={isRunning || zonesLoading || !activeZone}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#22c55e] text-[#0b0f0e] font-semibold text-xs hover:bg-[#16a34a] disabled:opacity-50 transition-colors shadow-sm min-h-[38px]"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#facc15] text-[#0a0a0a] font-semibold text-xs hover:bg-[#eab308] disabled:opacity-50 transition-colors shadow-sm min-h-[38px]"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             <span>{isRunning ? `Running scan (${progress}%)` : 'Run scan'}</span>
@@ -163,72 +163,72 @@ export function Scan() {
       {/* ── Prominent Pipeline Stage Counters (Big numbers for Raw / Rejected / Validated) ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Raw Detections */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Raw detections</span>
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Raw detections</span>
             <span className="w-2.5 h-2.5 rounded-full bg-[#93c5fd]" />
           </div>
           <span className="text-3xl sm:text-4xl font-bold font-mono text-[#93c5fd] kpi-number">
             {result ? result.raw_count : '—'}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Raw detections: Initial candidate pixel clusters flagged by spectral &amp; radar diffs
           </p>
         </div>
 
         {/* Rejected (False+) */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Rejected (False+)</span>
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Rejected (False+)</span>
             <span className="w-2.5 h-2.5 rounded-full bg-[#fbbf24]" />
           </div>
           <span className="text-3xl sm:text-4xl font-bold font-mono text-[#fbbf24] kpi-number">
             {result ? result.false_positives_filtered : '—'}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Rejected: False alarms eliminated by dual-sensor fusion &amp; cloud suppression
           </p>
         </div>
 
         {/* Validated Alerts */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Validated alerts</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#22c55e]" />
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Validated alerts</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#facc15]" />
           </div>
-          <span className="text-3xl sm:text-4xl font-bold font-mono text-[#22c55e] kpi-number">
+          <span className="text-3xl sm:text-4xl font-bold font-mono text-[#facc15] kpi-number">
             {result ? result.validated_count : '—'}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Validated alerts: Confirmed encroachments exceeding 35% cadastral boundary overlap
           </p>
         </div>
 
         {/* Sub-threshold */}
-        <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col justify-between shadow-sm">
-          <div className="flex items-center justify-between text-[#b4c2bb] mb-1">
-            <span className="text-xs font-semibold text-[#f1f5f3]">Sub-threshold</span>
+        <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col justify-between shadow-sm">
+          <div className="flex items-center justify-between text-[#b5b5ad] mb-1">
+            <span className="text-xs font-semibold text-[#f5f5f0]">Sub-threshold</span>
             <span className="w-2.5 h-2.5 rounded-full bg-[#94a3b8]" />
           </div>
           <span className="text-3xl sm:text-4xl font-bold font-mono text-[#94a3b8] kpi-number">
             {result ? (result.belowThresholdCount ?? 0) : '—'}
           </span>
-          <p className="text-[11px] text-[#b4c2bb] mt-2 pt-2 border-t border-[#2a3832]/60 kpi-subtitle leading-snug">
+          <p className="text-[11px] text-[#b5b5ad] mt-2 pt-2 border-t border-[#2e2e2e]/60 kpi-subtitle leading-snug">
             Sub-threshold: Minor anomalies located outside or below statutory boundary threshold
           </p>
         </div>
       </div>
 
       {/* ── Prominent Pipeline Processing Stages ── */}
-      <div className="p-4 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-        <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
+      <div className="p-4 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+        <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
           <div className="flex items-center gap-2">
-            <Radar className="w-4 h-4 text-[#22c55e]" />
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#f1f5f3]">
+            <Radar className="w-4 h-4 text-[#facc15]" />
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[#f5f5f0]">
               Orbital Analysis Pipeline Stages
             </h3>
           </div>
-          <span className="text-[11px] font-mono text-[#22c55e] font-semibold">
+          <span className="text-[11px] font-mono text-[#facc15] font-semibold">
             {isRunning ? `${progress}% In Progress` : result ? 'Pipeline Pass Verified' : 'Awaiting Execution'}
           </span>
         </div>
@@ -242,23 +242,23 @@ export function Scan() {
                 key={stg.id}
                 className={`p-3 rounded-lg border text-xs flex flex-col gap-1 transition-all ${
                   isActive
-                    ? 'bg-[#16201c] border-[#22c55e] shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                    ? 'bg-[#1a1a1a] border-[#facc15] shadow-[0_0_12px_rgba(250, 204, 21,0.3)]'
                     : isDone
-                    ? 'bg-[#16201c] border-[#22c55e]/50'
-                    : 'bg-[#0b0f0e] border-[#2a3832] opacity-75'
+                    ? 'bg-[#1a1a1a] border-[#facc15]/50'
+                    : 'bg-[#0a0a0a] border-[#2e2e2e] opacity-75'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-[#22c55e] font-bold">
+                  <span className="font-mono text-[10px] text-[#facc15] font-bold">
                     STAGE 0{stg.step}
                   </span>
-                  {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-[#22c55e]" />}
-                  {isActive && <span className="w-2 h-2 rounded-full bg-[#22c55e] animate-ping" />}
+                  {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-[#facc15]" />}
+                  {isActive && <span className="w-2 h-2 rounded-full bg-[#facc15] animate-ping" />}
                 </div>
-                <span className="font-semibold text-[13px] text-[#f1f5f3] leading-snug">
+                <span className="font-semibold text-[13px] text-[#f5f5f0] leading-snug">
                   {stg.name}
                 </span>
-                <span className="text-[11px] text-[#b4c2bb] leading-tight">
+                <span className="text-[11px] text-[#b5b5ad] leading-tight">
                   {stg.desc}
                 </span>
               </div>
@@ -271,30 +271,30 @@ export function Scan() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Left Column: Scan Parameters (5 Cols) */}
         <div className="lg:col-span-5 flex flex-col gap-5 h-full">
-          <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#b4c2bb]">
+          <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#b5b5ad]">
                 Scan parameters
               </h2>
-              <span className="text-[11px] text-[#22c55e] font-mono">
+              <span className="text-[11px] text-[#facc15] font-mono">
                 {jurisdictionConfig?.label || 'All jurisdictions'}
               </span>
             </div>
 
             {/* Data Source Selector Toggle */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-[#f1f5f3]">
+              <label className="text-xs font-medium text-[#f5f5f0]">
                 Telemetry Data Source
               </label>
-              <div className="grid grid-cols-2 gap-2 p-1 rounded-lg bg-[#0b0f0e] border border-[#2a3832]">
+              <div className="grid grid-cols-2 gap-2 p-1 rounded-lg bg-[#0a0a0a] border border-[#2e2e2e]">
                 <button
                   type="button"
                   onClick={() => setDataSource('calibration')}
                   disabled={isRunning}
                   className={`py-1.5 px-2.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
                     dataSource === 'calibration'
-                      ? 'bg-[#16201c] text-[#22c55e] border border-[#22c55e]/50 font-semibold shadow-sm'
-                      : 'text-[#b4c2bb] hover:text-[#f1f5f3]'
+                      ? 'bg-[#1a1a1a] text-[#facc15] border border-[#facc15]/50 font-semibold shadow-sm'
+                      : 'text-[#b5b5ad] hover:text-[#f5f5f0]'
                   }`}
                 >
                   <Layers className="w-3.5 h-3.5" />
@@ -306,15 +306,15 @@ export function Scan() {
                   disabled={isRunning}
                   className={`py-1.5 px-2.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
                     dataSource === 'real'
-                      ? 'bg-[#16201c] text-[#22c55e] border border-[#22c55e]/50 font-semibold shadow-sm'
-                      : 'text-[#b4c2bb] hover:text-[#f1f5f3]'
+                      ? 'bg-[#1a1a1a] text-[#facc15] border border-[#facc15]/50 font-semibold shadow-sm'
+                      : 'text-[#b5b5ad] hover:text-[#f5f5f0]'
                   }`}
                 >
                   <Satellite className="w-3.5 h-3.5" />
                   <span>Site scenes (real Sentinel-2 where available)</span>
                 </button>
               </div>
-              <span className="text-[10px] text-[#b4c2bb] font-mono">
+              <span className="text-[10px] text-[#b5b5ad] font-mono">
                 {dataSource === 'calibration'
                   ? 'Controlled seeds with simulated cloud masks & known ground truth.'
                   : 'Real Copernicus Sentinel-2 L2A imagery for Z-102 and Z-104; other sites use the calibration dataset. The result card says which.'}
@@ -323,21 +323,21 @@ export function Scan() {
 
             {/* Zone Selector Filtered to Active Jurisdiction */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-[#f1f5f3]">
+              <label className="text-xs font-medium text-[#f5f5f0]">
                 Protected Sector Target ({filteredZones.length} available)
               </label>
               <select
                 value={selectedZoneId}
                 onChange={(e) => setSelectedZoneId(Number(e.target.value))}
                 disabled={isRunning}
-                className="w-full bg-[#0b0f0e] border border-[#2a3832] rounded-lg px-3 py-2 text-xs text-[#f1f5f3] focus:outline-none focus:border-[#22c55e] focus:ring-2 focus:ring-[#22c55e] cursor-pointer"
-                style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+                className="w-full bg-[#0a0a0a] border border-[#2e2e2e] rounded-lg px-3 py-2 text-xs text-[#f5f5f0] focus:outline-none focus:border-[#facc15] focus:ring-2 focus:ring-[#facc15] cursor-pointer"
+                style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
               >
                 {filteredZones.map((z) => (
                   <option
                     key={z.properties.id}
                     value={z.properties.id}
-                    style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
+                    style={{ backgroundColor: '#0a0a0a', color: '#f5f5f0' }}
                   >
                     {z.properties.code || `Z-${z.properties.id}`}: {z.properties.name} ({z.properties.risk_level})
                     {dataSource === 'real' && [102, 103, 104, 105, 107].includes(z.properties.id) ? ' • [Site scene]' : ''}
@@ -347,8 +347,8 @@ export function Scan() {
             </div>
 
             {/* Constellation Specs Callout */}
-            <div className="p-2.5 rounded bg-[#16201c] border border-[#2a3832] text-[11px] text-[#b4c2bb] font-mono leading-relaxed">
-              <span className="text-[#22c55e] font-semibold block">Constellation Model Parameters</span>
+            <div className="p-2.5 rounded bg-[#1a1a1a] border border-[#2e2e2e] text-[11px] text-[#b5b5ad] font-mono leading-relaxed">
+              <span className="text-[#facc15] font-semibold block">Constellation Model Parameters</span>
               Modeled on Sentinel-2 (5-day nominal revisit) and Sentinel-1 C-SAR (~10 m pixel spacing).
             </div>
 
@@ -359,12 +359,12 @@ export function Scan() {
             {dataSource === 'calibration' ? (
               <CloudSlider value={cloudCoverage} onChange={setCloudCoverage} disabled={isRunning} />
             ) : (
-              <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col gap-1 text-xs">
-                <div className="flex items-center justify-between text-[#b4c2bb]">
-                  <span className="font-semibold text-[#f1f5f3]">Modeled Scene Classification Layer (SCL)</span>
-                  <span className="text-[10px] font-mono text-[#22c55e]">Active</span>
+              <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] flex flex-col gap-1 text-xs">
+                <div className="flex items-center justify-between text-[#b5b5ad]">
+                  <span className="font-semibold text-[#f5f5f0]">Modeled Scene Classification Layer (SCL)</span>
+                  <span className="text-[10px] font-mono text-[#facc15]">Active</span>
                 </div>
-                <p className="text-[11px] text-[#b4c2bb] leading-relaxed">
+                <p className="text-[11px] text-[#b5b5ad] leading-relaxed">
                   Modeled atmospheric classification mask automatically filters cirrus clouds (SCL 10), high-probability clouds (SCL 9), and cloud shadows (SCL 3) directly from spectral telemetry.
                 </p>
               </div>
@@ -373,10 +373,10 @@ export function Scan() {
 
           {/* Detections Breakdown (when scan finishes) */}
           {result && (
-            <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#2a3832]">
-                <h3 className="text-xs font-semibold text-[#f1f5f3]">Detected anomalies</h3>
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#16201c] border border-[#22c55e] text-[#22c55e] font-semibold">
+            <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#2e2e2e]">
+                <h3 className="text-xs font-semibold text-[#f5f5f0]">Detected anomalies</h3>
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#1a1a1a] border border-[#facc15] text-[#facc15] font-semibold">
                   {result.validated_count} validated / {result.raw_count} raw detections
                 </span>
               </div>
@@ -392,11 +392,11 @@ export function Scan() {
 
         {/* Right Column: Imagery Canvas & Actions (7 Cols, fills vertical space) */}
         <div className="lg:col-span-7 flex flex-col h-full">
-          <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col flex-1 gap-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#2a3832]">
+          <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col flex-1 gap-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#2e2e2e]">
               <div>
-                <h3 className="text-sm font-semibold text-[#f1f5f3]">Change detection</h3>
-                <p className="text-xs text-[#b4c2bb]">
+                <h3 className="text-sm font-semibold text-[#f5f5f0]">Change detection</h3>
+                <p className="text-xs text-[#b5b5ad]">
                   Bitemporal comparison • {activeZone?.properties?.name || 'Protected corridor'}
                 </p>
               </div>
@@ -406,7 +406,7 @@ export function Scan() {
                   type="button"
                   onClick={handleSaveScan}
                   disabled={savingScan}
-                  className="px-3.5 py-1.5 rounded-lg bg-[#16201c] hover:bg-[#111816] border border-[#22c55e] text-[#22c55e] text-xs font-medium flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                  className="px-3.5 py-1.5 rounded-lg bg-[#1a1a1a] hover:bg-[#121212] border border-[#facc15] text-[#facc15] text-xs font-medium flex items-center gap-1.5 transition-colors disabled:opacity-50"
                 >
                   <Check className="w-3.5 h-3.5" />
                   <span>{savingScan ? 'Saving...' : 'Save scan'}</span>
@@ -415,7 +415,7 @@ export function Scan() {
             </div>
 
             {saveStatus && (
-              <div className="p-3 rounded-lg bg-[#16201c] border border-[#22c55e] text-[#22c55e] text-xs flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#facc15] text-[#facc15] text-xs flex items-center gap-2">
                 <Check className="w-4 h-4 flex-shrink-0" />
                 <span>{saveStatus}</span>
               </div>
@@ -426,14 +426,14 @@ export function Scan() {
 
             {/* Empty State when no scan has run */}
             {!result && !isRunning ? (
-              <div className="flex-1 flex flex-col items-center justify-center p-12 text-center border border-dashed border-[#2a3832] rounded-lg bg-[#16201c]/40 min-h-[360px]">
-                <div className="w-12 h-12 rounded-full bg-[#111816] border border-[#2a3832] flex items-center justify-center mb-3">
-                  <Radar className="w-6 h-6 text-[#22c55e]" />
+              <div className="flex-1 flex flex-col items-center justify-center p-12 text-center border border-dashed border-[#2e2e2e] rounded-lg bg-[#1a1a1a]/40 min-h-[360px]">
+                <div className="w-12 h-12 rounded-full bg-[#121212] border border-[#2e2e2e] flex items-center justify-center mb-3">
+                  <Radar className="w-6 h-6 text-[#facc15]" />
                 </div>
-                <h4 className="text-sm font-semibold text-[#f1f5f3] mb-1">
+                <h4 className="text-sm font-semibold text-[#f5f5f0] mb-1">
                   No scan executed for this zone yet
                 </h4>
-                <p className="text-xs text-[#b4c2bb] max-w-sm">
+                <p className="text-xs text-[#b5b5ad] max-w-sm">
                   Select {dataSource === 'real' ? 'a modeled real target site' : 'parameters'} and click Run scan.
                 </p>
               </div>
@@ -450,27 +450,27 @@ export function Scan() {
 
                 {/* Metrics Summary Strip with 4 Counters */}
                 {result && (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#2a3832]">
-                    <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
-                      <span className="text-[11px] text-[#b4c2bb]">Raw detections</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#2e2e2e]">
+                    <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] flex flex-col">
+                      <span className="text-[11px] text-[#b5b5ad]">Raw detections</span>
                       <span className="text-xl font-bold font-mono text-[#93c5fd]">
                         {result.raw_count}
                       </span>
                     </div>
-                    <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
-                      <span className="text-[11px] text-[#b4c2bb]">Rejected (False+)</span>
+                    <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] flex flex-col">
+                      <span className="text-[11px] text-[#b5b5ad]">Rejected (False+)</span>
                       <span className="text-xl font-bold font-mono text-[#fbbf24]">
                         {result.false_positives_filtered}
                       </span>
                     </div>
-                    <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
-                      <span className="text-[11px] text-[#b4c2bb]">Validated alerts</span>
-                      <span className="text-xl font-bold font-mono text-[#22c55e]">
+                    <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] flex flex-col">
+                      <span className="text-[11px] text-[#b5b5ad]">Validated alerts</span>
+                      <span className="text-xl font-bold font-mono text-[#facc15]">
                         {result.validated_count}
                       </span>
                     </div>
-                    <div className="p-3 rounded-lg bg-[#16201c] border border-[#2a3832] flex flex-col">
-                      <span className="text-[11px] text-[#b4c2bb]">Sub-threshold (&lt;35%)</span>
+                    <div className="p-3 rounded-lg bg-[#1a1a1a] border border-[#2e2e2e] flex flex-col">
+                      <span className="text-[11px] text-[#b5b5ad]">Sub-threshold (&lt;35%)</span>
                       <span className="text-xl font-bold font-mono text-[#94a3b8]">
                         {result.belowThresholdCount ?? 0}
                       </span>
@@ -491,23 +491,23 @@ export function Scan() {
       />
 
       {/* Limitations Panel: Transparent & Honest Remote Sensing Constraints */}
-      <div className="p-5 rounded-lg bg-[#111816] border border-[#2a3832] flex flex-col gap-3">
-        <div className="flex items-center gap-2 pb-2 border-b border-[#2a3832]">
-          <Info className="w-4 h-4 text-[#22c55e]" />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#f1f5f3]">
+      <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-3">
+        <div className="flex items-center gap-2 pb-2 border-b border-[#2e2e2e]">
+          <Info className="w-4 h-4 text-[#facc15]" />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[#f5f5f0]">
             Physical Detection Limitations & Evidentiary Methodology
           </h3>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-[#b4c2bb] leading-relaxed">
-          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-[#b5b5ad] leading-relaxed">
+          <div className="p-3 rounded-md bg-[#1a1a1a] border border-[#2e2e2e]">
             <span className="text-white font-semibold block mb-1">Spatial Resolution Cutoff</span>
             Sentinel-2 MSI pixel size is 10 m (100 m² per pixel). Connected-component detections below 5 contiguous pixels (&lt;500 m²) are automatically filtered to suppress sensor noise and minor agricultural tilling.
           </div>
-          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832]">
+          <div className="p-3 rounded-md bg-[#1a1a1a] border border-[#2e2e2e]">
             <span className="text-white font-semibold block mb-1">Dual-Sensor Radar Requirement</span>
             Optical vegetation loss (ΔNDVI &lt; -0.25) alone cannot differentiate legal seasonal crop harvest from illegal clearing. Sentinel-1 C-SAR radar backscatter (+dB) is required to identify rigid double-bounce masonry or quarry gouging.
           </div>
-          <div className="p-3 rounded-md bg-[#16201c] border border-[#2a3832]">
+          <div className="p-3 rounded-md bg-[#1a1a1a] border border-[#2e2e2e]">
             <span className="text-white font-semibold block mb-1">Candidate Evidentiary Status</span>
             Orbital detections are algorithmic candidates for human administrative verification. Under Section 63 BSA, automated alerts must be confirmed by an authorized officer prior to executing statutory demolition or eviction orders.
           </div>
