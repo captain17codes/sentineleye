@@ -126,12 +126,11 @@ export function AppShell({ children }: AppShellProps) {
             <span className="text-border">|</span>
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted">
               <Layers className="w-3.5 h-3.5 text-muted" />
-              <span>Feed: Sentinel-1/2 Model</span>
+              <span>Data: Sentinel-2 L2A + calibration set</span>
             </div>
             <span className="hidden sm:inline text-border">|</span>
-            {/* Small Simulation Tag only where synthetic */}
-            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-amber-400 bg-raised border border-amber-400/40">
-              Simulation
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#22c55e] bg-raised border border-[#22c55e]/40">
+              Prototype
             </span>
           </div>
 

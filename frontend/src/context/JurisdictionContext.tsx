@@ -30,7 +30,7 @@ export const JURISDICTION_CONFIG: Record<
     zoneIds: [101, 103, 104], // Delhi Ridge, Yamuna Floodplain, Asola Bhatti
   },
   up: {
-    label: 'Uttar Pradesh Peripheral',
+    label: 'Rajasthan & Yamuna Periphery',
     center: [27.34, 76.85],
     zoom: 9,
     zoneIds: [103, 106], // Yamuna Floodplain, Sariska Buffer
@@ -44,7 +44,7 @@ export const JURISDICTION_CONFIG: Record<
 };
 
 export function JurisdictionProvider({ children }: { children: React.ReactNode }) {
-  const [jurisdiction, setJurisdiction] = useState<JurisdictionOption>('delhi');
+  const [jurisdiction, setJurisdiction] = useState<JurisdictionOption>('all');
   const [selectedZoneId, setSelectedZoneId] = useState<number | null>(null);
 
   const config = JURISDICTION_CONFIG[jurisdiction];

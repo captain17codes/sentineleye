@@ -441,6 +441,7 @@ export function Scan() {
               /* Canvas with side-by-side scenes and overlay */
               <div className="flex flex-col gap-4">
                 <DetectionCanvas
+                  sceneType={sceneType}
                   result={result}
                   isRunning={isRunning}
                   progress={progress}

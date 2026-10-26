@@ -8,6 +8,7 @@ import { Layers } from 'lucide-react';
 
 interface DetectionCanvasProps {
   result: DetectionResult | null;
+  sceneType?: 'optical' | 'sar' | 'fused';
   isRunning: boolean;
   progress: number;
   currentStage?: string;
@@ -15,7 +16,26 @@ interface DetectionCanvasProps {
 
 type LayerMode = 'composite' | 'ndvi' | 'sar' | 'mask';
 
-export function DetectionCanvas({ result, isRunning, progress, currentStage }: DetectionCanvasProps) {
+export function DetectionCanvas({ result, isRunning, progress, currentStage, sceneType = 'fused' }: DetectionCanvasProps) {
+  // Labels come from the scan itself: real scene dates when real imagery was used,
+  // and the sensor that actually ran (real sites without SAR run optical-only).
+  const meta = result?.scene_metadata;
+  const fmtDate = (iso: string) => {
+    const d = new Date(iso);
+    const day = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+    return `${day}, ${time} UTC`;
+  };
+  const t0DateLabel = meta?.t0Date ? fmtDate(meta.t0Date) : 'Calibration scene (synthetic)';
+  const t1DateLabel = meta?.t1Date ? fmtDate(meta.t1Date) : 'Calibration scene (synthetic)';
+  const effectiveSensor = meta?.isRealData && meta.sarAvailable === false ? 'optical' : sceneType;
+  const sensorLabel =
+    effectiveSensor === 'optical'
+      ? 'Sentinel-2 MSI (10m)'
+      : effectiveSensor === 'sar'
+      ? 'Sentinel-1 SAR (C-band)'
+      : 'Sentinel-2 MSI + Sentinel-1 SAR';
+
   const [activeLayer, setActiveLayer] = useState<LayerMode>('composite');
 
   // Compute alternative raster representations for heatmaps
@@ -145,11 +165,11 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage }: D
                 Timeline T0 · Baseline Reference
               </span>
               <span className="text-[10px] font-mono text-[#22c55e]">
-                14 Mar 2022, 10:42 UTC
+                {t0DateLabel}
               </span>
             </div>
             <span className="text-[10px] text-[#b4c2bb] font-mono px-2 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
-              Sentinel-2 MSI (10m)
+              {sensorLabel}
             </span>
           </div>
 
@@ -159,7 +179,7 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage }: D
             ) : isRunning ? (
               <div className="flex flex-col items-center gap-2">
                 <Spinner color="neon" size="md" />
-                <span className="text-xs text-[#b4c2bb]">Synthesizing baseline scene...</span>
+                <span className="text-xs text-[#b4c2bb]">Loading baseline scene...</span>
               </div>
             ) : (
               <div className="text-xs text-[#b4c2bb] text-center px-4">
@@ -183,11 +203,11 @@ export function DetectionCanvas({ result, isRunning, progress, currentStage }: D
                   : 'Binary Classified Change Mask'}
               </span>
               <span className="text-[10px] font-mono text-[#ef4444] font-bold">
-                18 Oct 2026, 10:48 UTC
+                {t1DateLabel}
               </span>
             </div>
             <span className="text-[10px] text-[#22c55e] font-mono px-2 py-0.5 rounded bg-[#111816] border border-[#2a3832]">
-              Sentinel-1 SAR + MSI
+              {sensorLabel}
             </span>
           </div>
 
