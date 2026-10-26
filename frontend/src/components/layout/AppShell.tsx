@@ -208,18 +208,20 @@ export function AppShell({ children }: AppShellProps) {
           {children}
         </main>
 
-        {/* Honest Demo Mode Footer Banner */}
+        {/* Honest data-provenance footer */}
         <footer className="h-7 flex-shrink-0 px-4 bg-[#0b0f0e] border-t border-[#2a3832] flex items-center justify-between text-[11px] text-[#8fa097] font-mono select-none">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
             <span className="text-[#b4c2bb]">
-              Demo mode: client-side simulation. Accounts, workflow and ledger are stored in your browser.
+              Research prototype · runs in your browser · ledger stored locally
             </span>
           </div>
           <div className="hidden md:flex items-center gap-3 text-[10px] presentation-hidden">
-            <span>Indicative zone polygons (generated)</span>
+            <span>Real Sentinel-2 L2A: Z-102, Z-104</span>
             <span>•</span>
-            <span>Calibrated scenes modeled on real sites (synthetic arrays)</span>
+            <span>Calibration dataset elsewhere</span>
+            <span>•</span>
+            <span>Indicative zone polygons</span>
             <span>•</span>
             <span>Section 63 BSA</span>
           </div>

@@ -36,10 +36,10 @@ export function AlertSourceBadge({ alert, isReal, className = '' }: AlertSourceB
 
   return (
     <span
-      title="Synthesized calibration scenario (seeded ground truth)"
+      title="Calibration dataset: synthetic scene with known ground truth"
       className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider bg-[#2a1d0c] text-[#fbbf24] border border-[#f59e0b]/40 select-none shadow-sm ${className}`}
     >
-      SIMULATED
+      CALIBRATION
     </span>
   );
 }

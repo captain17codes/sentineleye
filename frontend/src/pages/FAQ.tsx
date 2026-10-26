@@ -14,7 +14,7 @@ export function FAQ() {
     {
       category: 'Detection engine',
       question: 'How does the browser Web Worker generate and analyze satellite imagery?',
-      answer: 'SentinelEye runs its core synthetic detection engine off the main thread inside a dedicated Web Worker. It simulates 256×256 multispectral Optical RGB, SAR radar speckle, and Fused tensors. It generates procedural terrain (fields, rivers, roads, buildings), executes bitemporal pixel-difference change detection against historical baselines, labels connected blobs, and intersects them with protected cadastral zone polygons.',
+      answer: 'The detection engine runs off the main thread in a dedicated Web Worker. For each site it takes a before and an after scene (red, near-infrared and radar bands, 256×256 pixels at 10 m), masks clouds, computes the NDVI and radar differences, fuses the two sensors, groups changed pixels into polygons, intersects them with the protected boundary and classifies them. Site scans for Z-102 and Z-104 use real Copernicus Sentinel-2 L2A imagery; the calibration dataset uses synthetic scenes with known ground truth to test cases such as cloud cover.',
     },
     {
       category: 'False-alarm suppression',

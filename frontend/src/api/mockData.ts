@@ -211,7 +211,7 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
         ? `[REAL Sentinel-2 L2A ${body.t0_scene_id} → ${body.t1_scene_id}] ${
             body.note || 'Change detected on real imagery'
           } Score ${(body.change_score * 100).toFixed(1)}%.`
-        : `[SIMULATED] Orbital change detected with score ${(body.change_score * 100).toFixed(1)}%`,
+        : `[CALIBRATION] Orbital change detected with score ${(body.change_score * 100).toFixed(1)}%`,
       created_at: new Date().toISOString(),
       // Only crops read from real Sentinel-2 pixels count as real.
       is_real_scene: body.is_real_data === true,
@@ -273,8 +273,8 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
   // 13. Notifications: GET /notifications
   if (pathname.includes('/notifications')) {
     return [
-      { id: 1, type: 'alert', message: '[SIMULATED] Critical alert created for Aravalli Forest Reserve (Z-105)', created_at: new Date().toISOString() },
-      { id: 2, type: 'info', message: '[SIMULATED] Copernicus Sentinel-2 pass synchronized', created_at: new Date().toISOString() },
+      { id: 1, type: 'alert', message: '[CALIBRATION] Critical alert created for Aravalli Forest Reserve (Z-105)', created_at: new Date().toISOString() },
+      { id: 2, type: 'info', message: 'Real Sentinel-2 L2A scenes available for Z-102 and Z-104', created_at: new Date().toISOString() },
     ] as unknown as T;
   }
 

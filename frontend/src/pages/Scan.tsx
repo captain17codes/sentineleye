@@ -317,7 +317,7 @@ export function Scan() {
               <span className="text-[10px] text-[#b4c2bb] font-mono">
                 {dataSource === 'calibration'
                   ? 'Controlled seeds with simulated cloud masks & known ground truth.'
-                  : 'Real Sentinel-2 L2A crops for sites fetched with tools/fetch_real_sentinel.py; other sites use calibrated synthetic arrays. The result card says which.'}
+                  : 'Real Copernicus Sentinel-2 L2A imagery for Z-102 and Z-104; other sites use the calibration dataset. The result card says which.'}
               </span>
             </div>
 

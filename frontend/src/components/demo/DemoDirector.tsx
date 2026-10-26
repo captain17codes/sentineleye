@@ -113,9 +113,9 @@ export function DemoDirector() {
   // Check if ?demo=1 or demo mode is active
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    if (searchParams.get('demo') === '1' || localStorage.getItem('sentineleye_demo_active') === '1') {
+    // Presenter tool: only opens when explicitly requested with ?demo=1.
+    if (searchParams.get('demo') === '1') {
       setActive(true);
-      localStorage.setItem('sentineleye_demo_active', '1');
     }
   }, [location.search]);
 
@@ -175,26 +175,11 @@ export function DemoDirector() {
       restoreTamperedChain();
       setCurrentStepIdx(0);
       setResetting(false);
-      navigate('/overview?demo=1');
+      navigate('/overview');
     }, 400);
   };
 
-  if (!active) {
-    // Show tiny toggle pill at bottom right to activate demo mode anytime
-    return (
-      <button
-        onClick={() => {
-          setActive(true);
-          localStorage.setItem('sentineleye_demo_active', '1');
-        }}
-        className="fixed bottom-4 right-4 z-50 px-3 py-1.5 rounded-full bg-[#111816] hover:bg-[#16201c] border border-[#22c55e]/40 text-[#22c55e] text-xs font-mono font-semibold shadow-2xl flex items-center gap-1.5 transition-all presentation-hidden min-h-[36px]"
-        title="Activate 3-Minute Executive Demo Mode"
-      >
-        <Sparkles className="w-3.5 h-3.5 text-[#22c55e]" />
-        <span>Demo Director</span>
-      </button>
-    );
-  }
+  if (!active) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50 select-none presentation-hidden">

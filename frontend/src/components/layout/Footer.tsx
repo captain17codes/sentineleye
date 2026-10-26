@@ -7,11 +7,11 @@ export function Footer() {
         <span>SentinelEye • Planetary intelligence for land protection</span>
         <span className="text-border">|</span>
         <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#22c55e] bg-[#22c55e]/10 border border-[#22c55e]/20">
-          Demo Mode
+          Prototype
         </span>
       </div>
       <p className="max-w-2xl text-[11px] text-[#b4c2bb] leading-relaxed">
-        Demo mode: client-side simulation. Accounts, workflow and ledger are stored in your browser. Telemetry features calibrated scenes modeled on real sites (synthetic arrays) alongside controlled calibration seeds. Indicative zone polygons (generated).
+        Research prototype running in the browser: accounts, workflow and the evidence ledger are stored locally. Site scans for Z-102 and Z-104 use real Copernicus Sentinel-2 L2A imagery; other scenes form a calibration dataset with known ground truth. Zone boundaries are indicative, not survey records.
       </p>
       <div className="text-[10px] font-mono text-[#8fa097] mt-1">
         WebCrypto ECDSA P-256 Ledger Active • Section 63 BSA 2023 Evidentiary Protocol

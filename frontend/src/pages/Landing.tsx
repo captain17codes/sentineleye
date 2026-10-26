@@ -1,6 +1,8 @@
 import React, { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { resetDemo as resetWorkspace } from '../engine/store/alertStore';
+import { restoreTamperedChain } from '../engine/ledger';
 import { GlobeFallback } from '../components/landing/GlobeFallback';
 import { EvidenceSlider } from '../components/landing/EvidenceSlider';
 import {
@@ -100,15 +102,17 @@ export function Landing() {
     setLoading(true);
     try {
       await login('operator@sentineleye.com', 'operator123');
-      localStorage.setItem('sentineleye_demo_active', '1');
-      navigate('/overview?demo=1', { replace: true });
+      // Start every operator session from a clean, verified workspace.
+      resetWorkspace();
+      restoreTamperedChain();
+      navigate('/overview', { replace: true });
     } catch {
       setLoading(false);
     }
   };
 
   const pipelineSteps = [
-    { name: 'Sentinel-1/2 Dual-Band Model', sub: 'Optical + SAR Simulation' },
+    { name: 'Sentinel-1/2 Dual-Band Model', sub: 'Optical + SAR Fusion Engine' },
     { name: 'Storage', sub: 'GeoTIFF / Zarr tensors' },
     { name: 'Orchestration', sub: 'Automated ingest pipeline' },
     { name: 'ML engine', sub: 'Bitemporal change model' },
@@ -282,7 +286,7 @@ export function Landing() {
                       onClick={fillDemoAccount}
                       className="py-2 px-2 rounded-md bg-[#16201c] border border-[#2a3832] hover:border-[#22c55e] text-[#f1f5f3] text-xs font-medium text-center transition-colors"
                     >
-                      Reset as Demo
+                      Reset workspace
                     </button>
                     <button
                       type="button"
@@ -423,14 +427,14 @@ export function Landing() {
                     </button>
                   </form>
 
-                  {/* Demo Account Button */}
+                  {/* Operator quick sign-in */}
                   <div className="mt-4 pt-4 border-t border-[#2a3832] flex flex-col gap-2">
                     <button
                       type="button"
                       onClick={fillDemoAccount}
                       className="w-full py-2 px-3 rounded-md bg-[#16201c] border border-[#2a3832] hover:border-[#22c55e] text-[#f1f5f3] text-xs font-medium text-center transition-colors"
                     >
-                      Use demo account (operator)
+                      Sign in as field operator
                     </button>
                     <div className="text-[11px] text-[#b4c2bb] text-center font-mono">
                       operator@sentineleye.com / operator123
@@ -575,7 +579,7 @@ export function Landing() {
             <Shield className="w-4 h-4 text-[#22c55e]" />
             <span>SentinelEye • Autonomous Planetary Intelligence & Land Protection</span>
           </div>
-          <div>Simulated data for demonstration purposes.</div>
+          <div>Contains modified Copernicus Sentinel data (2022, 2026). Calibration dataset for testing. Indicative boundaries.</div>
         </footer>
       </section>
     </div>

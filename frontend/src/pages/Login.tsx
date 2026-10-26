@@ -95,7 +95,7 @@ export function Login() {
 
         {/* Demo Credentials Shortcuts */}
         <div className="mt-6 pt-5 border-t border-border flex flex-col gap-2">
-          <span className="text-[11px] font-medium text-muted text-center">Quick demo accounts:</span>
+          <span className="text-[11px] font-medium text-muted text-center">Quick sign-in:</span>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
