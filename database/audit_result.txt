@@ -1,5 +1,5 @@
 
-===== DB AUDIT BEFORE @ 2026-10-26T19:09:35.274Z =====
+===== DB AUDIT BEFORE @ 2026-10-26T19:13:23.003Z =====
 rows alerts: 38
 rows ledger_blocks: 40
 rows chain_anchors: 1
@@ -15,7 +15,7 @@ rows zones: 8
 alerts by status: {"Verified":17,"New":14,"Notice Issued":7}
 alerts missing lat/lng: 0
 alerts from real scenes: 0
-latest alert update: 2026-10-26T18:58:59.397671+00:00
+latest alert update: 2026-10-26T19:11:01.234717+00:00
 PostGIS alert_zone_check: 38 rows, inside=38, outside=0
 ledger chains: 2
   chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
