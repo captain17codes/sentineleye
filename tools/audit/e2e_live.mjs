@@ -24,6 +24,7 @@ let local = { chain: [], alerts: [] };
 let browser;
 const reqs = [];
 const errors = [];
+let alertId = null;
 try {
 browser = await chromium.launch({ channel: 'chrome' });
 var ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -58,12 +59,13 @@ await page.getByRole('button', { name: /^Run scan$/ }).first().click();
 await page.waitForFunction(() => !document.body.innerText.includes('Running scan'), null, { timeout: 90000 }).catch(() => log('scan did not finish in 90 s'));
 await page.waitForTimeout(3000);
 await page.screenshot({ path: 'shots/2_scan.png', fullPage: false });
+log(`scan page after run: ${(await page.locator('text=/Alerts created|validated|No new/i').first().textContent().catch(() => '?'))?.slice(0, 80)}`);
 
 // advance the first alert one step
 await page.goto(`${SITE}/alerts`, { waitUntil: 'networkidle' });
 await page.waitForTimeout(1500);
 const firstRow = page.locator('tbody tr').first();
-const alertId = Number(((await firstRow.locator('td').first().textContent()) || '').replace('#', '').trim());
+alertId = Number(((await firstRow.locator('td').first().textContent()) || '').replace('#', '').trim());
 const btn = firstRow.getByRole('button', { name: /^Mark / });
 const label = (await btn.count()) ? await btn.textContent() : null;
 if (label) await btn.click();
