@@ -1,0 +1,13 @@
+{
+  "_readme": "search_bbox = [minLng, minLat, maxLng, maxLat] where to look. regex = OSM name pattern. After `list`, copy the right OSM ids into osm_ids. Leave osm_ids empty for zones with no real OSM polygon (they will be reported MISSING; drop them or draw them yourself from an official source).",
+  "zones": {
+    "Z-101": {"name": "Delhi Ridge Forest Sector C", "regex": "Ridge", "search_bbox": [76.85, 28.35, 77.40, 28.95], "osm_ids": []},
+    "Z-102": {"name": "Mangar Bani Sacred Grove", "regex": "Mangar", "search_bbox": [77.00, 28.25, 77.35, 28.50], "osm_ids": []},
+    "Z-103": {"name": "Yamuna Floodplain", "regex": "Yamuna", "search_bbox": [77.00, 28.40, 77.45, 28.90], "osm_ids": []},
+    "Z-104": {"name": "Asola Bhatti Wildlife Sanctuary", "regex": "Asola|Bhatti", "search_bbox": [77.15, 28.40, 77.35, 28.55], "osm_ids": []},
+    "Z-105": {"name": "Aravalli Forest Reserve", "regex": "Aravalli", "search_bbox": [76.40, 27.80, 77.60, 28.60], "osm_ids": []},
+    "Z-106": {"name": "Sariska Buffer Zone", "regex": "Sariska", "search_bbox": [76.10, 27.10, 76.80, 27.75], "osm_ids": []},
+    "Z-107": {"name": "Bhindawas Wetland", "regex": "Bhindawas", "search_bbox": [76.35, 28.35, 76.85, 28.75], "osm_ids": []},
+    "Z-108": {"name": "Haryana Agricultural Reserve", "regex": "NOT_A_REAL_OSM_FEATURE_XYZ", "search_bbox": [76.50, 28.20, 77.20, 28.80], "osm_ids": []}
+  }
+}

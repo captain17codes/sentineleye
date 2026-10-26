@@ -1,0 +1,7 @@
+numpy
+requests
+rasterio
+shapely
+pyproj
+# optional, only for Sentinel-1 RTC (SAR) from Microsoft Planetary Computer:
+planetary-computer

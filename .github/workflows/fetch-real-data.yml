@@ -1,0 +1,38 @@
+name: Fetch real Sentinel-2 site scenes
+
+# Downloads real Copernicus Sentinel-2 L2A crops for the AOIs in tools/aoi_config.json
+# and commits them to frontend/public/real/. Run manually from the Actions tab, or
+# push a change to tools/aoi_config.json on the real-data-fetch branch.
+on:
+  workflow_dispatch:
+  push:
+    branches: [real-data-fetch]
+    paths:
+      - tools/aoi_config.json
+      - tools/fetch_real_sentinel.py
+      - .github/workflows/fetch-real-data.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install numpy requests rasterio shapely pyproj
+      - name: Fetch real scenes (optical only)
+        run: python tools/fetch_real_sentinel.py fetch --config tools/aoi_config.json --no-sar
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/real
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "data: real Sentinel-2 L2A crops from tools/aoi_config.json"
+          git push

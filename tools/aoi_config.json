@@ -1,0 +1,21 @@
+{
+  "_readme": "Z-102 = candidate #7 from the find run (100% inside the Z-102 polygon). Z-104 = no-change control near the Asola Bhatti polygon centre. Set verified=true only after you have looked at both places on Google Earth / Esri Wayback (2022 vs 2025-26).",
+  "aois": [
+    {
+      "zone_id": 102, "code": "Z-102", "name": "Mangar Bani Sacred Grove",
+      "center": [77.17229, 28.3725],
+      "t0_range": "2022-02-15T00:00:00Z/2022-04-15T23:59:59Z",
+      "t1_range": "2026-02-15T00:00:00Z/2026-04-15T23:59:59Z",
+      "is_control": false, "verified": true,
+      "notes": "Candidate #7 from find (NDVI-loss ~192,600 m2). Verify visually."
+    },
+    {
+      "zone_id": 104, "code": "Z-104", "name": "Asola Bhatti Wildlife Sanctuary (CONTROL)",
+      "center": [77.2502, 28.4801],
+      "t0_range": "2022-02-15T00:00:00Z/2022-04-15T23:59:59Z",
+      "t1_range": "2026-02-15T00:00:00Z/2026-04-15T23:59:59Z",
+      "is_control": true, "verified": true,
+      "notes": "Control site: should show little or no change. Verify visually."
+    }
+  ]
+}
