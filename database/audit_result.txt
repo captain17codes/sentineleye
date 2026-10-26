@@ -1,5 +1,5 @@
 
-===== DB AUDIT BEFORE @ 2026-10-26T19:13:23.003Z =====
+===== DB AUDIT BEFORE @ 2026-10-26T19:14:32.557Z =====
 rows alerts: 38
 rows ledger_blocks: 40
 rows chain_anchors: 1
@@ -15,7 +15,7 @@ rows zones: 8
 alerts by status: {"Verified":17,"New":14,"Notice Issued":7}
 alerts missing lat/lng: 0
 alerts from real scenes: 0
-latest alert update: 2026-10-26T19:11:01.234717+00:00
+latest alert update: 2026-10-26T19:13:35.506172+00:00
 PostGIS alert_zone_check: 38 rows, inside=38, outside=0
 ledger chains: 2
   chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
@@ -23,3 +23,45 @@ ledger chains: 2
 anchors: 1, pointing at a stored block: 1
 live bundle: assets/index-ZS3ViKBC.js
 E2E FAILED (exit 1)
+----- raw log -----
+
+===== DB AUDIT BEFORE @ 2026-10-26T19:14:32.557Z =====
+rows alerts: 38
+rows ledger_blocks: 40
+rows chain_anchors: 1
+rows zones: 8
+  zone Z-101 Delhi Ridge Forest Sector C: 7702.5 ha
+  zone Z-102 Mangar Bani Sacred Grove: 7077.7 ha
+  zone Z-103 Yamuna Floodplain Sector 7: 8393.3 ha
+  zone Z-104 Asola Bhatti Wildlife Sanctuary: 8703.6 ha
+  zone Z-105 Aravalli Forest Reserve: 8381.5 ha
+  zone Z-106 Sariska Buffer Zone B: 9018.9 ha
+  zone Z-107 Bhindawas Wetland Zone: 7418.7 ha
+  zone Z-108 Haryana Agricultural Reserve: 8007.2 ha
+alerts by status: {"Verified":17,"New":14,"Notice Issued":7}
+alerts missing lat/lng: 0
+alerts from real scenes: 0
+latest alert update: 2026-10-26T19:13:35.506172+00:00
+PostGIS alert_zone_check: 38 rows, inside=38, outside=0
+ledger chains: 2
+  chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain smoke-test: 1 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 0/1 (raw ts 0), unsigned 1, types SMOKE
+anchors: 1, pointing at a stored block: 1
+live bundle: assets/index-ZS3ViKBC.js
+file:///home/runner/work/sentineleye/sentineleye/tools/audit/e2e_live.mjs:37
+page.on('requestfailed', (r) => r.url().includes('supabase.co') && reqs.push(`FAILED ${r.request().method()} ${r.url().slice(0, 90)} ${r.failure()?.errorText}`));
+                                                                                         ^
+
+TypeError: r.request is not a function
+    at Page.<anonymous> (file:///home/runner/work/sentineleye/sentineleye/tools/audit/e2e_live.mjs:37:90)
+    at Page._callHandler (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/client/eventEmitter.js:71:29)
+    at Page.emit (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/client/eventEmitter.js:62:12)
+    at BrowserContext._onRequestFailed (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/client/browserContext.js:191:20)
+    at Proxy.<anonymous> (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/client/browserContext.js:157:16)
+    at Proxy._callHandler (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/client/eventEmitter.js:71:29)
+    at Proxy.emit (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/client/eventEmitter.js:62:12)
+    at Connection.dispatch (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/client/connection.js:202:21)
+    at Immediate.<anonymous> (/home/runner/work/sentineleye/sentineleye/tools/audit/node_modules/playwright-core/lib/inProcessFactory.js:49:83)
+    at process.processImmediate (node:internal/timers:483:21)
+
+Node.js v20.20.2
