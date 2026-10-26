@@ -1,0 +1,107 @@
+{
+  "zones": [
+    {
+      "zone_id": "khori-gaon",
+      "code": "CASE-1",
+      "name": "Khori Gaon, Faridabad",
+      "bbox": [
+        77.2673172,
+        28.4791016,
+        77.2934828,
+        28.5020984
+      ],
+      "center": [
+        77.2804,
+        28.4906
+      ],
+      "is_control": false,
+      "verified_by_human": true,
+      "notes": "",
+      "sar_available": false,
+      "kind": "case",
+      "event": "Supreme Court-ordered demolition of informal structures on Aravalli land protected under the Punjab Land Preservation Act, mid-2021.",
+      "expected_change": "Built-up structures removed (demolition), surface turns to rubble and bare earth",
+      "citation": "Supreme Court of India, Municipal Corporation of Faridabad v. Khori Gaon Residents Welfare Association, SLP (C) 7220-7221/2017, orders of 2021",
+      "source_url": "https://khorigaon.in/tag/demolition/",
+      "t0": {
+        "scene_id": "S2A_43RGM_20210320_1_L2A",
+        "datetime": "2021-03-20T05:41:02.490000Z",
+        "aoi_cloud_pct": 0.0
+      },
+      "t1": {
+        "scene_id": "S2B_43RGM_20220330_0_L2A",
+        "datetime": "2022-03-30T05:41:00.266000Z",
+        "aoi_cloud_pct": 0.0
+      }
+    },
+    {
+      "zone_id": "kot-dhauj-mining",
+      "code": "CASE-2",
+      "name": "Kot / Dhauj, Faridabad Aravallis",
+      "bbox": [
+        77.1610377,
+        28.3134016,
+        77.1871623,
+        28.3363984
+      ],
+      "center": [
+        77.1741,
+        28.3249
+      ],
+      "is_control": false,
+      "verified_by_human": true,
+      "notes": "",
+      "sar_available": false,
+      "kind": "case",
+      "event": "Reported illegal stone quarrying in the Aravalli hills despite the mining ban, 2021-2024.",
+      "expected_change": "Vegetation loss and new bare rock / soil (mining)",
+      "citation": "NGT OA 362/2022 (Aravalli Bachao Citizens Movement v. Union of India), as reported; unverified",
+      "source_url": "https://aravallibachao.org/",
+      "t0": {
+        "scene_id": "S2A_43RGM_20210320_1_L2A",
+        "datetime": "2021-03-20T05:41:02.490000Z",
+        "aoi_cloud_pct": 0.0
+      },
+      "t1": {
+        "scene_id": "S2B_43RGM_20240408_0_L2A",
+        "datetime": "2024-04-08T05:41:02.705000Z",
+        "aoi_cloud_pct": 0.0
+      }
+    },
+    {
+      "zone_id": "yamuna-zone-o",
+      "code": "CASE-3",
+      "name": "Yamuna floodplain (Zone O), Delhi",
+      "bbox": [
+        77.251901,
+        28.6095016,
+        77.278099,
+        28.6324984
+      ],
+      "center": [
+        77.265,
+        28.621
+      ],
+      "is_control": false,
+      "verified_by_human": true,
+      "notes": "",
+      "sar_available": false,
+      "kind": "case",
+      "event": "DDA clearance of encroachments (nurseries, structures, farms) on about 401 ha of Yamuna floodplain, 2023-2024.",
+      "expected_change": "Encroachments cleared: nurseries / farms / structures removed",
+      "citation": "Times of India, '401.4 hectares of floodplain freed from squatters on Yamuna riverbed', July 2024; NGT proceedings",
+      "source_url": "https://timesofindia.indiatimes.com/city/delhi/4014-hectares-of-floodplain-freed-from-squatters-on-yamuna-riverbed/articleshow/111765333.cms",
+      "t0": {
+        "scene_id": "S2A_43RGM_20230310_0_L2A",
+        "datetime": "2023-03-10T05:40:58.438000Z",
+        "aoi_cloud_pct": 0.0
+      },
+      "t1": {
+        "scene_id": "S2B_43RGM_20250324_0_L2A",
+        "datetime": "2025-03-24T05:41:06.496000Z",
+        "aoi_cloud_pct": 0.0
+      }
+    }
+  ],
+  "data_source": "REAL Sentinel-2 L2A (Earth Search STAC); Sentinel-1 RTC where available"
+}
