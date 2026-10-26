@@ -1,1 +1,25 @@
+
+===== DB AUDIT BEFORE @ 2026-10-26T19:09:35.274Z =====
+rows alerts: 38
+rows ledger_blocks: 40
+rows chain_anchors: 1
+rows zones: 8
+  zone Z-101 Delhi Ridge Forest Sector C: 7702.5 ha
+  zone Z-102 Mangar Bani Sacred Grove: 7077.7 ha
+  zone Z-103 Yamuna Floodplain Sector 7: 8393.3 ha
+  zone Z-104 Asola Bhatti Wildlife Sanctuary: 8703.6 ha
+  zone Z-105 Aravalli Forest Reserve: 8381.5 ha
+  zone Z-106 Sariska Buffer Zone B: 9018.9 ha
+  zone Z-107 Bhindawas Wetland Zone: 7418.7 ha
+  zone Z-108 Haryana Agricultural Reserve: 8007.2 ha
+alerts by status: {"Verified":17,"New":14,"Notice Issued":7}
+alerts missing lat/lng: 0
+alerts from real scenes: 0
+latest alert update: 2026-10-26T18:58:59.397671+00:00
+PostGIS alert_zone_check: 38 rows, inside=38, outside=0
+ledger chains: 2
+  chain aed850e87c7e128992de4b692e853d0d263201fa: 39 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 39/39 (raw ts 0), unsigned 0, types SCENE_INGEST/VERIFIED/NOTICE_ISSUED/DETECTION
+  chain smoke-test: 1 blocks, idx gaps 0, broken prev-links 0, hash re-computed OK 0/1 (raw ts 0), unsigned 1, types SMOKE
+anchors: 1, pointing at a stored block: 1
+live bundle: assets/index-ZS3ViKBC.js
 E2E FAILED (exit 1)
