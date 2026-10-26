@@ -9,6 +9,7 @@
  */
 
 import { STORAGE_KEYS } from './config';
+import { queueLedgerSync, saveAnchor, chainIdOf } from '../lib/db';
 
 export type BlockType = 'SCENE_INGEST' | 'DETECTION' | 'VERIFIED' | 'NOTICE_ISSUED' | 'SIGNED_AND_SERVED';
 
@@ -494,6 +495,8 @@ export function saveLedgerChain(chain: LedgerBlock[]): void {
       localStorage.setItem(STORAGE_KEYS.LEDGER, JSON.stringify(chain));
     }
   } catch {}
+  // Mirror new blocks to the database (append-only; existing rows are never overwritten).
+  queueLedgerSync(chain);
 }
 
 export async function addLedgerRecord(
@@ -534,6 +537,7 @@ export function anchorChainHead(headHash: string, blockIndex?: number): ChainAnc
       localStorage.setItem(STORAGE_KEYS.ANCHOR, JSON.stringify(anchor));
     }
   } catch {}
+  if (_activeChain && _activeChain.length) void saveAnchor(chainIdOf(_activeChain), headHash, index);
   return anchor;
 }
 

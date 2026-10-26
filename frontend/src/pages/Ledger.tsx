@@ -28,6 +28,7 @@ import {
   FileCode2,
 } from 'lucide-react';
 import { LoadingState, EmptyState } from '../components/ui/StatusStates';
+import { DbLedgerCheck } from '../components/db/DbLedgerCheck';
 
 export function Ledger() {
   const [chain, setChain] = useState<LedgerBlock[]>([]);
@@ -268,6 +269,8 @@ export function Ledger() {
       )}
 
       {/* Filter and Stats Bar */}
+      <DbLedgerCheck />
+
       <div className="flex items-center justify-between gap-4 p-3 rounded-lg bg-[#121212] border border-[#2e2e2e] text-xs">
         <div className="flex items-center gap-2">
           <span className="text-[#b5b5ad]">Filter by block type:</span>

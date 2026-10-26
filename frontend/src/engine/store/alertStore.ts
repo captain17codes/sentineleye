@@ -8,6 +8,7 @@ import { Alert, AlertStatus } from '../../types/alert.types';
 import { STORAGE_KEYS, DEMO_SEED, TARGET_DISTRIBUTION } from '../config';
 import { SEEDED_ZONES } from '../../api/seededData';
 import { runScanPipeline } from '../scan/pipeline';
+import { queueAlertsSync } from '../../lib/db';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -52,6 +53,7 @@ function saveToStorage(store: AlertStore): void {
   } catch {
     // storage full — ignore
   }
+  queueAlertsSync(store.alerts);
 }
 
 // ── Seeded alert generation via Real Scan Pipeline ─────────────────────────

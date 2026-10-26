@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { DbPanel } from '../components/db/DbPanel';
 import { useAuth } from '../context/AuthContext';
 import { getLedgerChain, verifyChain, LedgerBlock } from '../engine/ledger';
 import { EmptyState } from '../components/ui/StatusStates';
@@ -52,6 +53,8 @@ export function Settings() {
           Account identity, node parameters, and cryptographic ledger verification
         </p>
       </div>
+
+      <DbPanel />
 
       {/* Operator Identity Card */}
       <div className="p-5 rounded-lg bg-[#121212] border border-[#2e2e2e] flex flex-col gap-4">

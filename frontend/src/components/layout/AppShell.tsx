@@ -1,4 +1,5 @@
 import React from 'react';
+import { DbStatusChip } from '../db/DbStatusChip';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useJurisdiction, JURISDICTION_CONFIG, JurisdictionOption } from '../../context/JurisdictionContext';
@@ -134,6 +135,7 @@ export function AppShell({ children }: AppShellProps) {
             <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium text-[#facc15] bg-raised border border-[#facc15]/40">
               Prototype
             </span>
+            <DbStatusChip />
           </div>
 
           {/* Right Controls: Presentation Mode Toggle + Jurisdiction Picker + Ledger Status */}
