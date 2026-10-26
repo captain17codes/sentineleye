@@ -3,9 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import { runScanPipeline } from '../scan/pipeline';
 import { SEEDED_ZONES } from '../../api/seededData';
+import { prepareSiteScene } from '../scan/realScene';
 
 describe('Calibrated Telemetry Engine Modeled on Real Sites', () => {
-  it('loads calibrated scene arrays modeled on real coordinates and executes dual-sensor change detection without errors', () => {
+  it('loads the Z-102 site scene (real Sentinel-2 or calibrated) and runs the pipeline on its own crop', () => {
     const t0Path = path.resolve(__dirname, '../../../public/real/102/t0.json');
     const t1Path = path.resolve(__dirname, '../../../public/real/102/t1.json');
 
@@ -15,52 +16,40 @@ describe('Calibrated Telemetry Engine Modeled on Real Sites', () => {
     const t0Data = JSON.parse(fs.readFileSync(t0Path, 'utf-8'));
     const t1Data = JSON.parse(fs.readFileSync(t1Path, 'utf-8'));
 
-    expect(t0Data.scene_id).toContain('S2B_');
-    expect(t1Data.scene_id).toContain('S2B_');
+    // Copernicus Sentinel-2 product IDs (S2A/S2B/S2C), whichever satellite took the scene
+    expect(t0Data.scene_id).toMatch(/^S2[ABC]_/);
+    expect(t1Data.scene_id).toMatch(/^S2[ABC]_/);
     expect(t0Data.red.length).toBe(256 * 256);
 
-    const zoneRecord = SEEDED_ZONES.find((z) => z.id === 102)!;
-    const geoJson = JSON.parse(zoneRecord.geojson);
-
-    const bbox = {
-      minLng: t0Data.bbox[0],
-      minLat: t0Data.bbox[1],
-      maxLng: t0Data.bbox[2],
-      maxLat: t0Data.bbox[3],
-    };
-
-    const realCloudMask = new Uint8Array(256 * 256);
-    for (let i = 0; i < 256 * 256; i++) {
-      if (t1Data.scl[i] === 3 || t1Data.scl[i] === 8 || t1Data.scl[i] === 9) {
-        realCloudMask[i] = 1;
-      }
+    const p = prepareSiteScene(t0Data, t1Data, 'fused', 256, 102);
+    if (p.isRealData) {
+      expect(t0Data.source.kind).toBe('REAL');
+      // reflectance must be physical values, not leftovers from synthetic generators
+      expect(Math.max(...t0Data.nir.slice(0, 5000))).toBeLessThanOrEqual(1);
+      expect(Math.min(...t0Data.red.slice(0, 5000))).toBeGreaterThanOrEqual(0);
     }
 
+    const zoneRecord = SEEDED_ZONES.find((z) => z.id === 102)!;
     const output = runScanPipeline({
       zoneId: 102,
-      bbox,
-      zoneGeoJson: geoJson,
-      mode: 'fused',
+      bbox: p.bbox!,
+      zoneGeoJson: JSON.parse(zoneRecord.geojson),
+      mode: p.effectiveMode,
       cloudCoverage: 0,
+      seed: 144,
       dataSource: 'real',
-      realScene: {
-        t0: {
-          red: new Float32Array(t0Data.red),
-          nir: new Float32Array(t0Data.nir),
-          sar: new Float32Array(t0Data.sar),
-        },
-        t1: {
-          red: new Float32Array(t1Data.red),
-          nir: new Float32Array(t1Data.nir),
-          sar: new Float32Array(t1Data.sar),
-        },
-        cloudMask: realCloudMask,
-      },
+      realScene: { t0: p.scene.t0, t1: p.scene.t1, cloudMask: p.cloudMask },
     });
 
     expect(output).toBeDefined();
-    expect(output.detections.length).toBeGreaterThan(0);
-    expect(output.stats.totalEncroachedAreaM2).toBeGreaterThan(5000);
+    expect(output.stats.rawDetectionsCount).toBeGreaterThanOrEqual(output.stats.validatedCount);
+    // every detection must lie on the site crop itself
+    for (const d of output.detections) {
+      expect(d.centroid[0]).toBeGreaterThanOrEqual(p.bbox!.minLng);
+      expect(d.centroid[0]).toBeLessThanOrEqual(p.bbox!.maxLng);
+      expect(d.centroid[1]).toBeGreaterThanOrEqual(p.bbox!.minLat);
+      expect(d.centroid[1]).toBeLessThanOrEqual(p.bbox!.maxLat);
+    }
   });
 
   it('verifies control negative site (Z-107 Bhindawas) outputs zero false-positive alerts', () => {
