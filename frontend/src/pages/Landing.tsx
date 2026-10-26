@@ -232,7 +232,7 @@ export function Landing() {
             </h1>
 
             <p className="mt-4 text-base sm:text-lg text-[#b4c2bb] max-w-xl leading-relaxed">
-              AI-powered land protection from orbit to enforcement.
+              Satellite-powered land protection, from orbit to enforcement.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3 text-xs text-[#b4c2bb]">
