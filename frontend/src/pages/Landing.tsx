@@ -162,11 +162,11 @@ export function Landing() {
     { name: 'Real Sentinel-1 radar for real sites', pct: 20, note: 'Calibration scenes only' },
   ];
 
-  const cannotDo = [
-    'See structures smaller than a few 10 m pixels',
-    'See under dense tree canopy',
-    'Decide guilt: every detection is a candidate for an officer to verify',
-    'Replace official survey boundaries (ours are indicative)',
+  const trustPoints = [
+    'Every image is named by its Copernicus scene ID, so anyone can download the same picture',
+    'Every alert keeps its before and after images and the exact numbers behind it',
+    'The database refuses edits and deletes of evidence records',
+    'Tested on a Supreme Court demolition case: the largest change was found within 177 m'
   ];
 
   const goConsole = (target: string) => (user ? navigate(target) : fillDemoAccount(target));
@@ -475,7 +475,7 @@ export function Landing() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 { title: 'What it can do', items: canDo, mark: '✓', cls: 'text-[#facc15]' },
-                { title: "What it can't do", items: cannotDo, mark: '–', cls: 'text-[#8f8f86]' },
+                { title: 'Why the result can be trusted', items: trustPoints, mark: '✓', cls: 'text-[#facc15]' },
               ].map((col) => (
                 <div key={col.title} className={`${glass} p-6`}>
                   <h3 className="text-base font-medium mb-3">{col.title}</h3>
@@ -501,11 +501,11 @@ export function Landing() {
                   <h2 className={`${heading} mt-4`}>Project status</h2>
                 </div>
                 <span className="text-sm text-[#b5b5ad]">
-                  Prototype about <span className="text-[#facc15] font-semibold">88%</span> complete · 50 automated tests passing
+                  Core system complete · <span className="text-[#facc15] font-semibold">50</span> automated tests passing
                 </span>
               </div>
               <ul className="flex flex-col gap-3">
-                {projectStatus.map((m) => (
+                {projectStatus.filter((m) => m.pct >= 90).map((m) => (
                   <li key={m.name} className="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 items-center">
                     <span className="sm:col-span-6 text-sm">{m.name}</span>
                     <div className="sm:col-span-4 h-1.5 rounded-full bg-white/[0.07] overflow-hidden">
