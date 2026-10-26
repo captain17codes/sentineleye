@@ -1,5 +1,5 @@
 // Drives the LIVE site like a user and checks every write reached Supabase.
-import { chromium } from 'playwright';
+import { chromium } from 'playwright-core';
 import { audit, appendOnlyProbe, dump } from './db_audit.mjs';
 import fs from 'node:fs';
 
@@ -20,13 +20,14 @@ function fnv1a(str, seed = 0x811c9dc5) {
 process.on('unhandledRejection', (e) => { fs.appendFileSync(OUT, 'UNHANDLED: ' + String(e && e.stack || e).slice(0, 900) + '\n'); process.exit(1); });
 const before = await audit('BEFORE').catch((e) => { log('AUDIT BEFORE FAILED: ' + String(e && e.stack || e).slice(0, 600)); return null; });
 
-const browser = await chromium.launch();
 let local = { chain: [], alerts: [] };
-try {
-const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-const page = await ctx.newPage();
+let browser;
 const reqs = [];
 const errors = [];
+try {
+browser = await chromium.launch({ channel: 'chrome' });
+var ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+var page = await ctx.newPage();
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text().slice(0, 200)));
 page.on('pageerror', (e) => errors.push('pageerror ' + e.message.slice(0, 200)));
 page.on('response', (r) => {
@@ -91,10 +92,10 @@ local = await page.evaluate(() => ({
 await page.waitForTimeout(2000);
 } catch (e) {
   log('E2E STEP FAILED: ' + String(e && e.stack || e).slice(0, 900));
-  await page.screenshot({ path: 'shots/error.png' }).catch(() => {});
-  local = await page.evaluate(() => ({ chain: JSON.parse(localStorage.getItem('sentineleye_ledger_v4') || '[]'), alerts: JSON.parse(localStorage.getItem('sentineleye_alerts_v4') || '{"alerts":[]}').alerts })).catch(() => local);
+  await page?.screenshot({ path: 'shots/error.png' }).catch(() => {});
+  local = await page?.evaluate(() => ({ chain: JSON.parse(localStorage.getItem('sentineleye_ledger_v4') || '[]'), alerts: JSON.parse(localStorage.getItem('sentineleye_alerts_v4') || '{"alerts":[]}').alerts })).catch(() => local);
 }
-await browser.close();
+await browser?.close();
 
 const g = local.chain[0];
 const chainId = g ? `${g.hash.slice(0, 16)}-${fnv1a(g.publicKey || '')}${fnv1a(g.publicKey || '', 0x01000193)}` : '';
