@@ -2,7 +2,8 @@
 // Deterministic Sentinel-1 SAR & Sentinel-2 Optical Bitemporal Pipeline
 // Reports real stage progress, false-alarm rejection, and vector polygons.
 
-import { WorkerInput, WorkerOutput, DetectionBlob, EncroachmentClass, RealSceneMetadata } from '../types/scan.types';
+import { WorkerInput, WorkerOutput, DetectionBlob, EncroachmentClass, RealSceneMetadata, SceneType } from '../types/scan.types';
+import { prepareSiteScene, SiteSceneFile } from '../engine/scan/realScene';
 import { runScanPipeline } from '../engine/scan/pipeline';
 import { SEEDED_ZONES } from '../api/seededData';
 
@@ -73,7 +74,7 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
     const geoJson = JSON.parse(zoneRecord.geojson);
 
     // Bounding box: ~0.12 deg span (~12km)
-    const bbox = {
+    let bbox = {
       minLng: lng - 0.06,
       maxLng: lng + 0.06,
       minLat: lat - 0.06,
@@ -91,52 +92,36 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
 
     let realSceneInput: { t0: any; t1: any; cloudMask?: Uint8Array } | undefined = undefined;
     let sceneMetadata: RealSceneMetadata | undefined = undefined;
+    let effectiveMode: SceneType = scene_type;
+    let isRealData = false;
+    let sarAvailable = true;
 
     if (isRealMode) {
-      postStageProgress('Stage 1/9: Loading calibrated telemetry arrays modeled on real sites', 10);
+      postStageProgress('Stage 1/9: Loading site scene arrays', 10);
       try {
         const [t0Resp, t1Resp] = await Promise.all([
           fetch(`/real/${zone_id}/t0.json`),
           fetch(`/real/${zone_id}/t1.json`),
         ]);
         if (t0Resp.ok && t1Resp.ok) {
-          const t0Data = await t0Resp.json();
-          const t1Data = await t1Resp.json();
+          const t0Data: SiteSceneFile = await t0Resp.json();
+          const t1Data: SiteSceneFile = await t1Resp.json();
+          const prepared = prepareSiteScene(t0Data, t1Data, scene_type, SCENE_SIZE, zone_id);
 
-          const realCloudMask = new Uint8Array(SCENE_SIZE * SCENE_SIZE);
-          for (let i = 0; i < SCENE_SIZE * SCENE_SIZE; i++) {
-            const sclVal = t1Data.scl ? t1Data.scl[i] : 4;
-            // SCL classes: 3 = cloud shadow, 8 = cloud medium prob, 9 = cloud high prob, 10 = thin cirrus
-            if (sclVal === 3 || sclVal === 8 || sclVal === 9 || sclVal === 10) {
-              realCloudMask[i] = 1;
-            }
+          realSceneInput = { t0: prepared.scene.t0, t1: prepared.scene.t1, cloudMask: prepared.cloudMask };
+          sceneMetadata = prepared.metadata;
+          effectiveMode = prepared.effectiveMode;
+          isRealData = prepared.isRealData;
+          sarAvailable = prepared.sarAvailable;
+          // Georeference detections on the actual crop, not on a box around the zone.
+          if (prepared.bbox) bbox = prepared.bbox;
+
+          if (isRealData) {
+            postStageProgress(`Stage 1/9: Loaded real Sentinel-2 L2A ${t0Data.scene_id} / ${t1Data.scene_id}`, 12);
           }
-
-          realSceneInput = {
-            t0: {
-              red: new Float32Array(t0Data.red),
-              nir: new Float32Array(t0Data.nir),
-              sar: new Float32Array(t0Data.sar),
-            },
-            t1: {
-              red: new Float32Array(t1Data.red),
-              nir: new Float32Array(t1Data.nir),
-              sar: new Float32Array(t1Data.sar),
-            },
-            cloudMask: realCloudMask,
-          };
-
-          sceneMetadata = {
-            t0SceneId: t0Data.scene_id,
-            t1SceneId: t1Data.scene_id,
-            t0Date: t0Data.datetime,
-            t1Date: t1Data.datetime,
-            telemetrySource: 'Calibrated scenes modeled on real sites (synthetic arrays)',
-            isControl: zone_id === 107,
-          };
         }
       } catch (fetchErr) {
-        console.warn('[Worker] Real crop fetch fallback:', fetchErr);
+        console.warn('[Worker] Site scene fetch fallback:', fetchErr);
       }
     } else {
       postStageProgress('Stage 1/9: Ingesting Sentinel-1 SAR and Sentinel-2 optical scenes', 10);
@@ -172,7 +157,7 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
       zoneId: zone_id,
       bbox,
       zoneGeoJson: geoJson,
-      mode: scene_type,
+      mode: effectiveMode,
       cloudCoverage: cloud_coverage,
       seed: 42 + zone_id,
       dataSource: isRealMode && realSceneInput ? 'real' : 'calibration',
@@ -191,7 +176,7 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
     const cloud = pipeline.cloudMask;
 
     for (let i = 0; i < SCENE_SIZE * SCENE_SIZE; i++) {
-      const isCloud = scene_type === 'optical' && cloud[i] === 1;
+      const isCloud = effectiveMode === 'optical' && cloud[i] === 1;
 
       // True-color approximation: Red, Green (derived), Blue (derived)
       const r0 = t0Bands.red[i];
@@ -257,10 +242,14 @@ self.onmessage = async (event: MessageEvent<WorkerInput>) => {
       beforeCrop: beforeDataUrl,
       afterCrop: afterDataUrl,
       patch: idx,
+      note:
+        isRealData && !sarAvailable
+          ? 'Vegetation loss on real Sentinel-2 imagery (optical only, no SAR). Candidate: needs human verification.'
+          : undefined,
     }));
 
     // If seasonal farming was rejected, add a false alarm blob for demonstration
-    if (pipeline.stats.rejectedCount > 0) {
+    if (pipeline.stats.rejectedCount > 0 && !isRealData) {
       blobs.push({
         id: 999,
         class: 'Land Encroachment',

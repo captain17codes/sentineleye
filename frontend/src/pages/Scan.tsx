@@ -1,3 +1,4 @@
+import { SceneProvenanceCard } from '../components/scan/SceneProvenanceCard';
 import React, { useState, useEffect, useMemo } from 'react';
 import { ScenePanel } from '../components/command/ScenePanel';
 import { CloudSlider } from '../components/command/CloudSlider';
@@ -82,7 +83,13 @@ export function Scan() {
     if (!result) return;
     setSavingScan(true);
     try {
-      const coords = activeZone?.geometry?.coordinates?.[0]?.[0] || [77.08, 28.52];
+      const zoneCoords = activeZone?.geometry?.coordinates?.[0]?.[0] || [77.08, 28.52];
+      // Place the alert where the change was detected, not on the zone outline.
+      const firstValid = result.blobs.find((b) => b.isValidated);
+      const coords = firstValid
+        ? [(firstValid.bbox[0] + firstValid.bbox[2]) / 2, (firstValid.bbox[1] + firstValid.bbox[3]) / 2]
+        : zoneCoords;
+      const meta = result.scene_metadata;
       const res: any = await scansApi.create({
         zone_id: selectedZoneId,
         scene_type: sceneType,
@@ -98,6 +105,13 @@ export function Scan() {
         after_img: result.blobs[0]?.afterCrop,
         lng: coords[0],
         lat: coords[1],
+        is_real_data: meta?.isRealData === true,
+        sar_available: meta?.sarAvailable,
+        t0_scene_id: meta?.isRealData ? meta.t0SceneId : undefined,
+        t1_scene_id: meta?.isRealData ? meta.t1SceneId : undefined,
+        t0_timestamp: meta?.isRealData ? meta.t0Date : undefined,
+        t1_timestamp: meta?.isRealData ? meta.t1Date : undefined,
+        note: firstValid?.note,
       });
 
       if (res.alertCreated) {
@@ -123,7 +137,9 @@ export function Scan() {
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-[#16201c] border border-[#2a3832] text-[#b4c2bb]">
               {dataSource === 'calibration'
                 ? 'Data source: Calibration scenes (synthetic, ground truth known)'
-                : 'Data source: Calibrated scenes modeled on real sites (synthetic arrays)'}
+                : result?.scene_metadata?.isRealData
+                  ? 'Data source: REAL Copernicus Sentinel-2 L2A'
+                  : 'Data source: Site scenes (real Sentinel-2 where available, otherwise modeled)'}
             </span>
           </div>
           <p className="text-xs text-[#b4c2bb] mt-0.5">
@@ -295,13 +311,13 @@ export function Scan() {
                   }`}
                 >
                   <Satellite className="w-3.5 h-3.5" />
-                  <span>Calibrated scenes modeled on real sites (synthetic arrays)</span>
+                  <span>Site scenes (real Sentinel-2 where available)</span>
                 </button>
               </div>
               <span className="text-[10px] text-[#b4c2bb] font-mono">
                 {dataSource === 'calibration'
                   ? 'Controlled seeds with simulated cloud masks & known ground truth.'
-                  : 'Calibrated synthetic arrays modeled on physical optical/SAR scattering characteristics of real target sites.'}
+                  : 'Real Sentinel-2 L2A crops for sites fetched with tools/fetch_real_sentinel.py; other sites use calibrated synthetic arrays. The result card says which.'}
               </span>
             </div>
 
@@ -324,7 +340,7 @@ export function Scan() {
                     style={{ backgroundColor: '#0b0f0e', color: '#f1f5f3' }}
                   >
                     {z.properties.code || `Z-${z.properties.id}`}: {z.properties.name} ({z.properties.risk_level})
-                    {dataSource === 'real' && [102, 103, 105, 107].includes(z.properties.id) ? ' • [Modeled site]' : ''}
+                    {dataSource === 'real' && [102, 103, 104, 105, 107].includes(z.properties.id) ? ' • [Site scene]' : ''}
                   </option>
                 ))}
               </select>
@@ -405,34 +421,8 @@ export function Scan() {
               </div>
             )}
 
-            {/* Telemetry Metadata Badge if Modeled Site Active */}
-            {result?.scene_metadata && (
-              <div className="p-3 rounded-lg bg-[#16201c] border border-[#22c55e]/40 flex flex-col gap-1.5 font-mono text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-[#22c55e] font-semibold flex items-center gap-1.5">
-                    <Satellite className="w-3.5 h-3.5" />
-                    Modeled Scene Telemetry (Calibrated Synthetic Arrays)
-                  </span>
-                  {result.scene_metadata.isControl && (
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-[#22c55e]/20 text-[#22c55e] border border-[#22c55e]/40 font-bold">
-                      VERIFIED NEGATIVE CONTROL
-                    </span>
-                  )}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-[#b4c2bb] pt-1 border-t border-[#2a3832]">
-                  <div>
-                    <span className="text-white block font-medium">T0 Optical Reference ID:</span>
-                    <span className="truncate block">{result.scene_metadata.t0SceneId}</span>
-                    <span className="text-[10px] text-muted">{new Date(result.scene_metadata.t0Date).toUTCString()}</span>
-                  </div>
-                  <div>
-                    <span className="text-white block font-medium">T1 Optical Reference ID:</span>
-                    <span className="truncate block">{result.scene_metadata.t1SceneId}</span>
-                    <span className="text-[10px] text-muted">{new Date(result.scene_metadata.t1Date).toUTCString()}</span>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Scene provenance: real Copernicus IDs with live archive check, or modeled-site label */}
+            {result?.scene_metadata && <SceneProvenanceCard meta={result.scene_metadata} />}
 
             {/* Empty State when no scan has run */}
             {!result && !isRunning ? (

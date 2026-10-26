@@ -8,6 +8,13 @@ export interface RealSceneMetadata {
   t1Date: string;
   telemetrySource?: string;
   isControl?: boolean;
+  /** true only when the crop was read from real Sentinel-2 pixels (source.kind === "REAL") */
+  isRealData?: boolean;
+  sarAvailable?: boolean;
+  mgrsGrid?: string;
+  t0CloudPct?: number;
+  t1CloudPct?: number;
+  aoiBbox?: [number, number, number, number];
 }
 
 export type EncroachmentClass =
@@ -25,6 +32,8 @@ export interface DetectionBlob {
   bbox: [number, number, number, number]; // [minX, minY, maxX, maxY]
   isValidated: boolean;
   rejectReason?: string;
+  /** shown to the operator, e.g. optical-only real detections that need human verification */
+  note?: string;
   beforeCrop: string; // base64 data URL
   afterCrop: string;  // base64 data URL
   patch?: number;

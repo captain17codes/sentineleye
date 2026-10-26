@@ -142,8 +142,12 @@ export async function generateNoticePdf({
   const t0DateCompact = t0Date.toISOString().slice(0, 10).replace(/-/g, '');
   const t1DateCompact = t1Date.toISOString().slice(0, 10).replace(/-/g, '');
   const zoneTag = `Z${alert.zone_id || 101}`;
-  const t0SceneId = `SIM-${zoneTag}-T0-${t0DateCompact}`;
-  const t1SceneId = `SIM-${zoneTag}-T1-${t1DateCompact}`;
+  const isRealScene = alert.is_real_scene === true && !!alert.t0_scene_id && !!alert.t1_scene_id;
+  const t0SceneId = isRealScene ? (alert.t0_scene_id as string) : `SIM-${zoneTag}-T0-${t0DateCompact}`;
+  const t1SceneId = isRealScene ? (alert.t1_scene_id as string) : `SIM-${zoneTag}-T1-${t1DateCompact}`;
+  const sceneKindLabel = isRealScene
+    ? 'Copernicus Sentinel-2 L2A product IDs (public archive: Earth Search STAC)'
+    : 'Simulated demonstration scene (not a Copernicus product ID)';
 
   const hashT0Scene = await sha256(`SCENE:${t0SceneId}:${alert.zone_id}:${alert.lat.toFixed(5)}:${alert.lng.toFixed(5)}`);
   const hashT1Scene = await sha256(`SCENE:${t1SceneId}:${alert.zone_id}:${alert.lat.toFixed(5)}:${alert.lng.toFixed(5)}`);
@@ -390,11 +394,11 @@ export async function generateNoticePdf({
   doc.text(`T1 Scene Hash SHA-256: ${hashT1Scene}`, 18, p2SealY + 29);
   doc.text(`Cadastral Hash SHA256: ${hashBoundary}`, 18, p2SealY + 33.5);
   doc.text(`Public Verify Anchor : ${verifyUrl}`, 18, p2SealY + 38);
-  doc.text(`Scene IDs (Simulated): ${t0SceneId} | ${t1SceneId}`, 18, p2SealY + 42.5);
+  doc.text(`Scene IDs ${isRealScene ? '(Real)     ' : '(Simulated)'}: ${t0SceneId} | ${t1SceneId}`, 18, p2SealY + 42.5);
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(6.2);
   doc.setTextColor(90, 90, 90);
-  doc.text(`[Simulated demonstration scene (not a Copernicus product ID)]`, 18, p2SealY + 46);
+  doc.text(`[${sceneKindLabel}]`, 18, p2SealY + 46);
   doc.setFont('courier', 'normal');
 
   // QR Code on right
@@ -447,7 +451,7 @@ export async function generateNoticePdf({
   const partBText =
     `I, Independent Technical Expert in Remote Sensing & Digital Forensics, hereby certify pursuant to Section 63(4) of the Bharatiya Sakshya Adhiniyam, 2023 that:\n` +
     `1. I have independently examined the computer architecture, processing pipeline, and cryptographic hash chain of the SentinelEye system.\n` +
-    `2. I have verified that the SHA-256 hashes of the simulated demonstration scenes (IDs: ${t0SceneId} and ${t1SceneId} — Simulated demonstration scene (not a Copernicus product ID)) and difference blobs match the ledger block #${blockIndex}.\n` +
+    `2. I have verified that the SHA-256 hashes of the ${isRealScene ? 'Copernicus Sentinel-2 L2A scenes' : 'simulated demonstration scenes'} (IDs: ${t0SceneId} and ${t1SceneId} — ${sceneKindLabel}) and difference blobs match the ledger block #${blockIndex}.\n` +
     `3. The mathematical integrity of the electronic output is authentic, reproducible, and free from retroactive modification.`;
   doc.text(doc.splitTextToSize(partBText, pageWidth - 28), 14, partBY + 4.5);
 

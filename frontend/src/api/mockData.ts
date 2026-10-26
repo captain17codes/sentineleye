@@ -183,6 +183,13 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
   // 9. Scans: POST /scans
   if (pathname === '/scans' && method === 'POST') {
     const body = options?.body ? JSON.parse(options.body as string) : {};
+    // Real imagery with nothing validated (e.g. a no-change control site): log the scan, raise no alert.
+    if (body.is_real_data === true && !(body.validated_classes?.length > 0)) {
+      return {
+        scan: { id: Date.now(), ...body, created_at: new Date().toISOString() },
+        alertCreated: false,
+      } as unknown as T;
+    }
     const alerts = getAlerts();
     const newId = alerts.length > 0 ? Math.max(...alerts.map((a) => a.id)) + 1 : 1;
 
@@ -200,10 +207,19 @@ export async function handleMockRequest<T>(path: string, options?: RequestInit):
       overlap_pct: body.validated_classes?.[0]?.overlap_pct || 86.4,
       before_img: body.before_img || '/evidence/before.webp',
       after_img: body.after_img || '/evidence/after.webp',
-      description: `[SIMULATED] Orbital change detected with score ${(body.change_score * 100).toFixed(1)}%`,
+      description: body.is_real_data
+        ? `[REAL Sentinel-2 L2A ${body.t0_scene_id} → ${body.t1_scene_id}] ${
+            body.note || 'Change detected on real imagery'
+          } Score ${(body.change_score * 100).toFixed(1)}%.`
+        : `[SIMULATED] Orbital change detected with score ${(body.change_score * 100).toFixed(1)}%`,
       created_at: new Date().toISOString(),
-      is_real_scene: body.data_source === 'real',
+      // Only crops read from real Sentinel-2 pixels count as real.
+      is_real_scene: body.is_real_data === true,
       data_source: body.data_source || 'calibration',
+      t0_scene_id: body.is_real_data ? body.t0_scene_id : undefined,
+      t1_scene_id: body.is_real_data ? body.t1_scene_id : undefined,
+      t0_timestamp: body.is_real_data ? body.t0_timestamp : undefined,
+      t1_timestamp: body.is_real_data ? body.t1_timestamp : undefined,
     };
 
     addAlert(newAlert);

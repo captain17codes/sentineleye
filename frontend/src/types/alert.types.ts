@@ -44,6 +44,9 @@ export interface Alert {
   audit_trail?: AuditEntry[];
   is_real_scene?: boolean;
   data_source?: 'calibration' | 'real';
+  /** real Copernicus product IDs, present only for alerts from real Sentinel-2 crops */
+  t0_scene_id?: string;
+  t1_scene_id?: string;
 }
 
 export interface AlertsResponse {

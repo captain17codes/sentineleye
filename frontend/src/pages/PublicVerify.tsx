@@ -90,7 +90,7 @@ export function PublicVerify() {
           </Link>
           <div className="flex items-center gap-1.5 font-mono text-xs text-[#b4c2bb]">
             <Lock className="w-3.5 h-3.5 text-[#22c55e]" />
-            <span>Section 63 BSA / Sec. 65B Public Verifier</span>
+            <span>Section 63 BSA (formerly Sec. 65B) Public Verifier</span>
           </div>
         </div>
 
