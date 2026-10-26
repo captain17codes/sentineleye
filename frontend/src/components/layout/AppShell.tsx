@@ -21,6 +21,7 @@ import {
   Lock,
   Tv,
   Gavel,
+  MousePointerSquareDashed,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -48,7 +49,8 @@ export function AppShell({ children }: AppShellProps) {
       title: '',
       items: [
         { label: 'Overview', hint: 'Summary of all zones', to: '/overview', icon: LayoutDashboard },
-        { label: 'Scan', hint: 'Compare two satellite dates', to: '/scan', icon: Radar },
+        { label: 'Area Scan', hint: 'Draw any area and detect change on live satellite images', to: '/area', icon: MousePointerSquareDashed },
+        { label: 'Zone Scan', hint: 'Compare two satellite dates for a protected zone', to: '/scan', icon: Radar },
         { label: 'Alerts', hint: 'Review and act on findings', to: '/alerts', icon: AlertTriangle },
         { label: 'Live Map', hint: 'See alerts on the map', to: '/map', icon: MapPin },
       ],

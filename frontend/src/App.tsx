@@ -10,6 +10,7 @@ import { RequireAuth } from './components/guards/RequireAuth';
 import { Landing } from './pages/Landing';
 import { Overview } from './pages/Overview';
 import { Scan } from './pages/Scan';
+const AreaScan = React.lazy(() => import('./pages/AreaScan'));
 import { MapView } from './pages/MapView';
 import { Alerts } from './pages/Alerts';
 import { Risk } from './pages/Risk';
@@ -91,6 +92,18 @@ export default function App() {
                   <RequireAuth>
                     <AppShell>
                       <Scan />
+                    </AppShell>
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/area"
+                element={
+                  <RequireAuth>
+                    <AppShell>
+                      <React.Suspense fallback={<div className="text-sm text-[#98a2b3]">Loading…</div>}>
+                        <AreaScan />
+                      </React.Suspense>
                     </AppShell>
                   </RequireAuth>
                 }
