@@ -18,6 +18,10 @@ export interface StacScene {
   datetime: string;
   cloud: number;
   epsg: number;
+  /** processing baseline, e.g. "04.00" */
+  baseline: number;
+  /** true when the archive says the +1000 DN offset was already removed from the pixels */
+  offsetApplied: boolean | null;
   assets: Record<string, { href: string; scale: number; offset: number }>;
 }
 
@@ -60,6 +64,9 @@ export async function searchScenes(bbox: BBox, fromIso: string, toIso: string, m
         datetime: f.properties?.datetime,
         cloud: f.properties?.['eo:cloud_cover'] ?? 100,
         epsg: f.properties?.['proj:epsg'] ?? Number(String(f.properties?.['proj:code'] || '').split(':')[1]),
+        baseline: parseFloat(f.properties?.['s2:processing_baseline'] || '0') || 0,
+        offsetApplied:
+          f.properties?.['earthsearch:boa_offset_applied'] ?? f.properties?.['s2:boa_offset_applied'] ?? null,
         assets,
       } as StacScene;
     })
@@ -97,7 +104,7 @@ function toUtm(lat: number, lng: number, zone: number, south: boolean): [number,
 }
 
 /** Reads one band inside the area and resamples it (nearest neighbour) onto a size x size lng/lat grid. */
-async function readBand(href: string, bbox: BBox, size: number, epsg: number): Promise<Float32Array> {
+async function readBand(href: string, bbox: BBox, size: number, epsg: number, bilinear = false): Promise<Float32Array> {
   const zone = epsg % 100;
   const south = Math.floor(epsg / 100) === 327;
   const tiff = await fromUrl(href, { allowFullFile: false });
@@ -135,9 +142,25 @@ async function readBand(href: string, bbox: BBox, size: number, epsg: number): P
   const w = x1 - x0;
   const h = y1 - y0;
   for (let i = 0; i < out.length; i++) {
-    const px = Math.floor((E[i] - ox) / rx) - x0;
-    const py = Math.floor((Nn[i] - oy) / ry) - y0;
-    out[i] = px >= 0 && py >= 0 && px < w && py < h ? win[py * w + px] : 0;
+    const fx = (E[i] - ox) / rx - x0;
+    const fy = (Nn[i] - oy) / ry - y0;
+    const px = Math.floor(fx);
+    const py = Math.floor(fy);
+    if (px < 0 || py < 0 || px >= w || py >= h) continue;
+    const nearest = win[py * w + px];
+    if (!bilinear) {
+      out[i] = nearest;
+      continue;
+    }
+    // bilinear between pixel centres (same as rasterio Resampling.bilinear); fall back to nearest at no-data
+    const gx = fx - 0.5;
+    const gy = fy - 0.5;
+    const ax = Math.max(0, Math.min(w - 2, Math.floor(gx)));
+    const ay = Math.max(0, Math.min(h - 2, Math.floor(gy)));
+    const tx = Math.min(1, Math.max(0, gx - ax));
+    const ty = Math.min(1, Math.max(0, gy - ay));
+    const v00 = win[ay * w + ax], v10 = win[ay * w + ax + 1], v01 = win[(ay + 1) * w + ax], v11 = win[(ay + 1) * w + ax + 1];
+    out[i] = v00 && v10 && v01 && v11 ? v00 * (1 - tx) * (1 - ty) + v10 * tx * (1 - ty) + v01 * (1 - tx) * ty + v11 * tx * ty : nearest;
   }
   return out;
 }
@@ -147,14 +170,15 @@ export async function loadScene(scene: StacScene, bbox: BBox, size: number, onBa
   // SCL first: if the area is cloudy the caller can skip this scene early
   for (const b of ['scl', 'blue', 'green', 'red', 'nir', 'swir16'] as const) {
     onBand?.(b);
-    raw[b] = await readBand(scene.assets[b].href, bbox, size, scene.epsg);
+    raw[b] = await readBand(scene.assets[b].href, bbox, size, scene.epsg, b !== 'scl');
   }
   const n = size * size;
+  const offset = reflectanceOffset(scene, raw.red);
   const refl = (b: string) => {
-    const { scale, offset } = scene.assets[b];
+    const scale = scene.assets[b].scale || 0.0001;
     const src = raw[b];
     const o = new Float32Array(n);
-    for (let i = 0; i < n; i++) o[i] = src[i] === 0 ? 0 : Math.max(1e-4, src[i] * scale + offset);
+    for (let i = 0; i < n; i++) o[i] = src[i] === 0 ? 0 : Math.min(1, Math.max(1e-4, src[i] * scale + offset));
     return o;
   };
   const scl = Uint8Array.from(raw.scl);
@@ -166,6 +190,22 @@ export async function loadScene(scene: StacScene, bbox: BBox, size: number, onBa
     invalidShare: bad / n,
     bands: { red: refl('red'), nir: refl('nir'), blue: refl('blue'), swir16: refl('swir16'), green: refl('green') },
   };
+}
+
+/**
+ * Baseline >= 04.00 products store DN = reflectance * 10000 + 1000, but Earth Search v1 has already
+ * removed the +1000 from many COGs while the metadata still advertises offset -0.1. Subtracting it twice
+ * clips dark pixels and distorts every index, so decide per scene (same rule as tools/fetch_real_sentinel.py):
+ * trust an explicit flag, otherwise look at the pixels: shifted data never has valid DN below 1000.
+ */
+export function reflectanceOffset(scene: Pick<StacScene, 'baseline' | 'offsetApplied'>, redDn: ArrayLike<number>): number {
+  if (scene.offsetApplied === true) return 0;
+  if (scene.baseline < 4) return 0;
+  const v: number[] = [];
+  for (let i = 0; i < redDn.length; i += 7) if (redDn[i] > 0) v.push(redDn[i]);
+  if (!v.length) return -0.1;
+  v.sort((a, b) => a - b);
+  return v[Math.floor(v.length * 0.01)] < 1000 ? 0 : -0.1;
 }
 
 /** Quick cloud check on the SCL band only. */

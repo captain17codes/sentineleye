@@ -23,3 +23,19 @@ describe('area scan: WGS84 -> UTM', () => {
     expect(s.h).toBeLessThan(2650);
   });
 });
+
+import { reflectanceOffset } from '../aoi/liveSentinel';
+describe('area scan: reflectance offset', () => {
+  const dark = Array.from({ length: 2000 }, (_, i) => 300 + i); // offset already removed: dark DN < 1000
+  const shifted = Array.from({ length: 2000 }, (_, i) => 1300 + i); // still carries +1000
+  it('does not subtract the offset twice', () => {
+    expect(reflectanceOffset({ baseline: 4, offsetApplied: null }, dark)).toBe(0);
+    expect(reflectanceOffset({ baseline: 4, offsetApplied: true }, shifted)).toBe(0);
+  });
+  it('subtracts it when the pixels still carry it', () => {
+    expect(reflectanceOffset({ baseline: 4, offsetApplied: null }, shifted)).toBe(-0.1);
+  });
+  it('never applies it to old baselines', () => {
+    expect(reflectanceOffset({ baseline: 2.09, offsetApplied: null }, shifted)).toBe(0);
+  });
+});
