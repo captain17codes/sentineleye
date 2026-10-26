@@ -101,25 +101,55 @@ def read_window(href, bbox, out_shape, resampling):
             return dst
 
 
-def scale_offset(item, key):
-    """DN -> reflectance. Uses STAC raster:bands if present, otherwise the
-    processing-baseline rule (baseline >= 04.00 has BOA_ADD_OFFSET = -1000)."""
-    asset = item["assets"].get(key, {})
-    rb = asset.get("raster:bands") or []
-    if rb and "scale" in rb[0]:
-        return float(rb[0]["scale"]), float(rb[0].get("offset", 0.0))
+def scale_offset(item, key, dn=None):
+    """DN -> reflectance (scale, offset).
+
+    Sentinel-2 processing baseline >= 04.00 stores DN = reflectance*10000 + 1000.
+    Some archives (Earth Search v1 among them) have already removed that +1000
+    from the COG pixels while metadata may still advertise offset -0.1.
+    Subtracting it twice clips dark pixels to 0 and inflates NDVI, so:
+      1. trust an explicit 'offset already applied' flag if the item has one;
+      2. otherwise look at the pixels: shifted data never has valid DN < 1000.
+    """
+    props = item.get("properties", {})
+    for flag in ("earthsearch:boa_offset_applied", "s2:boa_offset_applied"):
+        if props.get(flag) is True:
+            return 0.0001, 0.0
     try:
-        pb = float(item["properties"].get("s2:processing_baseline", "0") or 0)
+        pb = float(props.get("s2:processing_baseline", "0") or 0)
     except ValueError:
         pb = 0.0
-    return 0.0001, (-0.1 if pb >= 4.0 else 0.0)
+    if pb < 4.0:
+        return 0.0001, 0.0
+    if dn is not None:
+        valid = dn[dn > 0]
+        if valid.size and float(np.percentile(valid, 1)) < 1000:
+            return 0.0001, 0.0  # offset already removed in this file
+    return 0.0001, -0.1
+
+
+def check_reflectance(name, red, nir):
+    """Stop instead of writing physically impossible data."""
+    zero_red = float((red <= 0).mean())
+    med_nir = float(np.median(nir))
+    print(f"    {name}: red<=0 {zero_red*100:.1f}%  median red {float(np.median(red)):.3f}  median nir {med_nir:.3f}")
+    if zero_red > 0.10 or med_nir < 0.05:
+        raise SystemExit(
+            f"{name}: reflectance looks wrong ({zero_red*100:.0f}% red pixels <= 0, median NIR {med_nir:.3f}). "
+            "Probably a scale/offset problem; not writing this file."
+        )
 
 
 def read_optical(item, bbox, out_shape):
+    dns = {
+        key: read_window(item["assets"][key]["href"], bbox, out_shape, Resampling.bilinear).astype("float32")
+        for key in ("red", "nir")
+    }
+    # Decide once per scene from the red band (it always has dark pixels), apply to both bands.
+    sc, off = scale_offset(item, "red", dns["red"])
+    print(f"    {item['id']}: scale={sc} offset={off}")
     bands = {}
-    for key in ("red", "nir"):
-        dn = read_window(item["assets"][key]["href"], bbox, out_shape, Resampling.bilinear).astype("float32")
-        sc, off = scale_offset(item, key)
+    for key, dn in dns.items():
         refl = dn * sc + off
         refl[dn == 0] = 0.0  # nodata
         bands[key] = np.clip(refl, 0.0, 1.0)
@@ -348,6 +378,8 @@ def cmd_fetch(args):
             continue
         r0, n0, s0 = read_optical(i0, bbox, shape)
         r1, n1, s1 = read_optical(i1, bbox, shape)
+        check_reflectance(f"{z['code']} T0", r0, n0)
+        check_reflectance(f"{z['code']} T1", r1, n1)
 
         sar0 = sar1 = None
         sar_i0 = sar_i1 = None
